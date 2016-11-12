@@ -111,9 +111,11 @@ class JsonInterfaceGenerator():
 		# print(dom_name, full_name, func_name)
 
 		args = [ast.arg('self', None)]
-		typechecks = []
+		message_params = []
+		func_body = []
 		for param in func_params.get("parameters", []):
 			argname = param['name']
+			message_params.append(ast.Name(id=argname))
 			args.append(ast.arg(argname, None))
 			param_type = param.get("type", None)
 			if param_type in CHECKS:
@@ -124,15 +126,31 @@ class JsonInterfaceGenerator():
 				checker = ast.parse(checker_str)
 
 				if checker.body:
-					typechecks.append(checker.body.pop())
+					func_body.append(checker.body.pop())
 
-		print(typechecks)
+		fname = "webkit.{}.{}"
+		communicate_call = ast.Call(
+				func=ast.Attribute(value=ast.Name(id='self'), attr='transcieve'),
+				args=message_params,
+				keywords=[])
+
+		do_communicate = ast.Assign(targets=[ast.Name(id='subdom_funcs')], value=communicate_call)
+		func_ret = ast.Return(value=ast.Name(id='subdom_funcs'))
+
+		func_body.append(do_communicate)
+		func_body.append(func_ret)
+
+		# send_message = Expr(
+		# 	value=Call(
+		# 		func=Attribute(value=Name(id='self'), attr='__build_interface_class'),
+		# 		args=[],
+		# 		keywords=[]))],
 
 
 		func = ast.FunctionDef(
 			name = "{}_{}".format(full_name, func_name),
-			args = ast.arguments(args=args, defaults=[], vararg=[], kwarg=[]),
-			body = typechecks,
+			args = ast.arguments(args=args, defaults=[], vararg=[], kwarg={}),
+			body = func_body,
 			decorator_list = []
 			)
 
@@ -155,7 +173,7 @@ def print_file_ast():
 	print(astor.dump_tree(this_ast))
 
 def test():
-	# print(JsonInterfaceGenerator)
+	print(JsonInterfaceGenerator)
 	print_file_ast()
 	instance = JsonInterfaceGenerator()
 	newsauce = instance.dump_class()

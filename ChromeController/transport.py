@@ -101,7 +101,7 @@ class ChromeSocketManager():
 		# 'toolbar=1,scrollbars=1,location=1,statusbar=0,menubar=1,resizable=1'
 		# )" % (url) }})
 		self.soc.send(navcom)
-		return self.soc.recv()
+		return json.loads(self.soc.recv())
 
 
 if __name__ == '__main__':
