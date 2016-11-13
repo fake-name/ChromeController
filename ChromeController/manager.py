@@ -31,6 +31,7 @@ class ChromeInterface():
 										stdin=open(os.path.devnull, "r"),
 										stdout=subprocess.PIPE,
 										stderr=subprocess.PIPE)
+
 		print("Spawned process:", self.cr_proc)
 
 
@@ -45,6 +46,12 @@ class ChromeInterface():
 				time.sleep(1)
 
 		print(self.transport.find_tabs())
+
+	def synchronous_command(self, *args, **kwargs):
+		return self.transport.synchronous_command(*args, **kwargs)
+
+	def drain_transport(self):
+		return self.transport.drain()
 
 	def close(self):
 		print("Sending sigint to chromium")

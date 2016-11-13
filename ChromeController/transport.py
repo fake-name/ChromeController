@@ -26,6 +26,7 @@
 """
 import json
 import requests
+import socket
 import websocket
 
 
@@ -52,9 +53,12 @@ class ChromeSocketManager():
 		""" init """
 		self.host = host
 		self.port = port
+		self.msg_id = 0
 		self.soc = None
 		self.tablist = None
 		self.find_tabs()
+
+
 
 	def connect(self, tab=None, update_tabs=True):
 		"""Open a websocket connection to remote browser, determined by
@@ -67,9 +71,10 @@ class ChromeSocketManager():
 		if not tab:
 			tab = 0
 		wsurl = self.tablist[tab]['webSocketDebuggerUrl']
-		if self.soc.connected:
+		if self.soc is not None and self.soc.connected:
 			self.soc.close()
 		self.soc = websocket.create_connection(wsurl)
+		self.soc.settimeout(1)
 		return self.soc
 
 	def close(self):
@@ -88,7 +93,7 @@ class ChromeSocketManager():
 
 	def open_url(self, url):
 		"""Open a URL in the oldest tab."""
-		if not self.soc or not self.soc.connected:
+		if self.soc is None or (self.soc is not None and not self.soc.connected):
 			self.connect(tab=0)
 		# force the 'oldest' tab to load url
 		navcom = json.dumps({"id": 0,
@@ -102,6 +107,57 @@ class ChromeSocketManager():
 		# )" % (url) }})
 		self.soc.send(navcom)
 		return json.loads(self.soc.recv())
+
+	def synchronous_command(self, command, params):
+		"""Open a URL in the oldest tab."""
+
+		if self.soc is None or (self.soc is not None and not self.soc.connected):
+			self.connect(tab=0)
+		# force the 'oldest' tab to load url
+		command = {
+				"id": self.msg_id,
+				"method": command,
+			}
+
+		if params:
+			command["params"] = params
+		navcom = json.dumps(command)
+
+		self.msg_id += 1
+
+		# This code would open a new window, but browsers really dont
+		# like doing so.  And, the results are irritating at best.
+		# navcom=json.dumps({"id":0,"method":"Runtime.evaluate",
+		#  "params":{"expression": "window.open('%s', #'_blank',
+		# 'toolbar=1,scrollbars=1,location=1,statusbar=0,menubar=1,resizable=1'
+		# )" % (url) }})
+		print("Sending: ", navcom)
+		self.soc.send(navcom)
+
+		resp = self.soc.recv()
+
+		print("Response: ", resp)
+		return json.loads(resp)
+
+
+	def recv(self):
+		try:
+			tmp = self.soc.recv()
+			return json.loads(tmp)
+		except (socket.timeout, websocket.WebSocketTimeoutException):
+			return None
+
+	def drain(self):
+
+		ret = []
+		while 1:
+			try:
+				tmp = self.soc.recv()
+				ret.append(tmp)
+			except (socket.timeout, websocket.WebSocketTimeoutException):
+				break
+		return ret
+
 
 
 if __name__ == '__main__':
