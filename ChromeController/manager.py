@@ -6,65 +6,19 @@ import signal
 import time
 import requests.exceptions
 
-from .transport import ChromeSocketManager
+from .Generator import gen
 
-class ChromeInterface():
-	"""
+CromeRemoteDebugInterface = gen.get_class_def()
 
-	"""
+def build():
 
-	def __init__(self, binary=None):
-		""" init """
+	# print(gen.get_printed_ast())
 
-		if binary is None:
-			binary = "chromium"
-		if not os.path.exists(binary):
-			fixed = distutils.spawn.find_executable(binary)
-			if fixed:
-				binary = fixed
-		if not binary or not os.path.exists(binary):
-			raise RuntimeError("Could not find binary '%s'" % binary)
+	with open("test_class.py", "w") as fp:
+		code = gen.get_source()
+		fp.write(code)
+		# print(code)
 
-
-		argv = [binary, '--remote-debugging-port=9222']
-		self.cr_proc = subprocess.Popen(argv,
-										stdin=open(os.path.devnull, "r"),
-										stdout=subprocess.PIPE,
-										stderr=subprocess.PIPE)
-
-		print("Spawned process:", self.cr_proc)
-
-
-
-		# Allow the subprocess to start.
-		for x in range(3):
-			try:
-				self.transport = ChromeSocketManager()
-				print(self.transport)
-				break
-			except requests.exceptions.ConnectionError:
-				time.sleep(1)
-
-		print(self.transport.find_tabs())
-
-	def synchronous_command(self, *args, **kwargs):
-		return self.transport.synchronous_command(*args, **kwargs)
-
-	def drain_transport(self):
-		return self.transport.drain()
-
-	def close(self):
-		print("Sending sigint to chromium")
-		self.cr_proc.send_signal(signal.SIGINT)
-		self.cr_proc.terminate()
-
-	def __del__(self):
-		try:
-			self.close()
-		except:
-			pass
-
-if __name__ == '__main__':
-	import doctest
-	doctest.testmod()
-
+	# print(module)
+	# print(dir(module))
+	# print(module.CromeRemoteDebugInterface)

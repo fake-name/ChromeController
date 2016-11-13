@@ -16,15 +16,19 @@ CHECKS = {
 	"string"  : "(str, )",
 }
 
-class JsonInterfaceGenerator():
+
+
+class JsonInterfaceGenerator(object):
 	"""
 
 	"""
 
-	def __init__(self, protocol_major=1, protocol_minor=2):
+	def __init__(self, protocol_major=1, protocol_minor=2, *args, **kwargs):
 		""" init """
-		print(__file__)
 
+		super().__init__(*args, **kwargs)
+
+		self.line_num = 0
 		protocol_major = str(protocol_major)
 		protocol_minor = str(protocol_minor)
 
@@ -46,6 +50,10 @@ class JsonInterfaceGenerator():
 
 		self.__validate_protocol_version(protocol_major, protocol_minor)
 		self.__build_interface_class()
+
+	def __get_line(self):
+		self.line_num += 1
+		return self.line_num
 
 
 	def __validate_protocol_version(self, protocol_major, protocol_minor):
@@ -76,13 +84,13 @@ class JsonInterfaceGenerator():
 
 		self.interface_class = ast.ClassDef(
 				name           = "CromeRemoteDebugInterface",
-				bases          = [ast.Str("object")],
+				bases          = [ast.Name(id="ChromeInterface", ctx=ast.Load())],
 				body           = body,
 				keywords       = [],
 				decorator_list = [],
 				starargs       = None,
 				kwargs         = None,
-				lineno         = 0,
+				lineno         = self.__get_line(),
 				col_offset     = 0,
 				)
 
@@ -90,12 +98,30 @@ class JsonInterfaceGenerator():
 		# print(code)
 
 	def __build__init(self):
+
+		init_func = ast.Call(func=ast.Name(id='super', ctx=ast.Load()), args=[], keywords=[])
+		super_func = ast.Call(
+								func=ast.Attribute(value=init_func, attr='__init__', ctx=ast.Load()),
+								args=[ast.Starred(value=ast.Name(id='args', ctx=ast.Load()), ctx=ast.Load())],
+								keywords=[ast.keyword(arg=None, value=ast.Name(id='kwargs', ctx=ast.Load()), ctx=ast.Load())],
+						)
+
+		super_init = ast.Expr(
+							value=super_func,
+							lineno     = self.__get_line(),
+							col_offset = 0,
+						)
+
+
+		body = [super_init]
+
+
 		sig = ast.arguments(
-					args=[],
-					vararg=None,
+					args=[ast.arg('self', None)],
+					vararg=ast.arg(arg='args', annotation=None),
+					kwarg=ast.arg(arg='kwargs', annotation=None),
 					varargannotation=None,
 					kwonlyargs=[],
-					kwarg=None,
 					kwargannotation=None,
 					defaults=[],
 					kw_defaults=[])
@@ -103,9 +129,9 @@ class JsonInterfaceGenerator():
 		func = ast.FunctionDef(
 			name = "__init__",
 			args = sig,
-			body = [ast.Pass()],
+			body = body,
 			decorator_list = [],
-			lineno     = 0,
+			lineno     = self.__get_line(),
 			col_offset = 0,
 			)
 
@@ -171,15 +197,6 @@ class JsonInterfaceGenerator():
 		func_body.append(do_communicate)
 		func_body.append(func_ret)
 
-		# send_message = Expr(
-		# 	value=Call(
-		# 		func=Attribute(value=Name(id='self', ctx=ast.Load()), attr='__build_interface_class'),
-		# 		args=[],
-		# 		keywords=[]))],
-
-		# func_body = [ast.Pass()]
-
-
 		sig = ast.arguments(
 					args=args,
 					vararg=None,
@@ -195,7 +212,7 @@ class JsonInterfaceGenerator():
 			args = sig,
 			body = func_body,
 			decorator_list = [],
-			lineno     = 0,
+			lineno     = self.__get_line(),
 			col_offset = 0,
 			)
 
@@ -204,30 +221,20 @@ class JsonInterfaceGenerator():
 	def __to_module(self):
 
 		module_components = [
-			ast.ImportFrom(module="ChromeController.transport", names=[ast.alias('ChromeSocketManager', None)], level=0),
-			ast.ImportFrom(module="ChromeController.manager",   names=[ast.alias('ChromeInterface',     None)], level=0),
+			ast.ImportFrom(module="ChromeController.transport",    names=[ast.alias('ChromeSocketManager', None)], level=0),
+			ast.ImportFrom(module="ChromeController.manager_base", names=[ast.alias('ChromeInterface',     None)], level=0),
 			self.interface_class,
 		]
 
-		mod = ast.Module(module_components, lineno=1, col_offset=1)
+		mod = ast.Module(module_components, lineno=self.__get_line(), col_offset=1)
 
-		# print_call = ast.Expr(
-		# 		ast.Call(
-		# 		func=ast.Name(id='print', ctx=ast.Load()),
-		# 		args=[ast.Str(s="PyCon2010!", ctx=ast.Load())],
-		# 		keywords=[]))
-		# mod = ast.Module([print_call])
-
-		# mod.lineno = 1
-		# mod.col_offset  = 1
 		mod = ast.fix_missing_locations(mod)
 
 		return mod
 
-
-
 	def dump_class(self):
-		indent = "    "
+		print("Dumping class source")
+		indent = "	"
 		return astor.to_source(self.__to_module(), indent_with=indent)
 
 	def dump_ast(self):
@@ -235,13 +242,23 @@ class JsonInterfaceGenerator():
 
 	def compile_class(self):
 		mod = self.__to_module()
-		# print(mod.lineno)
-		# print(mod.body)
-		# print(mod.body[2])
-		# print(mod.body[2].lineno)
-		# print(mod.body[2].body)
+		code = compile(self.__to_module(), "no filename", "exec")
+		exec(code)
+		built_class = locals()['CromeRemoteDebugInterface']
 
-		return compile(self.__to_module(), "", "exec")
+		return built_class
+
+def get_source():
+	instance = JsonInterfaceGenerator()
+	return instance.dump_class()
+
+def get_class_def():
+	instance = JsonInterfaceGenerator()
+	return instance.compile_class()
+
+def get_printed_ast():
+	instance = JsonInterfaceGenerator()
+	return instance.dump_ast()
 
 
 
@@ -268,6 +285,7 @@ def test():
 
 if __name__ == '__main__':
 	test()
+	print_file_ast()
 
 
 
