@@ -25,9 +25,11 @@
 	You can also optionally specify a different tab to operate on.
 """
 import json
-import requests
 import socket
 import websocket
+import requests
+
+TRANSPORT_DEBUG = True
 
 
 class ChromeSocketManager():
@@ -57,6 +59,8 @@ class ChromeSocketManager():
 		self.soc = None
 		self.tablist = None
 		self.find_tabs()
+
+		self.messages = []
 
 
 
@@ -91,29 +95,28 @@ class ChromeSocketManager():
 		self.tablist = json.loads(response.text)
 		return self.tablist
 
-	def open_url(self, url):
-		"""Open a URL in the oldest tab."""
+
+	def __check_open_socket(self):
 		if self.soc is None or (self.soc is not None and not self.soc.connected):
 			self.connect(tab=0)
-		# force the 'oldest' tab to load url
-		navcom = json.dumps({"id": 0,
-							 "method": "Page.navigate",
-							 "params": {"url": url}})
-		# This code would open a new window, but browsers really dont
-		# like doing so.  And, the results are irritating at best.
-		# navcom=json.dumps({"id":0,"method":"Runtime.evaluate",
-		#  "params":{"expression": "window.open('%s', #'_blank',
-		# 'toolbar=1,scrollbars=1,location=1,statusbar=0,menubar=1,resizable=1'
-		# )" % (url) }})
-		self.soc.send(navcom)
-		return json.loads(self.soc.recv())
+
 
 	def synchronous_command(self, command, params):
 		"""Open a URL in the oldest tab."""
 
-		if self.soc is None or (self.soc is not None and not self.soc.connected):
-			self.connect(tab=0)
-		# force the 'oldest' tab to load url
+		send_id = self.send(command, params)
+		resp = self.recv(message_id=send_id)
+
+		if TRANSPORT_DEBUG:
+			print("Response: ", resp)
+
+		return resp
+
+	def send(self, command, params):
+		self.__check_open_socket()
+
+		sent_id = self.msg_id
+
 		command = {
 				"id": self.msg_id,
 				"method": command,
@@ -123,33 +126,54 @@ class ChromeSocketManager():
 			command["params"] = params
 		navcom = json.dumps(command)
 
-		self.msg_id += 1
 
-		# This code would open a new window, but browsers really dont
-		# like doing so.  And, the results are irritating at best.
-		# navcom=json.dumps({"id":0,"method":"Runtime.evaluate",
-		#  "params":{"expression": "window.open('%s', #'_blank',
-		# 'toolbar=1,scrollbars=1,location=1,statusbar=0,menubar=1,resizable=1'
-		# )" % (url) }})
-		print("Sending: ", navcom)
+		if TRANSPORT_DEBUG:
+			print("Sending: ", navcom)
+
 		self.soc.send(navcom)
 
-		resp = self.soc.recv()
-
-		print("Response: ", resp)
-		return json.loads(resp)
+		self.msg_id += 1
+		return sent_id
 
 
-	def recv(self):
-		try:
-			tmp = self.soc.recv()
-			return json.loads(tmp)
-		except (socket.timeout, websocket.WebSocketTimeoutException):
-			return None
+	def recv(self, message_id=None):
+		'''
+		Recieve a message, optionally filtering for a specified message id.
+		'''
+
+		self.__check_open_socket()
+
+		# First, check if the message has already been received.
+		for idx in range(len(self.messages)):
+			if "id" in self.messages[idx] and message_id:
+				if self.messages[idx]['id'] == message_id:
+					return self.messages.pop(idx)
+
+		# Then spin untill we either have the message,
+		# or have timed out.
+		while True:
+			try:
+				tmp = self.soc.recv()
+				decoded = json.loads(tmp)
+				if "id" in decoded and message_id:
+					if decoded['id'] == message_id:
+						return decoded
+					else:
+						self.messages.append(decoded)
+				else:
+					return decoded
+			except (socket.timeout, websocket.WebSocketTimeoutException):
+				return None
 
 	def drain(self):
+		'''
+		Return all messages in waiting for the websocket connection.
+		'''
 
 		ret = []
+		while len(self.messages):
+			ret.append(self.messages.pop(0))
+
 		while 1:
 			try:
 				tmp = self.soc.recv()

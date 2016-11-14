@@ -8,17 +8,25 @@ import requests.exceptions
 
 from .Generator import gen
 
-CromeRemoteDebugInterface = gen.get_class_def()
+CromeRemoteDebugInterfaceBase = gen.get_class_def()
 
-def build():
+class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
+	pass
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
 
-	# print(gen.get_printed_ast())
+		resp1 = self.synchronous_command("Page.enable", {})
+		resp2 = self.synchronous_command("DOM.enable", {})
+		resp3 = self.synchronous_command("Network.enable", {})
 
-	with open("test_class.py", "w") as fp:
-		code = gen.get_source()
-		fp.write(code)
-		# print(code)
+		print(resp1)
+		print(resp2)
+		print(resp3)
 
-	# print(module)
-	# print(dir(module))
-	# print(module.CromeRemoteDebugInterface)
+		pass
+	def blocking_navigate(self, url, timeout=30):
+		ret = self.synchronous_command("Page.navigate", {"url": "http://www.google.com"})
+		assert("params" in ret), "Missing return content"
+		assert("frameId" in ret['params']), "Missing 'frameId' in return content"
+
+		pass

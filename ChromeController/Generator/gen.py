@@ -143,8 +143,6 @@ class JsonInterfaceGenerator(object):
 		dom_desc  = subdom.get("descripton", "")
 		dom_name  = subdom['domain']
 		full_name = subdom['domain']
-		if subdom.get("experimental"):
-			full_name = "exp_{}".format(full_name)
 
 		for typen in subdom.get('types', []):
 			typestr = "{}_{}".format(dom_name, typen['id'])
