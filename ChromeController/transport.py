@@ -26,10 +26,11 @@
 """
 import json
 import socket
+import time
 import websocket
 import requests
 
-TRANSPORT_DEBUG = True
+TRANSPORT_DEBUG = False
 
 
 class ChromeSocketManager():
@@ -136,6 +137,35 @@ class ChromeSocketManager():
 		return sent_id
 
 
+	def recv_filtered(self, keycheck, timeout=30):
+
+		self.__check_open_socket()
+
+		# First, check if the message has already been received.
+		for idx in range(len(self.messages)):
+			if keycheck(self.messages[idx]):
+				return self.messages.pop(idx)
+
+		timeout_at = time.time() + timeout
+		while 1:
+			tmp = self.___recv()
+			if keycheck(tmp):
+				return tmp
+			else:
+				self.messages.append(tmp)
+
+			if time.time() > timeout_at:
+				return None
+
+
+	def ___recv(self):
+		try:
+			tmp = self.soc.recv()
+			decoded = json.loads(tmp)
+			return decoded
+		except (socket.timeout, websocket.WebSocketTimeoutException):
+			return None
+
 	def recv(self, message_id=None):
 		'''
 		Recieve a message, optionally filtering for a specified message id.
@@ -151,19 +181,13 @@ class ChromeSocketManager():
 
 		# Then spin untill we either have the message,
 		# or have timed out.
-		while True:
-			try:
-				tmp = self.soc.recv()
-				decoded = json.loads(tmp)
-				if "id" in decoded and message_id:
-					if decoded['id'] == message_id:
-						return decoded
-					else:
-						self.messages.append(decoded)
-				else:
-					return decoded
-			except (socket.timeout, websocket.WebSocketTimeoutException):
-				return None
+		def check_func(message):
+			if "id" in message:
+				return message['id'] == message_id
+			return False
+
+		return self.recv_filtered(check_func)
+
 
 	def drain(self):
 		'''
@@ -174,12 +198,10 @@ class ChromeSocketManager():
 		while len(self.messages):
 			ret.append(self.messages.pop(0))
 
-		while 1:
-			try:
-				tmp = self.soc.recv()
-				ret.append(tmp)
-			except (socket.timeout, websocket.WebSocketTimeoutException):
-				break
+		tmp = self.___recv()
+		while tmp is not None:
+			ret.append(tmp)
+			tmp = self.___recv()
 		return ret
 
 
