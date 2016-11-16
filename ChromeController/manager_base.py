@@ -4,9 +4,14 @@ import os.path
 import subprocess
 import signal
 import time
+import pprint
 import requests.exceptions
 
 from .transport import ChromeSocketManager
+
+
+class ChromeError(RuntimeError):
+	pass
 
 class ChromeInterface():
 	"""
@@ -47,8 +52,16 @@ class ChromeInterface():
 
 		print(self.transport.find_tabs())
 
+
+	def __check_ret(self, ret):
+		if 'error' in ret:
+			err = pprint.pformat(ret)
+			raise ChromeError("Error in response: \n{}".format(err))
+
 	def synchronous_command(self, *args, **kwargs):
-		return self.transport.synchronous_command(*args, **kwargs)
+		ret = self.transport.synchronous_command(*args, **kwargs)
+		self.__check_ret(ret)
+		return ret
 
 	def drain_transport(self):
 		return self.transport.drain()

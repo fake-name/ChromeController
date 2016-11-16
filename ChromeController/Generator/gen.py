@@ -168,7 +168,7 @@ class JsonInterfaceGenerator(object):
 		func_body = []
 		for param in func_params.get("parameters", []):
 			argname = param['name']
-			message_params.append(ast.Name(id=argname, ctx=ast.Load()))
+			message_params.append(ast.keyword(argname, ast.Name(id=argname, ctx=ast.Load())))
 			args.append(ast.arg(argname, None))
 			param_type = param.get("type", None)
 			if param_type in CHECKS:
@@ -181,13 +181,14 @@ class JsonInterfaceGenerator(object):
 				if checker.body:
 					func_body.append(checker.body.pop())
 
-		fname = ast.Name(id="\"{}.{}\"".format(dom_name, func_name), ctx=ast.Load())
-		message_params = [fname] + message_params
+		fname = ast.Str(s="{}.{}".format(dom_name, func_name), ctx=ast.Load())
+
 		# print(message_params)
+
 		communicate_call = ast.Call(
-				func=ast.Attribute(value=ast.Name(id='self', ctx=ast.Load()), ctx=ast.Load(), attr='transport.synchronous_command'),
-				args=message_params,
-				keywords=[])
+				func=ast.Attribute(value=ast.Name(id='self', ctx=ast.Load()), ctx=ast.Load(), attr='synchronous_command'),
+				args=[fname],
+				keywords=message_params)
 
 		do_communicate = ast.Assign(targets=[ast.Name(id='subdom_funcs', ctx=ast.Store())], value=communicate_call)
 		func_ret = ast.Return(value=ast.Name(id='subdom_funcs', ctx=ast.Load()))

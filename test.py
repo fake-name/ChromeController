@@ -3,17 +3,32 @@
 import os.path
 import time
 import pprint
+
+import WebRequest
+
 import ChromeController.manager as mgr
 import ChromeController
 
 def test():
+
+	ua = dict(WebRequest.getUserAgent())
+	print(ua)
+
 	crbin = os.path.abspath("../AutoTriever/Headless/headless_shell")
 	cr = ChromeController.CromeRemoteDebugInterface(binary=crbin)
 
 	print(cr)
 	resp = cr.set_viewport_size(1500, 1000)
 	print("Viewport size", resp)
-	resp = cr.blocking_navigate("http://www.google.com")
+
+	resp = cr.set_user_agent_string(ua.pop('User-Agent'))
+	print("Set user agent: ", resp)
+	ua['X-Devtools-Emulate-Network-Conditions-Client-Id'] = None
+	resp = cr.set_headers(ua)
+	print("Set extra headers: ", resp)
+
+	# resp = cr.blocking_navigate("http://www.google.com")
+	resp = cr.blocking_navigate("http://10.1.1.8:33507/index")
 	print("Page.navigate", resp)
 	img = cr.take_screeshot()
 	with open("screenshot.png", "wb") as fp:

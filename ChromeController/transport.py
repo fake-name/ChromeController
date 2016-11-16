@@ -102,8 +102,12 @@ class ChromeSocketManager():
 			self.connect(tab=0)
 
 
-	def synchronous_command(self, command, params):
+	def synchronous_command(self, command, *args, **params):
 		"""Open a URL in the oldest tab."""
+		print("synchronous_command")
+		print("command", command)
+		print("args", args)
+		print("params", params)
 
 		send_id = self.send(command, params)
 		resp = self.recv(message_id=send_id)
