@@ -155,17 +155,62 @@ class JsonInterfaceGenerator(object):
 			functions.append(func)
 
 		return functions
+	def __build_desc_string(self, dom_name, func_name, func_params):
+		desc = []
+		fname = "{}_{}".format(dom_name, func_name)
+		desc.append("Python Function: {}".format(fname))
+		desc.append("	Domain: {}".format(dom_name))
+		desc.append("	Method name: {}".format(func_name))
+		desc.append("")
 
+		if "parameters" in func_params:
+			desc.append("	Parameters:")
+			for param in func_params['parameters']:
+				if not "description" in param:
+					param['description'] = "No description"
+				if "type" in param:
+					desc.append("		\'{}\' (type: {}) -> {}".format(param['name'], param['type'], param['description']))
+				else:
+					desc.append("		\'{}\' (type: {}) -> {}".format(param['name'], param['$ref'], param['description']))
+
+		if "returns" in func_params:
+			desc.append("	Returns:")
+			for param in func_params['returns']:
+				if not "description" in param:
+					param['description'] = "No description"
+				if "type" in param:
+					desc.append("		\'{}\' (type: {}) -> {}".format(param['name'], param['type'], param['description']))
+				else:
+					desc.append("		\'{}\' (type: {}) -> {}".format(param['name'], param['$ref'], param['description']))
+		else:
+			desc.append("	No return value.")
+
+
+		if "description" in func_params:
+			desc.append("	Description: {}".format(func_params['description']))
+
+		desc = ["\t\t"+line for line in desc]
+		ret = "\n".join(desc)
+
+		return ret
 
 	def __build_function(self, dom_name, full_name, func_params):
 
 		assert 'name' in func_params
 		func_name = func_params['name']
+
+		docstr = self.__build_desc_string(dom_name, func_name, func_params)
+		# print(docstr)
+
 		# print(dom_name, full_name, func_name)
 
 		args = [ast.arg('self', None)]
 		message_params = []
 		func_body = []
+
+		if docstr:
+			func_body.append(ast.Expr(ast.Str("\n"+docstr+"\n\t\t")))
+
 		for param in func_params.get("parameters", []):
 			argname = param['name']
 			message_params.append(ast.keyword(argname, ast.Name(id=argname, ctx=ast.Load())))
@@ -181,7 +226,8 @@ class JsonInterfaceGenerator(object):
 				if checker.body:
 					func_body.append(checker.body.pop())
 
-		fname = ast.Str(s="{}.{}".format(dom_name, func_name), ctx=ast.Load())
+		fname = "{}.{}".format(dom_name, func_name)
+		fname = ast.Str(s=fname, ctx=ast.Load())
 
 		# print(message_params)
 

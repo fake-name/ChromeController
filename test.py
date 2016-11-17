@@ -1,13 +1,24 @@
 
 
 import os.path
-import time
+import astor
 import pprint
 
 import WebRequest
 
 import ChromeController.manager as mgr
 import ChromeController
+
+def test_func(a, b):
+	"""
+	Docstring!
+	"""
+	return a+b
+
+
+def docstring_dbg():
+	print(astor.dump_tree(astor.code_to_ast(test_func)))
+
 
 def test():
 
@@ -46,13 +57,13 @@ def test():
 
 def gen():
 	print("Manager: ", mgr)
-	mgr.build()
-	crbin = os.path.abspath("../AutoTriever/Headless/headless_shell")
-	cr = ChromeController.CromeRemoteDebugInterface(binary=crbin)
+	cls_def = mgr.gen.get_source()
+	print(cls_def)
 	# pass
 	# ChromeController.test()
 
 
 if __name__ == '__main__':
-	test()
-	# gen()
+	# test()
+	gen()
+	# docstring_dbg()
