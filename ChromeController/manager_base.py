@@ -58,8 +58,6 @@ class ChromeInterface():
 			except requests.exceptions.ConnectionError:
 				time.sleep(1)
 
-		print(self.transport.find_tabs())
-
 
 	def __check_ret(self, ret):
 		if 'error' in ret:

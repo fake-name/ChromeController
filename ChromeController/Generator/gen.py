@@ -32,42 +32,60 @@ class JsonInterfaceGenerator(object):
 		protocol_major = str(protocol_major)
 		protocol_minor = str(protocol_minor)
 
-		protocol_rev = "{}.{}".format(protocol_major, protocol_minor)
-
-		json_file = "browser_protocol-r{}.json".format(protocol_rev)
-		folder = os.path.split(__file__)[0]
-		protocol_file_path = os.path.join(folder, "../", 'protocols', json_file)
-		protocol_file_path = os.path.abspath(protocol_file_path)
-		assert(os.path.exists(protocol_file_path)), "Protocol file '{}' appears to be missing!".format(protocol_file_path)
 
 
 		self.types = {}
+		self.protocol = self.__load_protocol(protocol_major, protocol_minor)
+
+		self.__build_interface_class()
+
+	def __load_json_file(self, fname):
+
+		folder = os.path.split(__file__)[0]
+		protocol_file_path = os.path.join(folder, "../", 'protocols', fname)
+		protocol_file_path = os.path.abspath(protocol_file_path)
+		assert(os.path.exists(protocol_file_path)), "Protocol file '{}' appears to be missing!".format(protocol_file_path)
 
 		with open(protocol_file_path) as fp:
 			protocol_str = fp.read()
+		return json.loads(protocol_str)
 
-		self.protocol = json.loads(protocol_str)
 
-		self.__validate_protocol_version(protocol_major, protocol_minor)
-		self.__build_interface_class()
+	def __load_protocol(self, major, minor):
+
+		protocol_rev = "{}.{}".format(major, minor)
+		main_json_file = "browser_protocol-r{}.json".format(protocol_rev)
+		js_json_file = "js_protocol-r{}.json".format(protocol_rev)
+
+		js_file_1 = self.__load_json_file(main_json_file)
+		js_file_2 = self.__load_json_file(js_json_file)
+
+		self.__validate_protocol_version(main_json_file, js_file_1, major, minor)
+		self.__validate_protocol_version(js_json_file, js_file_2, major, minor)
+
+		# assemble the two json files into the single command descriptor file.
+		for domain in js_file_2['domains']:
+			js_file_1['domains'].append(domain)
+
+		return js_file_1
 
 	def __get_line(self):
 		self.line_num += 1
 		return self.line_num
 
 
-	def __validate_protocol_version(self, protocol_major, protocol_minor):
-		errm_1 = "Major version mismatch: {} - {}".format(self.protocol['version']["major"], protocol_major)
-		errm_2 = "Minor version mismatch: {} - {}".format(self.protocol['version']["minor"], protocol_minor)
+	def __validate_protocol_version(self, filename, js_file, major, minor):
+		errm_1 = "Major version mismatch: {} - {} in file {}".format(js_file['version']["major"], major, filename)
+		errm_2 = "Minor version mismatch: {} - {} in file {}".format(js_file['version']["minor"], minor, filename)
 
-		v_1 = self.protocol['version']["major"]
-		v_2 = self.protocol['version']["minor"]
+		v_1 = js_file['version']["major"]
+		v_2 = js_file['version']["minor"]
 
-		assert isinstance(protocol_major, str)
-		assert isinstance(protocol_minor, str)
+		assert isinstance(major, str)
+		assert isinstance(minor, str)
 
-		assert v_1 == protocol_major, errm_1
-		assert v_2 == protocol_minor, errm_2
+		assert v_1 == major, errm_1
+		assert v_2 == minor, errm_2
 
 
 	def __build_interface_class(self):

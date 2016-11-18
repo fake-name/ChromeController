@@ -2,27 +2,7 @@
 
 	> a = Shell(host='localhost', port=92222)
 
-	a.tablist has a list of details on open tabs.
 
-	> a.connect(tab=index, updateTabs=True)
-
-	will connect a.soc to the webservice endpoint for tablist[index]'th
-	tab.  index is an integer, and updateTabs is True or False. Both tab
-	and updateTabs are optional, defaulting to 0 and True respectively.
-
-	At this point a.soc.send and a.soc.recv will synchronously write
-	commands and read responses.  The api is semi-asynchronous with
-	responses for commands, but also spontaeneous events will be
-	send by the browser. For this kind of advance usage, select/pol
-	on soc is advised.
-
-	As a convenience, the shell connection object offers a method that, by
-	injecting JavaScript into the first tab, commands Chrome to open a URL
-	in a new tab::
-
-	a.open_url('http://www.aldaily.com/')
-
-	You can also optionally specify a different tab to operate on.
 """
 import json
 import socket

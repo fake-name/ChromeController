@@ -11,29 +11,7 @@
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/Storage/Scripts/ChromeController/ChromeController/transport.py">/media/Storage/Scripts/ChromeController/ChromeController/transport.py</a></font></td></tr></table>
     <p><tt>Client&nbsp;for&nbsp;the&nbsp;Google&nbsp;Chrome&nbsp;browser's&nbsp;remote&nbsp;debugging&nbsp;api.<br>
 &nbsp;<br>
-&gt;&nbsp;a&nbsp;=&nbsp;Shell(host='localhost',&nbsp;port=92222)<br>
-&nbsp;<br>
-a.tablist&nbsp;has&nbsp;a&nbsp;list&nbsp;of&nbsp;details&nbsp;on&nbsp;open&nbsp;tabs.<br>
-&nbsp;<br>
-&gt;&nbsp;a.connect(tab=index,&nbsp;updateTabs=True)<br>
-&nbsp;<br>
-will&nbsp;connect&nbsp;a.soc&nbsp;to&nbsp;the&nbsp;webservice&nbsp;endpoint&nbsp;for&nbsp;tablist[index]'th<br>
-tab.&nbsp;&nbsp;index&nbsp;is&nbsp;an&nbsp;integer,&nbsp;and&nbsp;updateTabs&nbsp;is&nbsp;True&nbsp;or&nbsp;False.&nbsp;Both&nbsp;tab<br>
-and&nbsp;updateTabs&nbsp;are&nbsp;optional,&nbsp;defaulting&nbsp;to&nbsp;0&nbsp;and&nbsp;True&nbsp;respectively.<br>
-&nbsp;<br>
-At&nbsp;this&nbsp;point&nbsp;a.soc.send&nbsp;and&nbsp;a.soc.recv&nbsp;will&nbsp;synchronously&nbsp;write<br>
-commands&nbsp;and&nbsp;read&nbsp;responses.&nbsp;&nbsp;The&nbsp;api&nbsp;is&nbsp;semi-asynchronous&nbsp;with<br>
-responses&nbsp;for&nbsp;commands,&nbsp;but&nbsp;also&nbsp;spontaeneous&nbsp;events&nbsp;will&nbsp;be<br>
-send&nbsp;by&nbsp;the&nbsp;browser.&nbsp;For&nbsp;this&nbsp;kind&nbsp;of&nbsp;advance&nbsp;usage,&nbsp;select/pol<br>
-on&nbsp;soc&nbsp;is&nbsp;advised.<br>
-&nbsp;<br>
-As&nbsp;a&nbsp;convenience,&nbsp;the&nbsp;shell&nbsp;connection&nbsp;<a href="builtins.html#object">object</a>&nbsp;offers&nbsp;a&nbsp;method&nbsp;that,&nbsp;by<br>
-injecting&nbsp;JavaScript&nbsp;into&nbsp;the&nbsp;first&nbsp;tab,&nbsp;commands&nbsp;Chrome&nbsp;to&nbsp;open&nbsp;a&nbsp;URL<br>
-in&nbsp;a&nbsp;new&nbsp;tab::<br>
-&nbsp;<br>
-a.open_url('<a href="http://www.aldaily.com/">http://www.aldaily.com/</a>')<br>
-&nbsp;<br>
-You&nbsp;can&nbsp;also&nbsp;optionally&nbsp;specify&nbsp;a&nbsp;different&nbsp;tab&nbsp;to&nbsp;operate&nbsp;on.</tt></p>
+&gt;&nbsp;a&nbsp;=&nbsp;Shell(host='localhost',&nbsp;port=92222)</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
