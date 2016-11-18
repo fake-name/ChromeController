@@ -37,26 +37,19 @@ class ChromeSocketManager():
 	"""
 	A remote debugging connection to Google Chrome.
 
-	   > a = Shell(host='localhost', port=92222)
+	> a = ChromeSocketManager(host='localhost', port=9222)
 
-	   a.tablist has a list of details on open tabs.
 
-	   > a.connect(tab=index, update_tabs=True)
-
-	   will connect a.soc to the webservice endpoint for tablist[index]'th
-	   tab.  index is an integer, and update_tabs is True or False. Both tab
-	   and updateTabs are optional, defaulting to 0 and True respectively.
-
-	   At this point a.soc.send and a.soc.recv will synchronously write
-	   commands and read responses.  The api is semi-asynchronous with
-	   responses for commands, but also spontaeneous events will be
-	   send by the browser. For this kind of advance usage, select/pol
-	   on soc is advised.
 
 	   """
 
 	def __init__(self, host='localhost', port=9222):
-		""" init """
+		"""
+		Create connection to remote host `host`, on port `port`.
+
+		Assumes remote is listening for websocket connections.
+
+		"""
 		self.host = host
 		self.port = port
 		self.msg_id = 0
@@ -69,11 +62,15 @@ class ChromeSocketManager():
 
 
 	def connect(self, tab=None, update_tabs=True):
-		"""Open a websocket connection to remote browser, determined by
-		   self.host and self.port.  Each tab has it's own websocket
-		   endpoint - you specify which with the tab parameter, defaulting
-		   to 0.  The parameter update_tabs, if True, will force a rescan
-		   of open tabs before connection. """
+		"""
+		Open a websocket connection to remote browser, determined by
+		self.host and self.port.  Each tab has it's own websocket
+		endpoint - you specify which with the tab parameter, defaulting
+		to 0.  The parameter update_tabs, if True, will force a rescan
+		of open tabs before connection.
+
+		"""
+
 		if update_tabs or not self.tablist:
 			self.find_tabs()
 		if not tab:
@@ -83,7 +80,6 @@ class ChromeSocketManager():
 			self.soc.close()
 		self.soc = websocket.create_connection(wsurl)
 		self.soc.settimeout(1)
-		return self.soc
 
 	def close(self):
 		""" Close websocket connection to remote browser."""
@@ -105,12 +101,17 @@ class ChromeSocketManager():
 			self.connect(tab=0)
 
 
-	def synchronous_command(self, command, *args, **params):
-		"""Open a URL in the oldest tab."""
-		print("synchronous_command")
-		print("command", command)
-		print("args", args)
-		print("params", params)
+	def synchronous_command(self, command, **params):
+		"""
+		Synchronously execute command `command` with params `params` in the
+		remote chrome instance, returning the response from the chrome instance.
+
+		"""
+
+		if TRANSPORT_DEBUG:
+			print("synchronous_command")
+			print("command", command)
+			print("params", params)
 
 		send_id = self.send(command, params)
 		resp = self.recv(message_id=send_id)
@@ -120,7 +121,16 @@ class ChromeSocketManager():
 
 		return resp
 
-	def send(self, command, params):
+	def send(self, command, params=None):
+		'''
+		Send command `command` with optional parameters `params` to the
+		remote chrome instance.
+
+		The command `id` is automatically added to the outgoing message.
+
+		return value is the command id, which can be used to match a command
+		to it's associated response.
+		'''
 		self.__check_open_socket()
 
 		sent_id = self.msg_id
@@ -144,7 +154,40 @@ class ChromeSocketManager():
 		return sent_id
 
 
+	def ___recv(self):
+		try:
+			tmp = self.soc.recv()
+			decoded = json.loads(tmp)
+			return decoded
+		except (socket.timeout, websocket.WebSocketTimeoutException):
+			return None
+
 	def recv_filtered(self, keycheck, timeout=30):
+		'''
+		Receive a filtered message, using the callable `keycheck` to filter received messages
+		for content.
+
+		`keycheck` is expected to be a callable that takes a single parameter (the decoded response
+		from chromium), and returns a boolean (true, if the command is the one filtered for, or false
+		if the command is not the one filtered for).
+
+		This is used internally, for example, by `recv()`, to filter the response for a specific ID:
+
+		```
+			def check_func(message):
+				if message_id is None:
+					return True
+				if "id" in message:
+					return message['id'] == message_id
+				return False
+			return self.recv_filtered(check_func, timeout)
+
+		```
+
+		Note that the function is defined dynamically, and `message_id` is captured via closure.
+
+		'''
+
 
 		self.__check_open_socket()
 
@@ -165,17 +208,17 @@ class ChromeSocketManager():
 				return None
 
 
-	def ___recv(self):
-		try:
-			tmp = self.soc.recv()
-			decoded = json.loads(tmp)
-			return decoded
-		except (socket.timeout, websocket.WebSocketTimeoutException):
-			return None
-
-	def recv(self, message_id=None):
+	def recv(self, message_id=None, timeout=30):
 		'''
 		Recieve a message, optionally filtering for a specified message id.
+
+		If `message_id` is none, the first command in the receive queue is returned.
+		If `message_id` is not none, the command waits untill a message is received with
+		the specified id, or it times out.
+
+		Timeout is the number of seconds to wait for a response, or `None` if the timeout
+		has expired with no response.
+
 		'''
 
 		self.__check_open_socket()
@@ -189,11 +232,13 @@ class ChromeSocketManager():
 		# Then spin untill we either have the message,
 		# or have timed out.
 		def check_func(message):
+			if message_id is None:
+				return True
 			if "id" in message:
 				return message['id'] == message_id
 			return False
 
-		return self.recv_filtered(check_func)
+		return self.recv_filtered(check_func, timeout)
 
 
 	def drain(self):
