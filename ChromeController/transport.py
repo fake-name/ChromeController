@@ -34,7 +34,8 @@ TRANSPORT_DEBUG = False
 
 
 class ChromeSocketManager():
-	"""A remote debugging connection to Google Chrome.
+	"""
+	A remote debugging connection to Google Chrome.
 
 	   > a = Shell(host='localhost', port=92222)
 
@@ -50,7 +51,9 @@ class ChromeSocketManager():
 	   commands and read responses.  The api is semi-asynchronous with
 	   responses for commands, but also spontaeneous events will be
 	   send by the browser. For this kind of advance usage, select/pol
-	   on soc is advised.  """
+	   on soc is advised.
+
+	   """
 
 	def __init__(self, host='localhost', port=9222):
 		""" init """

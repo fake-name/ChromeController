@@ -162,6 +162,10 @@ class JsonInterfaceGenerator(object):
 		desc.append("	Domain: {}".format(dom_name))
 		desc.append("	Method name: {}".format(func_name))
 		desc.append("")
+		if 'experimental' in func_params and func_params['experimental']:
+			desc.append("	WARNING: This function is marked 'Experimental'!")
+			desc.append("")
+
 
 		if "parameters" in func_params:
 			desc.append("	Parameters:")
