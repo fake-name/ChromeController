@@ -4,6 +4,7 @@ import os.path
 import sys
 import subprocess
 import pprint
+import json
 import base64
 import signal
 import pprint
@@ -14,6 +15,7 @@ from .Generator import gen
 
 CromeRemoteDebugInterfaceBase = gen.get_class_def()
 
+from .resources import js
 
 # [
 # 	'Accessibility_getPartialAXTree',
@@ -376,9 +378,53 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 		'''
 		pass
 
+	def __exec_js(self, script, args={}):
+		'''
+		 std::unique_ptr<base::Value>* result) {
+		  std::string json;
+		  base::JSONWriter::Write(args, &json);
+		  // TODO(zachconrad): Second null should be array of shadow host ids.
+		  std::string expression = base::StringPrintf(
+		      "(%s).apply(null, [null, %s, %s])",
+		      kCallFunctionScript,
+		      function.c_str(),
+		      json.c_str());
+		'''
+		expression = "({}).apply(null, [null, {}, {}])".format(
+				js.kCallFunctionScript,
+				script,
+				json.dumps(args)
+			)
+
+		resp3 = self.synchronous_command("Runtime.evaluate",
+			expression=expression,
+			silent=False,
+			returnByValue=False,
+			generatePreview=False,
+			userGesture=False,
+			awaitPromise=False)
+
+		print("Return value: ", resp3)
+
+		return resp
+
+	def navigate_to(self, url):
+		assert "'" not in url
+		return self.__exec_js("window.location.href = '{}'".format(url))
+
+
 	def click_link_containing_url(self, url):
-		elem = self.find_element("//a".format(url))
-		print(elem)
+
+		# exec_func =
+
+		self.__exec_js("window.location.href = '/test'")
+
+		# js.kCallFunctionScript
+
+		# "window.history.back();"
+
+		# elem = self.find_element("//a".format(url))
+		# print(elem)
 
 	def find_element(self, search):
 

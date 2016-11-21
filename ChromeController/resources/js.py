@@ -3,7 +3,14 @@
 # // found in the LICENSE file.
 
 # // This file was generated at (2016-11-18 07:04:40.019257) by running:
-# //     ../../chrome/test/chromedriver/embed_js_in_cpp.py --directory gen/chrome/test/chromedriver/chrome ../../chrome/test/chromedriver/js/add_cookie.js ../../chrome/test/chromedriver/js/call_function.js ../../chrome/test/chromedriver/js/execute_async_script.js ../../chrome/test/chromedriver/js/focus.js ../../chrome/test/chromedriver/js/get_element_region.js ../../chrome/test/chromedriver/js/is_option_element_toggleable.js
+# //
+# ../../chrome/test/chromedriver/embed_js_in_cpp.py --directory gen/chrome/test/chromedriver/chrome
+# ../../chrome/test/chromedriver/js/add_cookie.js
+# ../../chrome/test/chromedriver/js/call_function.js
+# ../../chrome/test/chromedriver/js/execute_async_script.js
+# ../../chrome/test/chromedriver/js/focus.js
+# ../../chrome/test/chromedriver/js/get_element_region.js
+# ../../chrome/test/chromedriver/js/is_option_element_toggleable.js
 
 #include "chrome/test/chromedriver/chrome/js.h"
 
