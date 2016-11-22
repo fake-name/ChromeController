@@ -9,11 +9,11 @@ import os.path
 
 
 CHECKS = {
-	"array"   : "(list, tuple)",
-	"boolean" : "(bool, )",
-	"integer" : "(int, )",
-	"number"  : "(float, int)",
-	"string"  : "(str, )",
+	"array"   : ast.Tuple(ctx=ast.Load(), elts=[ast.Name(id='list', ctx=ast.Load()), ast.Name(id='tuple', ctx=ast.Load())]),   # "(list, tuple)",
+	"boolean" : ast.Tuple(ctx=ast.Load(), elts=[ast.Name(id='bool', ctx=ast.Load())]),   # "(bool, )",
+	"integer" : ast.Tuple(ctx=ast.Load(), elts=[ast.Name(id='int', ctx=ast.Load())]),   # "(int, )",
+	"number"  : ast.Tuple(ctx=ast.Load(), elts=[ast.Name(id='float', ctx=ast.Load()), ast.Name(id='int', ctx=ast.Load())]),   # "(float, int)",
+	"string"  : ast.Tuple(ctx=ast.Load(), elts=[ast.Name(id='str', ctx=ast.Load())]),   # "(str, )",
 }
 
 
@@ -173,6 +173,7 @@ class JsonInterfaceGenerator(object):
 			functions.append(func)
 
 		return functions
+
 	def __build_desc_string(self, dom_name, func_name, func_params):
 		desc = []
 		fname = "{}_{}".format(dom_name, func_name)
@@ -187,13 +188,22 @@ class JsonInterfaceGenerator(object):
 
 		if "parameters" in func_params:
 			desc.append("	Parameters:")
-			for param in func_params['parameters']:
-				if not "description" in param:
-					param['description'] = "No description"
-				if "type" in param:
-					desc.append("		\'{}\' (type: {}) -> {}".format(param['name'], param['type'], param['description']))
-				else:
-					desc.append("		\'{}\' (type: {}) -> {}".format(param['name'], param['$ref'], param['description']))
+			required = [param for param in func_params['parameters'] if not param.get("optional", False)]
+			optional = [param for param in func_params['parameters'] if param.get("optional", False)]
+			sections = [
+				("		Required arguments:", required),
+				("		Optional arguments:", optional),
+			]
+			sections = [section for section in sections if section[1]]
+			for segment_name, items in sections:
+				desc.append(segment_name)
+				for param in items:
+					if not "description" in param:
+						param['description'] = "No description"
+					if "type" in param:
+						desc.append("			\'{}\' (type: {}) -> {}".format(param['name'], param['type'], param['description']))
+					else:
+						desc.append("			\'{}\' (type: {}) -> {}".format(param['name'], param['$ref'], param['description']))
 
 		if "returns" in func_params:
 			desc.append("	Returns:")
@@ -216,15 +226,75 @@ class JsonInterfaceGenerator(object):
 
 		return ret
 
+	def __build_conditional_arg_check(self, argname, argtype):
+
+		target_value = ast.Subscript(
+							value=ast.Name(id='kwargs', ctx=ast.Load()),
+							slice=ast.Index(ast.Str(s=argname)),
+							ctx=ast.Load()
+							)
+
+		presence_check = ast.Call(func = ast.Name(id='isinstance', ctx=ast.Load()),
+				args         = [target_value, argtype],
+				keywords     = [],
+				lineno       = self.__get_line())
+
+		check_message = ast.BinOp(
+				left         = ast.Str(s='Argument {} must be of type ({}). Received type: %s'.format(argname, argtype)),
+				op           = ast.Mod(),
+				right        = ast.Call(func=ast.Name(id='type', ctx=ast.Load()), args=[target_value], keywords=[]),
+				lineno       = self.__get_line())
+
+		assert_check = ast.Assert(
+			test         = presence_check,
+			msg          = check_message,
+			lineno       = self.__get_line())
+
+		check_body = [assert_check]
+
+		check = ast.Compare(left=ast.Str(s=argname, ctx=ast.Load()), ops=[ast.In()], comparators=[ast.Name(id='kwargs', ctx=ast.Load())])
+
+		new_ret = ast.If(
+			test=check,
+			body=check_body,
+			orelse=[],
+			lineno       = self.__get_line())
+
+		return new_ret
+
+	def __build_unconditional_arg_check(self, argname, argtype):
+		# checker_str = "assert isinstance({argname}, {typetuple}), \"Argument {argname} must be of type {typetuple}. Received type: %s\" % type({argname})".format(
+		# 		argname = argname,
+		# 		typetuple = argtype,
+		# 	)
+		# checker = ast.parse(checker_str)
+		# old_ret = checker.body.pop()
+
+		presence_check = ast.Call(func = ast.Name(id='isinstance', ctx=ast.Load()),
+				args         = [ast.Name(id=argname, ctx=ast.Load()), argtype],
+				keywords     = [],
+				lineno       = self.__get_line())
+
+		check_message = ast.BinOp(
+				left         = ast.Str(s='Argument {} must be of type ({}). Received type: %s'.format(argname, argtype)),
+				op           = ast.Mod(),
+				right        = ast.Call(func=ast.Name(id='type', ctx=ast.Load()), args=[ast.Name(id=argname, ctx=ast.Load())], keywords=[]),
+				lineno       = self.__get_line())
+
+		new_ret = ast.Assert(
+			test         = presence_check,
+			msg          = check_message,
+			lineno       = self.__get_line())
+
+
+		return new_ret
+
 	def __build_function(self, dom_name, full_name, func_params):
 
 		assert 'name' in func_params
 		func_name = func_params['name']
 
 		docstr = self.__build_desc_string(dom_name, func_name, func_params)
-		# print(docstr)
-
-		# print(dom_name, full_name, func_name)
 
 		args = [ast.arg('self', None)]
 		message_params = []
@@ -235,23 +305,60 @@ class JsonInterfaceGenerator(object):
 
 		for param in func_params.get("parameters", []):
 			argname = param['name']
-			message_params.append(ast.keyword(argname, ast.Name(id=argname, ctx=ast.Load())))
-			args.append(ast.arg(argname, None))
+			param_optional = param.get("optional", False)
+
+			if param_optional is False:
+				message_params.append(ast.keyword(argname, ast.Name(id=argname, ctx=ast.Load())))
+				args.append(ast.arg(argname, None))
+
+
 			param_type = param.get("type", None)
 			if param_type in CHECKS:
-				checker_str = "assert isinstance({argname}, {typetuple}), \"Argument {argname} must be of type {typetuple}. Received type: %s\" % type({argname})".format(
-						argname = argname,
-						typetuple = CHECKS[param_type],
-					)
-				checker = ast.parse(checker_str)
+				if param_optional:
+					check = self.__build_conditional_arg_check(argname, CHECKS[param_type])
+				else:
+					check = self.__build_unconditional_arg_check(argname, CHECKS[param_type])
 
-				if checker.body:
-					func_body.append(checker.body.pop())
+				if check:
+					func_body.append(check)
+
+
+
+
+		optional_params = [param.get("name") for param in func_params.get("parameters", []) if param.get("optional", False)]
+		if len(optional_params):
+			value = ast.List(elts=[ast.Str(s=param, ctx=ast.Store()) for param in optional_params], ctx=ast.Load())
+			create_list = ast.Assign(targets=[ast.Name(id='expected', ctx=ast.Store())], value=value)
+
+			func_body.append(create_list)
+
+			passed_arg_list = ast.Assign(targets=[ast.Name(id='passed_keys', ctx=ast.Store())],
+				value=ast.Call(func=ast.Name(id='list', ctx=ast.Load()),
+				args=[ast.Call(func=ast.Attribute(value=ast.Name(id='kwargs', ctx=ast.Load()), attr='keys', ctx=ast.Load()), args=[], keywords=[])],
+				keywords=[]))
+
+			func_body.append(passed_arg_list)
+
+			comprehension = ast.comprehension(target=ast.Name(id='key', ctx=ast.Store()), iter=ast.Name(id='passed_keys', ctx=ast.Load()), ifs=[])
+			comparator = ast.Name(id='expected', ctx=ast.Load())
+
+			listcomp = ast.ListComp(elt=ast.Compare(left=ast.Name(id='key', ctx=ast.Load()), ops=[ast.In()], comparators=[comparator]), generators=[comprehension])
+
+			check_message = ast.BinOp(
+					left         = ast.Str(s="Allowed kwargs are {}. Passed kwargs: %s".format(optional_params)),
+					op           = ast.Mod(),
+					right        = ast.Name(id='passed_keys', ctx=ast.Load()),
+					lineno       = self.__get_line())
+
+			kwarg_check = ast.Assert(test=ast.Call(func=ast.Name(id='all', ctx=ast.Load()), args=[listcomp], keywords=[]), msg=check_message)
+			func_body.append(kwarg_check)
+
+
+			message_params.append(ast.keyword(arg=None, value=ast.Name(id='kwargs', ctx=ast.Load())))
+
 
 		fname = "{}.{}".format(dom_name, func_name)
 		fname = ast.Str(s=fname, ctx=ast.Load())
-
-		# print(message_params)
 
 		communicate_call = ast.Call(
 				func=ast.Attribute(value=ast.Name(id='self', ctx=ast.Load()), ctx=ast.Load(), attr='synchronous_command'),
@@ -264,12 +371,18 @@ class JsonInterfaceGenerator(object):
 		func_body.append(do_communicate)
 		func_body.append(func_ret)
 
+		if len(optional_params):
+			kwarg = ast.arg(arg='kwargs', annotation=None)
+		else:
+			kwarg = None
+
+
 		sig = ast.arguments(
 					args=args,
 					vararg=None,
 					varargannotation=None,
 					kwonlyargs=[],
-					kwarg=None,
+					kwarg=kwarg,
 					kwargannotation=None,
 					defaults=[],
 					kw_defaults=[])

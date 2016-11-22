@@ -314,9 +314,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
 		resp1 = self.Page_enable()
 		resp2 = self.DOM_enable()
-
-		# I haven't worked out optionally ignorable arguments for this, yet
-		resp3 = self.synchronous_command("Network.enable")
+		resp3 = self.Network_enable()
 
 
 	def set_viewport_size(self, x_pix, y_pix):
@@ -396,17 +394,11 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 				json.dumps(args)
 			)
 
-		resp3 = self.synchronous_command("Runtime.evaluate",
-			expression=expression,
-			silent=False,
-			returnByValue=False,
-			generatePreview=False,
-			userGesture=False,
-			awaitPromise=False)
+		resp3 = self.Runtime_evaluate(expression=expression)
 
 		print("Return value: ", resp3)
 
-		return resp
+		return resp3
 
 	def navigate_to(self, url):
 		assert "'" not in url
