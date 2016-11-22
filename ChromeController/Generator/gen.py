@@ -176,8 +176,8 @@ class JsonInterfaceGenerator(object):
 
 	def __build_desc_string(self, dom_name, func_name, func_params):
 		desc = []
-		fname = "{}_{}".format(dom_name, func_name)
-		desc.append("Python Function: {}".format(fname))
+		fname = "{}.{}".format(dom_name, func_name)
+		desc.append("Function path: {}".format(fname))
 		desc.append("	Domain: {}".format(dom_name))
 		desc.append("	Method name: {}".format(func_name))
 		desc.append("")
@@ -217,6 +217,7 @@ class JsonInterfaceGenerator(object):
 		else:
 			desc.append("	No return value.")
 
+		desc.append("")
 
 		if "description" in func_params:
 			desc.append("	Description: {}".format(func_params['description']))
