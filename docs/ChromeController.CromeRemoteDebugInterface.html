@@ -41,7 +41,8 @@ A&nbsp;navigation&nbsp;command&nbsp;results&nbsp;in&nbsp;a&nbsp;sequence&nbsp;of
 &nbsp;-&nbsp;Page.frameStoppedLoading"&nbsp;(with&nbsp;frameid)<br>
 &nbsp;-&nbsp;Page.loadEventFired"&nbsp;(not&nbsp;attached&nbsp;to&nbsp;an&nbsp;ID)<br>
 &nbsp;<br>
-Therefore,&nbsp;we&nbsp;trigger&nbsp;a&nbsp;navigation&nbsp;option,&nbsp;and&nbsp;then&nbsp;wait&nbsp;for&nbsp;the&nbsp;expected&nbsp;set&nbsp;of&nbsp;results.</tt></dd></dl>
+Therefore,&nbsp;this&nbsp;call&nbsp;triggers&nbsp;a&nbsp;navigation&nbsp;option,<br>
+and&nbsp;then&nbsp;waits&nbsp;for&nbsp;the&nbsp;expected&nbsp;set&nbsp;of&nbsp;response&nbsp;event&nbsp;messages.</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-blocking_navigate_and_get_source"><strong>blocking_navigate_and_get_source</strong></a>(self, url)</dt><dd><tt>Do&nbsp;a&nbsp;blocking&nbsp;navigate&nbsp;to&nbsp;url&nbsp;`url`,&nbsp;and&nbsp;then&nbsp;extract&nbsp;the<br>
 response&nbsp;body&nbsp;and&nbsp;return&nbsp;that.<br>
@@ -52,13 +53,20 @@ function&nbsp;will&nbsp;not&nbsp;reflect&nbsp;the&nbsp;changes&nbsp;made&nbsp;by
 &nbsp;<br>
 The&nbsp;rendered&nbsp;page&nbsp;content&nbsp;can&nbsp;be&nbsp;retreived&nbsp;by&nbsp;calling&nbsp;`<a href="#ChromeController.CromeRemoteDebugInterface-get_rendered_page_source">get_rendered_page_source</a>()`.<br>
 &nbsp;<br>
+Due&nbsp;to&nbsp;the&nbsp;remote&nbsp;api&nbsp;structure,&nbsp;accessing&nbsp;the&nbsp;raw&nbsp;content&nbsp;after&nbsp;the&nbsp;content&nbsp;has&nbsp;been&nbsp;loaded<br>
+is&nbsp;not&nbsp;possible,&nbsp;so&nbsp;any&nbsp;task&nbsp;requiring&nbsp;the&nbsp;raw&nbsp;content&nbsp;must&nbsp;be&nbsp;careful&nbsp;to&nbsp;request&nbsp;it<br>
+before&nbsp;it&nbsp;actually&nbsp;navigates&nbsp;to&nbsp;said&nbsp;content.<br>
+&nbsp;<br>
 Return&nbsp;value&nbsp;is&nbsp;a&nbsp;dictionary&nbsp;with&nbsp;two&nbsp;keys:<br>
 {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'binary'&nbsp;:&nbsp;(boolean,&nbsp;true&nbsp;if&nbsp;content&nbsp;is&nbsp;binary,&nbsp;false&nbsp;if&nbsp;not)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'content'&nbsp;:&nbsp;(string&nbsp;of&nbsp;bytestring,&nbsp;depending&nbsp;on&nbsp;whether&nbsp;`binary`&nbsp;is&nbsp;true&nbsp;or&nbsp;not)<br>
 }</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-click_element"><strong>click_element</strong></a>(self, contains_url)</dt><dd><tt>ChromeDriver&nbsp;source&nbsp;for&nbsp;how&nbsp;to&nbsp;click&nbsp;an&nbsp;element:<br>
+<dl><dt><a name="CromeRemoteDebugInterface-click_element"><strong>click_element</strong></a>(self, contains_url)</dt><dd><tt>TODO<br>
+&nbsp;<br>
+&nbsp;<br>
+ChromeDriver&nbsp;source&nbsp;for&nbsp;how&nbsp;to&nbsp;click&nbsp;an&nbsp;element:<br>
 &nbsp;<br>
 Status&nbsp;ExecuteClickElement(Session*&nbsp;session,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebView*&nbsp;web_view,<br>
@@ -104,7 +112,7 @@ Status&nbsp;ExecuteClickElement(Session*&nbsp;session,<br>
 &nbsp;&nbsp;}<br>
 }</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-click_link_containing_url"><strong>click_link_containing_url</strong></a>(self, url)</dt></dl>
+<dl><dt><a name="CromeRemoteDebugInterface-click_link_containing_url"><strong>click_link_containing_url</strong></a>(self, url)</dt><dd><tt>TODO</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-find_element"><strong>find_element</strong></a>(self, search)</dt><dd><tt><a href="#ChromeController.CromeRemoteDebugInterface-DOM_performSearch">DOM_performSearch</a>(self,&nbsp;query,&nbsp;includeUserAgentShadowDOM)<br>
 Python&nbsp;Function:&nbsp;DOM_performSearch<br>
@@ -152,24 +160,35 @@ Python&nbsp;Function:&nbsp;DOM_discardSearchResults<br>
 <dl><dt><a name="CromeRemoteDebugInterface-get_rendered_page_source"><strong>get_rendered_page_source</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;HTML&nbsp;markup&nbsp;for&nbsp;the&nbsp;current&nbsp;page.<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;done&nbsp;by&nbsp;looking&nbsp;up&nbsp;the&nbsp;root&nbsp;DOM&nbsp;node,&nbsp;and&nbsp;then&nbsp;requesting&nbsp;the&nbsp;outer&nbsp;HTML<br>
-for&nbsp;that&nbsp;node&nbsp;ID.</tt></dd></dl>
+for&nbsp;that&nbsp;node&nbsp;ID.<br>
+&nbsp;<br>
+This&nbsp;calls&nbsp;return&nbsp;will&nbsp;reflect&nbsp;any&nbsp;modifications&nbsp;made&nbsp;by&nbsp;javascript&nbsp;to&nbsp;the<br>
+page.&nbsp;For&nbsp;unmodified&nbsp;content,&nbsp;use&nbsp;`<a href="#ChromeController.CromeRemoteDebugInterface-blocking_navigate_and_get_source">blocking_navigate_and_get_source</a>()`</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-navigate_to"><strong>navigate_to</strong></a>(self, url)</dt></dl>
+<dl><dt><a name="CromeRemoteDebugInterface-navigate_to"><strong>navigate_to</strong></a>(self, url)</dt><dd><tt>Trigger&nbsp;a&nbsp;page&nbsp;navigation&nbsp;to&nbsp;url&nbsp;`url`.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;this&nbsp;is&nbsp;done&nbsp;via&nbsp;javascript&nbsp;injection,&nbsp;and&nbsp;as&nbsp;such&nbsp;results&nbsp;in<br>
+the&nbsp;`referer`&nbsp;header&nbsp;being&nbsp;sent&nbsp;with&nbsp;the&nbsp;url&nbsp;of&nbsp;the&nbsp;network&nbsp;location.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;useful&nbsp;when&nbsp;a&nbsp;page's&nbsp;navigation&nbsp;is&nbsp;stateful,&nbsp;or&nbsp;for&nbsp;simple<br>
+cases&nbsp;of&nbsp;referrer&nbsp;spoofing.</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-set_cookie"><strong>set_cookie</strong></a>(self, cookie)</dt><dd><tt>TODO</tt></dd></dl>
-
-<dl><dt><a name="CromeRemoteDebugInterface-set_headers"><strong>set_headers</strong></a>(self, header_dict)</dt><dd><tt>Update&nbsp;or&nbsp;add&nbsp;a&nbsp;set&nbsp;of&nbsp;headers&nbsp;to&nbsp;the&nbsp;remote&nbsp;browser.<br>
-&nbsp;<br>
-Passed&nbsp;headers&nbsp;should&nbsp;be&nbsp;a&nbsp;dictionary&nbsp;of&nbsp;key-value&nbsp;items,&nbsp;where&nbsp;the&nbsp;key&nbsp;is&nbsp;the&nbsp;name<br>
-of&nbsp;the&nbsp;header,&nbsp;and&nbsp;value&nbsp;is&nbsp;the&nbsp;header&nbsp;content.</tt></dd></dl>
-
-<dl><dt><a name="CromeRemoteDebugInterface-set_user_agent_string"><strong>set_user_agent_string</strong></a>(self, ua_string)</dt><dd><tt>Override&nbsp;the&nbsp;user-agent&nbsp;string&nbsp;for&nbsp;the&nbsp;remote&nbsp;browser,&nbsp;setting&nbsp;it&nbsp;to&nbsp;`ua_string`.</tt></dd></dl>
-
-<dl><dt><a name="CromeRemoteDebugInterface-set_viewport_size"><strong>set_viewport_size</strong></a>(self, x_pix, y_pix)</dt><dd><tt>Set&nbsp;the&nbsp;emulated&nbsp;viewport&nbsp;size&nbsp;to&nbsp;`x_pix`&nbsp;by&nbsp;`y_pix`</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-take_screeshot"><strong>take_screeshot</strong></a>(self)</dt><dd><tt>Take&nbsp;a&nbsp;screenshot&nbsp;of&nbsp;the&nbsp;virtual&nbsp;viewport&nbsp;content.<br>
 &nbsp;<br>
 Return&nbsp;value&nbsp;is&nbsp;a&nbsp;png&nbsp;image&nbsp;as&nbsp;a&nbsp;bytestring.</tt></dd></dl>
+
+<dl><dt><a name="CromeRemoteDebugInterface-update_headers"><strong>update_headers</strong></a>(self, header_args)</dt><dd><tt>Given&nbsp;a&nbsp;set&nbsp;of&nbsp;headers,&nbsp;update&nbsp;both&nbsp;the&nbsp;user-agent<br>
+and&nbsp;additional&nbsp;headers&nbsp;for&nbsp;the&nbsp;remote&nbsp;browser.<br>
+&nbsp;<br>
+header_args&nbsp;must&nbsp;be&nbsp;a&nbsp;dict.&nbsp;Keys&nbsp;are&nbsp;the&nbsp;names&nbsp;of<br>
+the&nbsp;corresponding&nbsp;HTTP&nbsp;header.<br>
+&nbsp;<br>
+return&nbsp;value&nbsp;is&nbsp;a&nbsp;2-tuple&nbsp;of&nbsp;the&nbsp;results&nbsp;of&nbsp;the&nbsp;user-agent<br>
+update,&nbsp;as&nbsp;well&nbsp;as&nbsp;the&nbsp;extra&nbsp;headers&nbsp;update.<br>
+If&nbsp;no&nbsp;'User-Agent'&nbsp;key&nbsp;is&nbsp;present&nbsp;in&nbsp;the&nbsp;new&nbsp;headers,<br>
+the&nbsp;first&nbsp;item&nbsp;in&nbsp;the&nbsp;tuple&nbsp;will&nbsp;be&nbsp;None</tt></dd></dl>
 
 <hr>
 Methods inherited from ChromeController.Generator.gen.CromeRemoteDebugInterface:<br>
