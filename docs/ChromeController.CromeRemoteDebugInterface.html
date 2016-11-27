@@ -155,7 +155,11 @@ Python&nbsp;Function:&nbsp;DOM_discardSearchResults<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;return&nbsp;value.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Discards&nbsp;search&nbsp;results&nbsp;from&nbsp;the&nbsp;session&nbsp;with&nbsp;the&nbsp;given&nbsp;id.&nbsp;&lt;code&gt;getSearchResults&lt;/code&gt;&nbsp;should&nbsp;no&nbsp;longer&nbsp;be&nbsp;called&nbsp;for&nbsp;that&nbsp;search.</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-get_cookie"><strong>get_cookie</strong></a>(self)</dt><dd><tt>TODO</tt></dd></dl>
+<dl><dt><a name="CromeRemoteDebugInterface-get_cookies"><strong>get_cookies</strong></a>(self)</dt><dd><tt>Retreive&nbsp;the&nbsp;cookies&nbsp;from&nbsp;the&nbsp;remote&nbsp;browser.<br>
+&nbsp;<br>
+Return&nbsp;value&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;http.cookiejar.Cookie()&nbsp;instances.<br>
+These&nbsp;can&nbsp;be&nbsp;directly&nbsp;used&nbsp;with&nbsp;the&nbsp;various&nbsp;http.cookiejar.XXXCookieJar<br>
+cookie&nbsp;management&nbsp;classes.</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-get_rendered_page_source"><strong>get_rendered_page_source</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;HTML&nbsp;markup&nbsp;for&nbsp;the&nbsp;current&nbsp;page.<br>
 &nbsp;<br>

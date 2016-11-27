@@ -110,12 +110,12 @@ def test():
 	print("Set user agent: ", resp)
 	# print("Set extra headers: ", resp)
 
-	# resp = cr.blocking_navigate("http://www.google.com")
-	resp = cr.blocking_navigate_and_get_source("http://10.1.1.8:33507/index")
-	resp = cr.blocking_navigate_and_get_source("http://10.1.1.8:33507/index")
+	resp = cr.blocking_navigate_and_get_source("http://www.google.com")
+	# resp = cr.blocking_navigate_and_get_source("http://10.1.1.8:33507/index")
+	# resp = cr.blocking_navigate_and_get_source("http://10.1.1.8:33507/index")
 
 	cr.click_link_containing_url("/test")
-	print("Page.navigate", resp['content'])
+	# print("Page.navigate", resp['content'])
 	img = cr.take_screeshot()
 	with open("screenshot.png", "wb") as fp:
 		fp.write(img)
@@ -126,6 +126,8 @@ def test():
 	ctnt = cr.get_rendered_page_source()
 	# print("Source:")
 	# print(ctnt)
+
+	cr.get_cookies()
 
 	wait_time = 5
 	for x in range(wait_time):

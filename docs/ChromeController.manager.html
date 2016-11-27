@@ -20,15 +20,16 @@
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="base64.html">base64</a><br>
 <a href="distutils.html">distutils</a><br>
 <a href="ChromeController.Generator.gen.html">ChromeController.Generator.gen</a><br>
+<a href="http.html">http</a><br>
 </td><td width="25%" valign=top><a href="ChromeController.resources.js.html">ChromeController.resources.js</a><br>
 <a href="json.html">json</a><br>
 <a href="os.html">os</a><br>
-</td><td width="25%" valign=top><a href="pprint.html">pprint</a><br>
-<a href="requests.html">requests</a><br>
+<a href="pprint.html">pprint</a><br>
+</td><td width="25%" valign=top><a href="requests.html">requests</a><br>
 <a href="signal.html">signal</a><br>
-</td><td width="25%" valign=top><a href="subprocess.html">subprocess</a><br>
+<a href="subprocess.html">subprocess</a><br>
 <a href="sys.html">sys</a><br>
-<a href="time.html">time</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -197,7 +198,11 @@ Python&nbsp;Function:&nbsp;DOM_discardSearchResults<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;return&nbsp;value.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Discards&nbsp;search&nbsp;results&nbsp;from&nbsp;the&nbsp;session&nbsp;with&nbsp;the&nbsp;given&nbsp;id.&nbsp;&lt;code&gt;getSearchResults&lt;/code&gt;&nbsp;should&nbsp;no&nbsp;longer&nbsp;be&nbsp;called&nbsp;for&nbsp;that&nbsp;search.</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-get_cookie"><strong>get_cookie</strong></a>(self)</dt><dd><tt>TODO</tt></dd></dl>
+<dl><dt><a name="CromeRemoteDebugInterface-get_cookies"><strong>get_cookies</strong></a>(self)</dt><dd><tt>Retreive&nbsp;the&nbsp;cookies&nbsp;from&nbsp;the&nbsp;remote&nbsp;browser.<br>
+&nbsp;<br>
+Return&nbsp;value&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;http.cookiejar.Cookie()&nbsp;instances.<br>
+These&nbsp;can&nbsp;be&nbsp;directly&nbsp;used&nbsp;with&nbsp;the&nbsp;various&nbsp;http.cookiejar.XXXCookieJar<br>
+cookie&nbsp;management&nbsp;classes.</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-get_rendered_page_source"><strong>get_rendered_page_source</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;HTML&nbsp;markup&nbsp;for&nbsp;the&nbsp;current&nbsp;page.<br>
 &nbsp;<br>
