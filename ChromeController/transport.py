@@ -10,7 +10,7 @@ import time
 import websocket
 import requests
 
-TRANSPORT_DEBUG = False
+TRANSPORT_DEBUG = True
 
 
 class ChromeSocketManager():
@@ -89,15 +89,15 @@ class ChromeSocketManager():
 		"""
 
 		if TRANSPORT_DEBUG:
-			print("synchronous_command")
-			print("command", command)
-			print("params", params)
+			print("Synchronous_command:")
+			print("	command: '%s'" % command)
+			print("	params:  '%s'" % params)
 
 		send_id = self.send(command, params)
 		resp = self.recv(message_id=send_id)
 
 		if TRANSPORT_DEBUG:
-			print("Response: ", resp)
+			print("	Response: '%s'" % resp)
 
 		return resp
 
@@ -126,7 +126,7 @@ class ChromeSocketManager():
 
 
 		if TRANSPORT_DEBUG:
-			print("Sending: ", navcom)
+			print("		Sending: '%s'" % navcom)
 
 		self.soc.send(navcom)
 
@@ -137,6 +137,9 @@ class ChromeSocketManager():
 	def ___recv(self):
 		try:
 			tmp = self.soc.recv()
+			if TRANSPORT_DEBUG:
+				print("		Received: '%s'" % tmp)
+
 			decoded = json.loads(tmp)
 			return decoded
 		except (socket.timeout, websocket.WebSocketTimeoutException):

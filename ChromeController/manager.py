@@ -10,14 +10,16 @@ import signal
 import pprint
 import time
 import http.cookiejar
-import requests.exceptions
+import urllib.parse
 
 from .Generator import gen
-
 CromeRemoteDebugInterfaceBase = gen.get_class_def()
+from .manager_base import ChromeError
+
 
 from .resources import js
 
+DEFAULT_TIMEOUT_SECS = 30
 
 class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
@@ -95,13 +97,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
 
 
-	# Interact with httplib.cookie instances
-	def set_cookie(self, cookie):
-		'''
-		TODO
-		'''
-		pass
-
+	# Interact with http.cookiejar.Cookie() instances
 	def get_cookies(self):
 		'''
 		Retreive the cookies from the remote browser.
@@ -148,6 +144,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 			# I suspect the python cookie implementation is derived exactly from the standard, while the
 			# chromium implementation is more of a practically derived structure.
 
+			# Network.setCookie
 
 			baked_cookie = http.cookiejar.Cookie(
 					# We assume V0 cookies, principally because I don't think I've /ever/ actually encountered a V1 cookie.
@@ -174,6 +171,82 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 			cookies.append(baked_cookie)
 
 		return cookies
+
+	def set_cookie(self, cookie):
+		'''
+		Add a cookie to the remote chromium instance.
+
+		Passed value `cookie` must be an instance of `http.cookiejar.Cookie()`.
+		'''
+		'''
+			Function path: Network.setCookie
+			Domain: Network
+			Method name: setCookie
+
+			WARNING: This function is marked 'Experimental'!
+
+			Parameters:
+			        Required arguments:
+			                'url' (type: string) -> The request-URI to associate with the setting of the cookie. This value can affect the default domain and path values of the created cookie.
+			                'name' (type: string) -> The name of the cookie.
+			                'value' (type: string) -> The value of the cookie.
+			        Optional arguments:
+			                'domain' (type: string) -> If omitted, the cookie becomes a host-only cookie.
+			                'path' (type: string) -> Defaults to the path portion of the url parameter.
+			                'secure' (type: boolean) -> Defaults ot false.
+			                'httpOnly' (type: boolean) -> Defaults to false.
+			                'sameSite' (type: CookieSameSite) -> Defaults to browser default behavior.
+			                'expirationDate' (type: Timestamp) -> If omitted, the cookie becomes a session cookie.
+			Returns:
+			        'success' (type: boolean) -> True if successfully set cookie.
+
+			Description: Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
+		'''
+
+		assert isinstance(cookie, http.cookiejar.Cookie), 'The value passed to `set_cookie` must be an instance of http.cookiejar.Cookie().'
+
+		# Yeah, the cookielib stores this attribute as a string, despite it containing a
+		# boolean value. No idea why.
+		is_http_only = cookie.get_nonstandard_attr('httponly', 'False').lower() == "true"
+
+
+		# I'm unclear what the "url" field is actually for. A cookie only needs the domain and
+		# path component to be fully defined. Considering the API apparently allows the domain and
+		# path parameters to be unset, I think it forms a partially redundant, with some
+		# strange interactions with mode-changing between host-only and more general
+		# cookies depending on what's set where.
+		# Anyways, given we need a URL for the API to work properly, we produce a fake
+		# host url by building it out of the relevant cookie properties.
+		fake_url = urllib.parse.urlunsplit((
+				"http" if is_http_only else "https",  # Scheme
+				cookie.domain,                        # netloc
+				cookie.path,                          # path
+				'',                                   # query
+				'',                                   # fragment
+			))
+
+		params = {
+				'url'            : fake_url,
+
+				'name'           : cookie.name,
+				'value'          : cookie.value,
+				'domain'         : cookie.domain,
+				'path'           : cookie.path,
+				'secure'         : cookie.secure,
+				'expirationDate' : cookie.expires,
+
+				'httpOnly'       : is_http_only,
+
+				# The "sameSite" flag appears to be a chromium-only extension for controlling
+				# cookie sending in non-first-party contexts. See:
+				# https://bugs.chromium.org/p/chromium/issues/detail?id=459154
+				# Anyways, we just use the default here, whatever that is.
+				# sameSite       = cookie.xxx
+			}
+
+		ret = self.Network_setCookie(**params)
+
+		return ret
 
 
 	def navigate_to(self, url):
@@ -334,7 +407,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
 
 
-	def blocking_navigate_and_get_source(self, url):
+	def blocking_navigate_and_get_source(self, url, timeout=DEFAULT_TIMEOUT_SECS):
 		'''
 		Do a blocking navigate to url `url`, and then extract the
 		response body and return that.
@@ -357,7 +430,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
 		'''
 
-		resp = self.blocking_navigate(url)
+		resp = self.blocking_navigate(url, timeout)
 		assert 'requestId' in resp
 		print('resp', resp)
 
@@ -410,7 +483,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 		return imgdat
 
 
-	def blocking_navigate(self, url, timeout=30):
+	def blocking_navigate(self, url, timeout=DEFAULT_TIMEOUT_SECS):
 		'''
 		Do a blocking navigate to url `url`.
 
@@ -505,9 +578,13 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 					return False
 				if 'frameId' in params:
 					if params['frameId'] == expected_id and 'response' in params:
-						response = params['response']
-						if 'url' in response:
-							return url in response['url']
+						return True
+
+						# Checking the url in the response breaks if
+						# the remote issues a 301 or 302.
+						# response = params['response']
+						# if 'url' in response:
+						# 	return url == response['url']
 				return False
 			return network_response_recieved_tracker
 
@@ -519,6 +596,9 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 		self.transport.recv_filtered(check_load_event_fired)
 
 		resp = self.transport.recv_filtered(network_response_recieved_for_url(url))
+
+		if resp is None:
+			raise ChromeError("Blocking navigate timed out!")
 
 		return resp['params']
 
