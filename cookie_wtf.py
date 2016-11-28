@@ -32,14 +32,14 @@ def test():
 
 	cooks2 = cr.get_cookies()
 	print()
-	print("Pre-clearing cookies:")
+	print("Cookies after first 'Page.navigate' command:")
 	for cookie in cooks1:
-		pprint.pprint(cookie)
+		print('	', cookie)
 
 	print()
-	print("After nav cookies:")
+	print("Cookies after second 'Page.navigate' command:")
 	for cookie in cooks2:
-		pprint.pprint(cookie)
+		print('	', cookie)
 
 	# for cook in cooks1:
 	# 	ret = cr.set_cookie(cook)
