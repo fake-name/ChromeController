@@ -435,7 +435,8 @@ def get_source():
 
 def get_class_def():
 	instance = JsonInterfaceGenerator()
-	return instance.compile_class()
+	ret = instance.compile_class()
+	return ret
 
 def get_printed_ast():
 	instance = JsonInterfaceGenerator()

@@ -432,7 +432,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
 		resp = self.blocking_navigate(url, timeout)
 		assert 'requestId' in resp
-		print('resp', resp)
+		# print('resp', resp)
 
 		content = self.Network_getResponseBody(resp['requestId'])
 		assert 'result' in content

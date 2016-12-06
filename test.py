@@ -95,11 +95,12 @@ def docstring_dbg():
 
 
 def test():
+	print("Starting!")
 
 	ua = dict(WebRequest.getUserAgent())
 	# print(ua)
 
-	crbin = os.path.abspath("../AutoTriever/Headless/headless_shell")
+	crbin = os.path.abspath("../Chromium/src/out/Headless/headless_shell")
 	cr = ChromeController.CromeRemoteDebugInterface(binary=crbin)
 
 	# print(cr)
@@ -140,28 +141,28 @@ def test():
 	resp = cr.blocking_navigate_and_get_source("http://google.com", timeout=10)
 	cr.Network_clearBrowserCookies()
 
-	cooks2 = cr.get_cookies()
-	print()
-	print("Pre-clearing cookies:")
-	for cookie in cooks1:
-		print(cookie)
-		print(cookie._rest)
-	print()
-	print("Cleared cookies:")
-	for cookie in cooks2:
-		print(cookie)
-		print(cookie._rest)
+	# cooks2 = cr.get_cookies()
+	# print()
+	# print("Pre-clearing cookies:")
+	# for cookie in cooks1:
+	# 	print(cookie)
+	# 	print(cookie._rest)
+	# print()
+	# print("Cleared cookies:")
+	# for cookie in cooks2:
+	# 	print(cookie)
+	# 	print(cookie._rest)
 
-	for cook in cooks1:
-		ret = cr.set_cookie(cook)
-		print(ret)
+	# for cook in cooks1:
+	# 	ret = cr.set_cookie(cook)
+	# 	print(ret)
 
-	print()
-	print("Reinstated cookies:")
-	cooks3 = cr.get_cookies()
-	for cookie in cooks3:
-		print(cookie)
-		print(cookie._rest)
+	# print()
+	# print("Reinstated cookies:")
+	# cooks3 = cr.get_cookies()
+	# for cookie in cooks3:
+	# 	print(cookie)
+	# 	print(cookie._rest)
 
 	wait_time = 5
 	for x in range(wait_time):

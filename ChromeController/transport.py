@@ -10,7 +10,7 @@ import time
 import websocket
 import requests
 
-TRANSPORT_DEBUG = True
+TRANSPORT_DEBUG = False
 
 
 class ChromeSocketManager():

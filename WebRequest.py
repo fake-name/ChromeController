@@ -38,7 +38,7 @@ def parse_headers(fp, _class=http.client.HTTPMessage):
 	hstring = b''.join(headers)
 	inferred = chardet.detect(hstring)
 	if inferred and inferred['confidence'] > 0.8:
-		print("Parsing headers!", hstring)
+		# print("Parsing headers!", hstring)
 		hstring = hstring.decode(inferred['encoding'])
 	else:
 		hstring = hstring.decode('iso-8859-1')
