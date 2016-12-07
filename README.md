@@ -14,11 +14,15 @@ at the moment.
 
 Interface documentation is here: https://fake-name.github.io/ChromeController/ChromeController.CromeRemoteDebugInterface.html
 
-Tested only on python 3.5 and linux. If you are using python 2, please stahp. 
+Tested only on python 3.4 and 3.5 on linux. If you are using python 2, please stahp. 
 Will probably work with normal chromium/windows, but that's not tested. My 
 use-case is controlling chromium's `headless_shell`, and the system I do testing 
 on has no X install at all, so non-headless testing is not something I can do
 at the moment.
+
+Note that this tool generates and manipulates the AST directly, so it is 
+EXTREMELY sensitive to implementation details. It is *probably* broken on 
+python 3.6 or < 3.4.
 
 Transport layer (originally) from https://github.com/minektur/chrome_remote_shell
 
