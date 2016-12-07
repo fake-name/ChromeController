@@ -3,6 +3,7 @@
 import json
 import ast
 import astor
+import sys
 import pprint
 
 import os.path
@@ -118,12 +119,24 @@ class JsonInterfaceGenerator(object):
 	def __build__init(self):
 
 		super_func = ast.Call(func=ast.Name(id='super', ctx=ast.Load()), args=[], keywords=[])
-		super_func = ast.Call(
-								func=ast.Attribute(value=super_func, attr='__init__', ctx=ast.Load()),
-								args=[ast.Starred(value=ast.Name(id='args', ctx=ast.Load()), ctx=ast.Load())],
-								keywords=[],
-								kwargs=ast.Name(id='kwargs', ctx=ast.Load()),
-						)
+		if (sys.version_info[0], sys.version_info[1]) == (3, 5):
+			super_func = ast.Call(
+									func=ast.Attribute(value=super_func, attr='__init__', ctx=ast.Load()),
+									args=[ast.Starred(value=ast.Name(id='args', ctx=ast.Load()), ctx=ast.Load())],
+									keywords=[],
+									kwargs=ast.Name(id='kwargs', ctx=ast.Load()),
+							)
+		elif (sys.version_info[0], sys.version_info[1]) == (3,4):
+			super_func = ast.Call(
+									func=ast.Attribute(value=super_func, attr='__init__', ctx=ast.Load()),
+									args=[],
+									keywords=[],
+									starargs=ast.Name(id='args', ctx=ast.Load()),
+									kwargs=ast.Name(id='kwargs', ctx=ast.Load()),
+							)
+		else:
+			print("Version:", sys.version_info)
+			raise RuntimeError("This script only functions on python 3.4 and 3.5. Active python version {}.{}".format(*sys.version_info))
 
 		super_init = ast.Expr(
 							value=super_func,
