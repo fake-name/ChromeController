@@ -91,7 +91,9 @@ def func():
 
 	class TestWat(object):
 		def __init__(self, *args, **kwargs):
-			super().__init__(self, *args, **kwargs)
+			print("Lol?", (args, kwargs))
+			super().__init__(*args, **kwargs)
+			super().__init__(args, kwargs)
 
 	instance = TestWat()
 
@@ -107,7 +109,7 @@ def test():
 	# print(ua)
 
 	crbin = os.path.abspath("../Chromium/src/out/Headless/headless_shell")
-	cr = ChromeController.CromeRemoteDebugInterface(binary=crbin)
+	cr = ChromeController.CromeRemoteDebugInterface(crbin)
 
 	# print(cr)
 	resp = cr.Emulation_setVisibleSize(1500, 1000)

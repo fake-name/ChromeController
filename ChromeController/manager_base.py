@@ -18,7 +18,7 @@ class ChromeInterface():
 
 	"""
 
-	def __init__(self, binary=None):
+	def __init__(self, binary=None, *args, **kwargs):
 		"""
 		Base chromium transport initialization.
 
@@ -28,6 +28,7 @@ class ChromeInterface():
 		The chromium binary is launched with the arg `--remote-debugging-port=9222` if found.
 
 		"""
+		print("Binary:", binary, (args, kwargs))
 
 		if binary is None:
 			binary = "chromium"

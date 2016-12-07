@@ -120,9 +120,8 @@ class JsonInterfaceGenerator(object):
 		super_func = ast.Call(func=ast.Name(id='super', ctx=ast.Load()), args=[], keywords=[])
 		super_func = ast.Call(
 								func=ast.Attribute(value=super_func, attr='__init__', ctx=ast.Load()),
-								args=[],
+								args=[ast.Starred(value=ast.Name(id='args', ctx=ast.Load()), ctx=ast.Load())],
 								keywords=[],
-								starargs=ast.Name(id='args', ctx=ast.Load()),
 								kwargs=ast.Name(id='kwargs', ctx=ast.Load()),
 						)
 
