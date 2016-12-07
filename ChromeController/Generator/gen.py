@@ -117,11 +117,13 @@ class JsonInterfaceGenerator(object):
 
 	def __build__init(self):
 
-		init_func = ast.Call(func=ast.Name(id='super', ctx=ast.Load()), args=[], keywords=[])
+		super_func = ast.Call(func=ast.Name(id='super', ctx=ast.Load()), args=[], keywords=[])
 		super_func = ast.Call(
-								func=ast.Attribute(value=init_func, attr='__init__', ctx=ast.Load()),
-								args=[ast.Starred(value=ast.Name(id='args', ctx=ast.Load()), ctx=ast.Load())],
-								keywords=[ast.keyword(arg=None, value=ast.Name(id='kwargs', ctx=ast.Load()), ctx=ast.Load())],
+								func=ast.Attribute(value=super_func, attr='__init__', ctx=ast.Load()),
+								args=[],
+								keywords=[],
+								starargs=ast.Name(id='args', ctx=ast.Load()),
+								kwargs=ast.Name(id='kwargs', ctx=ast.Load()),
 						)
 
 		super_init = ast.Expr(
@@ -130,9 +132,7 @@ class JsonInterfaceGenerator(object):
 							col_offset = 0,
 						)
 
-
 		body = [super_init]
-
 
 		sig = ast.arguments(
 					args=[ast.arg('self', None)],
@@ -256,10 +256,10 @@ class JsonInterfaceGenerator(object):
 		check = ast.Compare(left=ast.Str(s=argname, ctx=ast.Load()), ops=[ast.In()], comparators=[ast.Name(id='kwargs', ctx=ast.Load())])
 
 		new_ret = ast.If(
-			test=check,
-			body=check_body,
-			orelse=[],
-			lineno       = self.__get_line())
+			test   = check,
+			body   = check_body,
+			orelse = [],
+			lineno = self.__get_line())
 
 		return new_ret
 
@@ -327,6 +327,7 @@ class JsonInterfaceGenerator(object):
 
 
 		optional_params = [param.get("name") for param in func_params.get("parameters", []) if param.get("optional", False)]
+		func_kwargs = None
 		if len(optional_params):
 			value = ast.List(elts=[ast.Str(s=param, ctx=ast.Store()) for param in optional_params], ctx=ast.Load())
 			create_list = ast.Assign(targets=[ast.Name(id='expected', ctx=ast.Store())], value=value)
@@ -354,8 +355,7 @@ class JsonInterfaceGenerator(object):
 			kwarg_check = ast.Assert(test=ast.Call(func=ast.Name(id='all', ctx=ast.Load()), args=[listcomp], keywords=[]), msg=check_message)
 			func_body.append(kwarg_check)
 
-
-			message_params.append(ast.keyword(arg=None, value=ast.Name(id='kwargs', ctx=ast.Load())))
+			func_kwargs = ast.Name(id='kwargs', ctx=ast.Load())
 
 
 		fname = "{}.{}".format(dom_name, func_name)
@@ -364,6 +364,7 @@ class JsonInterfaceGenerator(object):
 		communicate_call = ast.Call(
 				func=ast.Attribute(value=ast.Name(id='self', ctx=ast.Load()), ctx=ast.Load(), attr='synchronous_command'),
 				args=[fname],
+				kwargs=func_kwargs,
 				keywords=message_params)
 
 		do_communicate = ast.Assign(targets=[ast.Name(id='subdom_funcs', ctx=ast.Store())], value=communicate_call)

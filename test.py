@@ -11,8 +11,6 @@ import ChromeController
 
 
 
-
-
 def test_func(self, expression, **kwargs):
 	"""
 	Python Function: Runtime_evaluate
@@ -89,9 +87,17 @@ def test_func(self, expression, **kwargs):
 
 
 
+def func():
+
+	class TestWat(object):
+		def __init__(self, *args, **kwargs):
+			super().__init__(self, *args, **kwargs)
+
+	instance = TestWat()
+
 
 def docstring_dbg():
-	print(astor.dump_tree(astor.code_to_ast(test_func)))
+	print(astor.dump_tree(astor.code_to_ast(func)))
 
 
 def test():
@@ -184,6 +190,6 @@ def gen():
 
 
 if __name__ == '__main__':
+	gen()
 	test()
-	# gen()
 	# docstring_dbg()
