@@ -22,24 +22,37 @@ def test_delete_cookies():
 
 	try:
 		resp = cr.blocking_navigate_and_get_source("http://www.whatarecookies.com/cookietest.asp", timeout=10)
-
 	except Exception as e:
 		raise e
 
-	cooks2 = cr.get_cookies()
+	cooks1 = cr.get_cookies()
 
 	cr.Network_clearBrowserCookies()
 
-	cooks4 = cr.get_cookies()
+	cooks2 = cr.get_cookies()
+
+
+	try:
+		resp = cr.blocking_navigate_and_get_source("http://goat.com", timeout=10)
+	except Exception as e:
+		raise e
+	cr.Network_clearBrowserCookies()
+
+	cooks3 = cr.get_cookies()
 
 	print()
 	print("Uncleared Cookies:")
-	for cookie in cooks2:
+	for cookie in cooks1:
 		print(cookie)
 
 	print()
 	print("Cleared cookies:")
-	for cookie in cooks4:
+	for cookie in cooks2:
+		print(cookie)
+
+	print()
+	print("Navigated and cleared cookies:")
+	for cookie in cooks3:
 		print(cookie)
 
 
@@ -147,18 +160,9 @@ def test():
 	# print("Draining!")
 	# pprint.pprint(cr.drain_transport())
 
-def gen():
-	# print("Manager: ", mgr)
-	cls_def = mgr.gen.get_source()
-	with open("class.py", "w") as fp:
-		fp.write(cls_def)
-	# print(cls_def)
-	# pass
-	# ChromeController.test()
 
 
 if __name__ == '__main__':
-	gen()
 	# test()
 	test_delete_cookies()
 	# docstring_dbg()
