@@ -11,6 +11,8 @@ import websocket
 import requests
 
 TRANSPORT_DEBUG = False
+TRANSPORT_TX_DEBUG = TRANSPORT_DEBUG
+TRANSPORT_RX_DEBUG = TRANSPORT_DEBUG
 
 
 class ChromeSocketManager():
@@ -88,7 +90,7 @@ class ChromeSocketManager():
 
 		"""
 
-		if TRANSPORT_DEBUG:
+		if TRANSPORT_TX_DEBUG:
 			print("Synchronous_command:")
 			print("	command: '%s'" % command)
 			print("	params:  '%s'" % params)
@@ -96,8 +98,8 @@ class ChromeSocketManager():
 		send_id = self.send(command, params)
 		resp = self.recv(message_id=send_id)
 
-		if TRANSPORT_DEBUG:
-			print("	Response: '%s'" % resp)
+		if TRANSPORT_RX_DEBUG:
+			print("	Response: '%s'" % str(resp).encode("ascii", 'ignore').decode("ascii"))
 
 		return resp
 
@@ -125,7 +127,7 @@ class ChromeSocketManager():
 		navcom = json.dumps(command)
 
 
-		if TRANSPORT_DEBUG:
+		if TRANSPORT_TX_DEBUG:
 			print("		Sending: '%s'" % navcom)
 
 		self.soc.send(navcom)
@@ -137,7 +139,7 @@ class ChromeSocketManager():
 	def ___recv(self):
 		try:
 			tmp = self.soc.recv()
-			if TRANSPORT_DEBUG:
+			if TRANSPORT_RX_DEBUG:
 				print("		Received: '%s'" % tmp)
 
 			decoded = json.loads(tmp)

@@ -98,7 +98,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
 
 	# Interact with http.cookiejar.Cookie() instances
-	def get_cookies(self):
+	def get_cookies(self, all_cookies=True):
 		'''
 		Retreive the cookies from the remote browser.
 
@@ -106,8 +106,11 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 		These can be directly used with the various http.cookiejar.XXXCookieJar
 		cookie management classes.
 		'''
-
-		ret = self.Network_getCookies()
+		# 'global' is a reserved keyword. You can't specify it as a kwarg directly,
+		# because it results in a syntax error.
+		# Use a intermediate dict with an explicitly string "global" to work around.
+		kwargs = {"global" : all_cookies}
+		ret = self.Network_getCookies(**kwargs)
 
 		assert 'result' in ret, "No return value in function response!"
 		assert 'cookies' in ret['result'], "No 'cookies' key in function response"
@@ -458,7 +461,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 		page. For unmodified content, use `blocking_navigate_and_get_source()`
 		'''
 
-		dom_attr = self.DOM_getDocument(depth=1, traverseFrames=False)
+		dom_attr = self.DOM_getDocument(depth=-1, pierce=False)
 		assert 'result' in dom_attr
 		assert 'root' in dom_attr['result']
 		assert 'nodeId' in dom_attr['result']['root']
