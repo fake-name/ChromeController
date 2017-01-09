@@ -44,7 +44,7 @@ A&nbsp;navigation&nbsp;command&nbsp;results&nbsp;in&nbsp;a&nbsp;sequence&nbsp;of
 Therefore,&nbsp;this&nbsp;call&nbsp;triggers&nbsp;a&nbsp;navigation&nbsp;option,<br>
 and&nbsp;then&nbsp;waits&nbsp;for&nbsp;the&nbsp;expected&nbsp;set&nbsp;of&nbsp;response&nbsp;event&nbsp;messages.</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-blocking_navigate_and_get_source"><strong>blocking_navigate_and_get_source</strong></a>(self, url)</dt><dd><tt>Do&nbsp;a&nbsp;blocking&nbsp;navigate&nbsp;to&nbsp;url&nbsp;`url`,&nbsp;and&nbsp;then&nbsp;extract&nbsp;the<br>
+<dl><dt><a name="CromeRemoteDebugInterface-blocking_navigate_and_get_source"><strong>blocking_navigate_and_get_source</strong></a>(self, url, timeout=30)</dt><dd><tt>Do&nbsp;a&nbsp;blocking&nbsp;navigate&nbsp;to&nbsp;url&nbsp;`url`,&nbsp;and&nbsp;then&nbsp;extract&nbsp;the<br>
 response&nbsp;body&nbsp;and&nbsp;return&nbsp;that.<br>
 &nbsp;<br>
 This&nbsp;effectively&nbsp;returns&nbsp;the&nbsp;*unrendered*&nbsp;page&nbsp;content&nbsp;that's&nbsp;sent&nbsp;over&nbsp;the&nbsp;wire.&nbsp;As&nbsp;such,<br>
@@ -177,7 +177,9 @@ the&nbsp;`referer`&nbsp;header&nbsp;being&nbsp;sent&nbsp;with&nbsp;the&nbsp;url&
 This&nbsp;is&nbsp;useful&nbsp;when&nbsp;a&nbsp;page's&nbsp;navigation&nbsp;is&nbsp;stateful,&nbsp;or&nbsp;for&nbsp;simple<br>
 cases&nbsp;of&nbsp;referrer&nbsp;spoofing.</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-set_cookie"><strong>set_cookie</strong></a>(self, cookie)</dt><dd><tt>TODO</tt></dd></dl>
+<dl><dt><a name="CromeRemoteDebugInterface-set_cookie"><strong>set_cookie</strong></a>(self, cookie)</dt><dd><tt>Add&nbsp;a&nbsp;cookie&nbsp;to&nbsp;the&nbsp;remote&nbsp;chromium&nbsp;instance.<br>
+&nbsp;<br>
+Passed&nbsp;value&nbsp;`cookie`&nbsp;must&nbsp;be&nbsp;an&nbsp;instance&nbsp;of&nbsp;`http.cookiejar.Cookie()`.</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-take_screeshot"><strong>take_screeshot</strong></a>(self)</dt><dd><tt>Take&nbsp;a&nbsp;screenshot&nbsp;of&nbsp;the&nbsp;virtual&nbsp;viewport&nbsp;content.<br>
 &nbsp;<br>
@@ -977,7 +979,7 @@ Methods inherited from ChromeController.Generator.gen.CromeRemoteDebugInterface:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameters:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Optional&nbsp;arguments:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'depth'&nbsp;(type:&nbsp;integer)&nbsp;-&gt;&nbsp;The&nbsp;maximum&nbsp;depth&nbsp;at&nbsp;which&nbsp;children&nbsp;should&nbsp;be&nbsp;retrieved,&nbsp;defaults&nbsp;to&nbsp;1.&nbsp;Use&nbsp;-1&nbsp;for&nbsp;the&nbsp;entire&nbsp;subtree&nbsp;or&nbsp;provide&nbsp;an&nbsp;integer&nbsp;larger&nbsp;than&nbsp;0.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'traverseFrames'&nbsp;(type:&nbsp;boolean)&nbsp;-&gt;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;iframes&nbsp;should&nbsp;be&nbsp;traversed&nbsp;when&nbsp;returning&nbsp;the&nbsp;subtree&nbsp;(default&nbsp;is&nbsp;false).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'pierce'&nbsp;(type:&nbsp;boolean)&nbsp;-&gt;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;iframes&nbsp;and&nbsp;shadow&nbsp;roots&nbsp;should&nbsp;be&nbsp;traversed&nbsp;when&nbsp;returning&nbsp;the&nbsp;subtree&nbsp;(default&nbsp;is&nbsp;false).<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'root'&nbsp;(type:&nbsp;Node)&nbsp;-&gt;&nbsp;Resulting&nbsp;node.<br>
 &nbsp;<br>
@@ -1264,7 +1266,7 @@ Methods inherited from ChromeController.Generator.gen.CromeRemoteDebugInterface:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'nodeId'&nbsp;(type:&nbsp;NodeId)&nbsp;-&gt;&nbsp;Id&nbsp;of&nbsp;the&nbsp;node&nbsp;to&nbsp;get&nbsp;children&nbsp;for.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Optional&nbsp;arguments:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'depth'&nbsp;(type:&nbsp;integer)&nbsp;-&gt;&nbsp;The&nbsp;maximum&nbsp;depth&nbsp;at&nbsp;which&nbsp;children&nbsp;should&nbsp;be&nbsp;retrieved,&nbsp;defaults&nbsp;to&nbsp;1.&nbsp;Use&nbsp;-1&nbsp;for&nbsp;the&nbsp;entire&nbsp;subtree&nbsp;or&nbsp;provide&nbsp;an&nbsp;integer&nbsp;larger&nbsp;than&nbsp;0.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'traverseFrames'&nbsp;(type:&nbsp;boolean)&nbsp;-&gt;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;iframes&nbsp;should&nbsp;be&nbsp;traversed&nbsp;when&nbsp;returning&nbsp;the&nbsp;sub-tree&nbsp;(default&nbsp;is&nbsp;false).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'pierce'&nbsp;(type:&nbsp;boolean)&nbsp;-&gt;&nbsp;Whether&nbsp;or&nbsp;not&nbsp;iframes&nbsp;and&nbsp;shadow&nbsp;roots&nbsp;should&nbsp;be&nbsp;traversed&nbsp;when&nbsp;returning&nbsp;the&nbsp;sub-tree&nbsp;(default&nbsp;is&nbsp;false).<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;return&nbsp;value.<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Requests&nbsp;that&nbsp;children&nbsp;of&nbsp;the&nbsp;node&nbsp;with&nbsp;given&nbsp;id&nbsp;are&nbsp;returned&nbsp;to&nbsp;the&nbsp;caller&nbsp;in&nbsp;form&nbsp;of&nbsp;&lt;code&gt;setChildNodes&lt;/code&gt;&nbsp;events&nbsp;where&nbsp;not&nbsp;only&nbsp;immediate&nbsp;children&nbsp;are&nbsp;retrieved,&nbsp;but&nbsp;all&nbsp;children&nbsp;down&nbsp;to&nbsp;the&nbsp;specified&nbsp;depth.</tt></dd></dl>
@@ -1496,6 +1498,22 @@ Methods inherited from ChromeController.Generator.gen.CromeRemoteDebugInterface:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'exceptionDetails'&nbsp;(type:&nbsp;Runtime.ExceptionDetails)&nbsp;-&gt;&nbsp;Exception&nbsp;details.<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Evaluates&nbsp;expression&nbsp;on&nbsp;a&nbsp;given&nbsp;call&nbsp;frame.</tt></dd></dl>
+
+<dl><dt><a name="CromeRemoteDebugInterface-Debugger_getPossibleBreakpoints"><strong>Debugger_getPossibleBreakpoints</strong></a>(self, start, **kwargs)</dt><dd><tt>Function&nbsp;path:&nbsp;Debugger.getPossibleBreakpoints<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Debugger<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;name:&nbsp;getPossibleBreakpoints<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WARNING:&nbsp;This&nbsp;function&nbsp;is&nbsp;marked&nbsp;'Experimental'!<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Required&nbsp;arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'start'&nbsp;(type:&nbsp;Location)&nbsp;-&gt;&nbsp;Start&nbsp;of&nbsp;range&nbsp;to&nbsp;search&nbsp;possible&nbsp;breakpoint&nbsp;locations&nbsp;in.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Optional&nbsp;arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'end'&nbsp;(type:&nbsp;Location)&nbsp;-&gt;&nbsp;End&nbsp;of&nbsp;range&nbsp;to&nbsp;search&nbsp;possible&nbsp;breakpoint&nbsp;locations&nbsp;in&nbsp;(excluding).&nbsp;When&nbsp;not&nbsp;specifed,&nbsp;end&nbsp;of&nbsp;scripts&nbsp;is&nbsp;used&nbsp;as&nbsp;end&nbsp;of&nbsp;range.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'locations'&nbsp;(type:&nbsp;array)&nbsp;-&gt;&nbsp;List&nbsp;of&nbsp;the&nbsp;possible&nbsp;breakpoint&nbsp;locations.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Returns&nbsp;possible&nbsp;locations&nbsp;for&nbsp;breakpoint.&nbsp;scriptId&nbsp;in&nbsp;start&nbsp;and&nbsp;end&nbsp;range&nbsp;locations&nbsp;should&nbsp;be&nbsp;the&nbsp;same.</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-Debugger_getScriptSource"><strong>Debugger_getScriptSource</strong></a>(self, scriptId)</dt><dd><tt>Function&nbsp;path:&nbsp;Debugger.getScriptSource<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Debugger<br>
@@ -2597,12 +2615,15 @@ Methods inherited from ChromeController.Generator.gen.CromeRemoteDebugInterface:
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Returns&nbsp;the&nbsp;DER-encoded&nbsp;certificate.</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-Network_getCookies"><strong>Network_getCookies</strong></a>(self)</dt><dd><tt>Function&nbsp;path:&nbsp;Network.getCookies<br>
+<dl><dt><a name="CromeRemoteDebugInterface-Network_getCookies"><strong>Network_getCookies</strong></a>(self, **kwargs)</dt><dd><tt>Function&nbsp;path:&nbsp;Network.getCookies<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Network<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;name:&nbsp;getCookies<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WARNING:&nbsp;This&nbsp;function&nbsp;is&nbsp;marked&nbsp;'Experimental'!<br>
 &nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Optional&nbsp;arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'global'&nbsp;(type:&nbsp;boolean)&nbsp;-&gt;&nbsp;If&nbsp;true,&nbsp;returns&nbsp;all&nbsp;cookies,&nbsp;otherwise&nbsp;only&nbsp;the&nbsp;cookies&nbsp;for&nbsp;the&nbsp;current&nbsp;URL.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'cookies'&nbsp;(type:&nbsp;array)&nbsp;-&gt;&nbsp;Array&nbsp;of&nbsp;cookie&nbsp;objects.<br>
 &nbsp;<br>
@@ -3164,6 +3185,16 @@ Methods inherited from ChromeController.Generator.gen.CromeRemoteDebugInterface:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;return&nbsp;value.<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Starts&nbsp;sending&nbsp;each&nbsp;frame&nbsp;using&nbsp;the&nbsp;&lt;code&gt;screencastFrame&lt;/code&gt;&nbsp;event.</tt></dd></dl>
+
+<dl><dt><a name="CromeRemoteDebugInterface-Page_stopLoading"><strong>Page_stopLoading</strong></a>(self)</dt><dd><tt>Function&nbsp;path:&nbsp;Page.stopLoading<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Page<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;name:&nbsp;stopLoading<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WARNING:&nbsp;This&nbsp;function&nbsp;is&nbsp;marked&nbsp;'Experimental'!<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;return&nbsp;value.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Force&nbsp;the&nbsp;page&nbsp;stop&nbsp;all&nbsp;navigations&nbsp;and&nbsp;pending&nbsp;resource&nbsp;fetches.</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-Page_stopScreencast"><strong>Page_stopScreencast</strong></a>(self)</dt><dd><tt>Function&nbsp;path:&nbsp;Page.stopScreencast<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Page<br>

@@ -24,7 +24,7 @@ class JsonInterfaceGenerator(object):
 
 	"""
 
-	def __init__(self, protocol_major=1, protocol_minor=2, *args, **kwargs):
+	def __init__(self, protocol_major=1, protocol_minor=2, debug_prints=False, *args, **kwargs):
 		""" init """
 
 		super().__init__(*args, **kwargs)
@@ -33,7 +33,7 @@ class JsonInterfaceGenerator(object):
 		protocol_major = str(protocol_major)
 		protocol_minor = str(protocol_minor)
 
-
+		self.do_debug_prints = debug_prints
 
 		self.types = {}
 		self.protocol = self.__load_protocol(protocol_major, protocol_minor)
@@ -252,8 +252,11 @@ class JsonInterfaceGenerator(object):
 				keywords     = [],
 				lineno       = self.__get_line())
 
+		# Assumes that argtype is a ast.Tuple of ast.Name items
+		types = [t.id for t in argtype.elts]
+
 		check_message = ast.BinOp(
-				left         = ast.Str(s='Argument {} must be of type ({}). Received type: %s'.format(argname, argtype)),
+				left         = ast.Str(s='Argument {} must be of type ({}). Received type: %s'.format(argname, types)),
 				op           = ast.Mod(),
 				right        = ast.Call(func=ast.Name(id='type', ctx=ast.Load()), args=[target_value], keywords=[]),
 				lineno       = self.__get_line())
@@ -302,6 +305,17 @@ class JsonInterfaceGenerator(object):
 
 		return new_ret
 
+	def __build_debug_print(self, prefix_str, var_name):
+		pstmt = ast.Expr(
+			value=ast.Call(
+				func     = ast.Name(id='print', ctx=ast.Load()),
+				args     = [ast.Str(s=prefix_str), ast.Name(id=var_name, ctx=ast.Load())],
+				keywords = [],
+				lineno   = self.__get_line()
+			)
+		)
+		return pstmt
+
 	def __build_function(self, dom_name, full_name, func_params):
 
 		assert 'name' in func_params
@@ -317,12 +331,18 @@ class JsonInterfaceGenerator(object):
 			func_body.append(ast.Expr(ast.Str("\n"+docstr+"\n\t\t")))
 
 		for param in func_params.get("parameters", []):
+
 			argname = param['name']
+
+
 			param_optional = param.get("optional", False)
 
 			if param_optional is False:
 				message_params.append(ast.keyword(argname, ast.Name(id=argname, ctx=ast.Load())))
 				args.append(ast.arg(argname, None))
+				if self.do_debug_prints:
+					func_body.append(self.__build_debug_print(argname, argname))
+
 
 
 			param_type = param.get("type", None)
@@ -341,6 +361,8 @@ class JsonInterfaceGenerator(object):
 		optional_params = [param.get("name") for param in func_params.get("parameters", []) if param.get("optional", False)]
 		func_kwargs = None
 		if len(optional_params):
+
+
 			value = ast.List(elts=[ast.Str(s=param, ctx=ast.Store()) for param in optional_params], ctx=ast.Load())
 			create_list = ast.Assign(targets=[ast.Name(id='expected', ctx=ast.Store())], value=value)
 
@@ -373,14 +395,36 @@ class JsonInterfaceGenerator(object):
 		fname = "{}.{}".format(dom_name, func_name)
 		fname = ast.Str(s=fname, ctx=ast.Load())
 
-		communicate_call = ast.Call(
-				func=ast.Attribute(value=ast.Name(id='self', ctx=ast.Load()), ctx=ast.Load(), attr='synchronous_command'),
-				args=[fname],
-				kwargs=func_kwargs,
-				keywords=message_params)
+
+		if (sys.version_info[0], sys.version_info[1]) == (3, 5):
+
+			# More irritating minor semantic differences in the AST between 3.4 and 3.5
+			if func_kwargs:
+				message_params.append(ast.keyword(arg=None, value=ast.Name(id='kwargs', ctx=ast.Load())))
+
+			communicate_call = ast.Call(
+					func=ast.Attribute(value=ast.Name(id='self', ctx=ast.Load()), ctx=ast.Load(), attr='synchronous_command'),
+					args=[fname],
+					keywords=message_params)
+
+		elif (sys.version_info[0], sys.version_info[1]) == (3,4):
+
+			communicate_call = ast.Call(
+					func=ast.Attribute(value=ast.Name(id='self', ctx=ast.Load()), ctx=ast.Load(), attr='synchronous_command'),
+					args=[fname],
+					kwargs=func_kwargs,
+					keywords=message_params)
+		else:
+			print("Version:", sys.version_info)
+			raise RuntimeError("This script only functions on python 3.4 and 3.5. Active python version {}.{}".format(*sys.version_info))
+
 
 		do_communicate = ast.Assign(targets=[ast.Name(id='subdom_funcs', ctx=ast.Store())], value=communicate_call)
 		func_ret = ast.Return(value=ast.Name(id='subdom_funcs', ctx=ast.Load()))
+
+
+		if len(optional_params) and self.do_debug_prints:
+			func_body.append(self.__build_debug_print('kwargs', 'kwargs'))
 
 		func_body.append(do_communicate)
 		func_body.append(func_ret)
