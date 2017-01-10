@@ -198,7 +198,7 @@ Python&nbsp;Function:&nbsp;DOM_discardSearchResults<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;return&nbsp;value.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Discards&nbsp;search&nbsp;results&nbsp;from&nbsp;the&nbsp;session&nbsp;with&nbsp;the&nbsp;given&nbsp;id.&nbsp;&lt;code&gt;getSearchResults&lt;/code&gt;&nbsp;should&nbsp;no&nbsp;longer&nbsp;be&nbsp;called&nbsp;for&nbsp;that&nbsp;search.</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-get_cookies"><strong>get_cookies</strong></a>(self)</dt><dd><tt>Retreive&nbsp;the&nbsp;cookies&nbsp;from&nbsp;the&nbsp;remote&nbsp;browser.<br>
+<dl><dt><a name="CromeRemoteDebugInterface-get_cookies"><strong>get_cookies</strong></a>(self, all_cookies=True)</dt><dd><tt>Retreive&nbsp;the&nbsp;cookies&nbsp;from&nbsp;the&nbsp;remote&nbsp;browser.<br>
 &nbsp;<br>
 Return&nbsp;value&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;http.cookiejar.Cookie()&nbsp;instances.<br>
 These&nbsp;can&nbsp;be&nbsp;directly&nbsp;used&nbsp;with&nbsp;the&nbsp;various&nbsp;http.cookiejar.XXXCookieJar<br>
@@ -2644,6 +2644,17 @@ Methods inherited from ChromeController.Generator.gen.CromeRemoteDebugInterface:
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Enables&nbsp;network&nbsp;tracking,&nbsp;network&nbsp;events&nbsp;will&nbsp;now&nbsp;be&nbsp;delivered&nbsp;to&nbsp;the&nbsp;client.</tt></dd></dl>
 
+<dl><dt><a name="CromeRemoteDebugInterface-Network_getAllCookies"><strong>Network_getAllCookies</strong></a>(self)</dt><dd><tt>Function&nbsp;path:&nbsp;Network.getAllCookies<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Network<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;name:&nbsp;getAllCookies<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WARNING:&nbsp;This&nbsp;function&nbsp;is&nbsp;marked&nbsp;'Experimental'!<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'cookies'&nbsp;(type:&nbsp;array)&nbsp;-&gt;&nbsp;Array&nbsp;of&nbsp;cookie&nbsp;objects.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Returns&nbsp;all&nbsp;browser&nbsp;cookies.&nbsp;Depending&nbsp;on&nbsp;the&nbsp;backend&nbsp;support,&nbsp;will&nbsp;return&nbsp;detailed&nbsp;cookie&nbsp;information&nbsp;in&nbsp;the&nbsp;&lt;code&gt;cookies&lt;/code&gt;&nbsp;field.</tt></dd></dl>
+
 <dl><dt><a name="CromeRemoteDebugInterface-Network_getCertificate"><strong>Network_getCertificate</strong></a>(self, origin)</dt><dd><tt>Function&nbsp;path:&nbsp;Network.getCertificate<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Network<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;name:&nbsp;getCertificate<br>
@@ -2658,19 +2669,16 @@ Methods inherited from ChromeController.Generator.gen.CromeRemoteDebugInterface:
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Returns&nbsp;the&nbsp;DER-encoded&nbsp;certificate.</tt></dd></dl>
 
-<dl><dt><a name="CromeRemoteDebugInterface-Network_getCookies"><strong>Network_getCookies</strong></a>(self, **kwargs)</dt><dd><tt>Function&nbsp;path:&nbsp;Network.getCookies<br>
+<dl><dt><a name="CromeRemoteDebugInterface-Network_getCookies"><strong>Network_getCookies</strong></a>(self)</dt><dd><tt>Function&nbsp;path:&nbsp;Network.getCookies<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Network<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;name:&nbsp;getCookies<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WARNING:&nbsp;This&nbsp;function&nbsp;is&nbsp;marked&nbsp;'Experimental'!<br>
 &nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameters:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Optional&nbsp;arguments:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'global'&nbsp;(type:&nbsp;boolean)&nbsp;-&gt;&nbsp;If&nbsp;true,&nbsp;returns&nbsp;all&nbsp;cookies,&nbsp;otherwise&nbsp;only&nbsp;the&nbsp;cookies&nbsp;for&nbsp;the&nbsp;current&nbsp;URL.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'cookies'&nbsp;(type:&nbsp;array)&nbsp;-&gt;&nbsp;Array&nbsp;of&nbsp;cookie&nbsp;objects.<br>
 &nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Returns&nbsp;all&nbsp;browser&nbsp;cookies.&nbsp;Depending&nbsp;on&nbsp;the&nbsp;backend&nbsp;support,&nbsp;will&nbsp;return&nbsp;detailed&nbsp;cookie&nbsp;information&nbsp;in&nbsp;the&nbsp;&lt;code&gt;cookies&lt;/code&gt;&nbsp;field.</tt></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Returns&nbsp;all&nbsp;browser&nbsp;cookies&nbsp;for&nbsp;the&nbsp;current&nbsp;URL.&nbsp;Depending&nbsp;on&nbsp;the&nbsp;backend&nbsp;support,&nbsp;will&nbsp;return&nbsp;detailed&nbsp;cookie&nbsp;information&nbsp;in&nbsp;the&nbsp;&lt;code&gt;cookies&lt;/code&gt;&nbsp;field.</tt></dd></dl>
 
 <dl><dt><a name="CromeRemoteDebugInterface-Network_getResponseBody"><strong>Network_getResponseBody</strong></a>(self, requestId)</dt><dd><tt>Function&nbsp;path:&nbsp;Network.getResponseBody<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Network<br>

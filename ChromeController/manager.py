@@ -109,8 +109,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 		# 'global' is a reserved keyword. You can't specify it as a kwarg directly,
 		# because it results in a syntax error.
 		# Use a intermediate dict with an explicitly string "global" to work around.
-		kwargs = {"global" : all_cookies}
-		ret = self.Network_getCookies(**kwargs)
+		ret = self.Network_getAllCookies()
 
 		assert 'result' in ret, "No return value in function response!"
 		assert 'cookies' in ret['result'], "No 'cookies' key in function response"

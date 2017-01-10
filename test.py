@@ -3,6 +3,7 @@
 import os.path
 import astor
 import pprint
+import time
 
 import WebRequest
 
@@ -18,42 +19,61 @@ def test_delete_cookies():
 	# print(cr)
 	resp = cr.Emulation_setVisibleSize(1500, 1000)
 	# print("Viewport size", resp)
-	print("Doing first navigation...")
+
+	print("Navigating to whatarecookies.com")
 
 	try:
 		resp = cr.blocking_navigate_and_get_source("http://www.whatarecookies.com/cookietest.asp", timeout=10)
 	except Exception as e:
 		raise e
 
-	cooks1 = cr.get_cookies()
+	print("Sampling cookies #1")
+	cooks1 = cr.Network_getAllCookies()['result']['cookies']
+	print("Doing cookie clear")
+	res = cr.Network_clearBrowserCookies()
+	print("Cookie clear result: ", res)
 
-	cr.Network_clearBrowserCookies()
-
-	cooks2 = cr.get_cookies()
-
+	print("Sampling cookies #2")
+	cooks2 = cr.Network_getAllCookies()['result']['cookies']
+	print("Navigating to goat.com")
 
 	try:
 		resp = cr.blocking_navigate_and_get_source("http://goat.com", timeout=10)
 	except Exception as e:
 		raise e
-	cr.Network_clearBrowserCookies()
-
-	cooks3 = cr.get_cookies()
+	print("Doing cookie clear")
+	res = cr.Network_clearBrowserCookies()
+	print("Cookie clear result: ", res)
+	print("sleeping 15")
+	time.sleep(15)
+	print("Sampling cookies #3")
+	cooks3 = cr.Network_getAllCookies()['result']['cookies']
+	print("Doing cookie clear")
+	res = cr.Network_clearBrowserCookies()
+	print("Cookie clear result: ", res)
+	print("sleeping 15")
+	time.sleep(15)
+	print("Sampling cookies #4")
+	cooks4 = cr.Network_getAllCookies()['result']['cookies']
 
 	print()
-	print("Uncleared Cookies:")
-	for cookie in cooks1:
-		print(cookie)
+	print("Uncleared Cookies (#1):")
+	for cookie1 in cooks1:
+		print("	", cookie1)
 
 	print()
-	print("Cleared cookies:")
-	for cookie in cooks2:
-		print(cookie)
+	print("Cleared cookies (#2):")
+	for cookie2 in cooks2:
+		print("	", cookie2)
 
 	print()
-	print("Navigated and cleared cookies:")
-	for cookie in cooks3:
-		print(cookie)
+	print("Navigated and cleared cookies after delay (#3):")
+	for cookie3 in cooks3:
+		print("	", cookie3)
+	print()
+	print("Navigated and cleared cookies after another delay (#4):")
+	for cookie4 in cooks3:
+		print("	", cookie4)
 
 
 def test():

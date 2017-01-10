@@ -905,9 +905,10 @@
                 "description": "The security state of the page changed.",
                 "parameters": [
                     { "name": "securityState", "$ref": "SecurityState", "description": "Security state." },
-                    { "name": "explanations", "type": "array", "items": { "$ref": "SecurityStateExplanation" }, "description": "List of explanations for the security state. If the overall security state is `insecure` or `warning`, at least one corresponding explanation should be included.", "optional": true },
-                    { "name": "insecureContentStatus", "$ref": "InsecureContentStatus", "description": "Information about insecure content on the page.", "optional": true },
-                    { "name": "schemeIsCryptographic", "type": "boolean", "description": "True if the page was loaded over cryptographic transport such as HTTPS.", "optional": true }
+                    { "name": "schemeIsCryptographic", "type": "boolean", "description": "True if the page was loaded over cryptographic transport such as HTTPS." },
+                    { "name": "explanations", "type": "array", "items": { "$ref": "SecurityStateExplanation" }, "description": "List of explanations for the security state. If the overall security state is `insecure` or `warning`, at least one corresponding explanation should be included." },
+                    { "name": "insecureContentStatus", "$ref": "InsecureContentStatus", "description": "Information about insecure content on the page." },
+                    { "name": "summary", "type": "string", "description": "Overrides user-visible description of the state.", "optional": true }
                 ]
             }
         ]
@@ -988,7 +989,8 @@
                     { "name": "headers", "$ref": "Headers", "description": "HTTP request headers." },
                     { "name": "postData", "type": "string", "optional": true, "description": "HTTP POST request data." },
                     { "name": "mixedContentType", "optional": true, "type": "string", "enum": ["blockable", "optionally-blockable", "none"], "description": "The mixed content status of the request, as defined in http://www.w3.org/TR/mixed-content/" },
-                    { "name": "initialPriority", "$ref": "ResourcePriority", "description": "Priority of the resource request at the time request is sent."}
+                    { "name": "initialPriority", "$ref": "ResourcePriority", "description": "Priority of the resource request at the time request is sent."},
+                    { "name": "referrerPolicy", "type": "string", "enum": [ "unsafe-url", "no-referrer-when-downgrade", "no-referrer", "origin", "origin-when-cross-origin", "no-referrer-when-downgrade-origin-when-cross-origin" ], "description": "The referrer policy of the request, as defined in https://www.w3.org/TR/referrer-policy/" }
                 ]
             },
             {
@@ -1227,9 +1229,14 @@
             },
             {
                 "name": "getCookies",
-                "parameters": [
-                    { "name": "global", "type": "boolean", "optional": true, "description": "If true, returns all cookies, otherwise only the cookies for the current URL." }
+                "returns": [
+                    { "name": "cookies", "type": "array", "items": { "$ref": "Cookie" }, "description": "Array of cookie objects." }
                 ],
+                "description": "Returns all browser cookies for the current URL. Depending on the backend support, will return detailed cookie information in the <code>cookies</code> field.",
+                "experimental": true
+            },
+            {
+                "name": "getAllCookies",
                 "returns": [
                     { "name": "cookies", "type": "array", "items": { "$ref": "Cookie" }, "description": "Array of cookie objects." }
                 ],
@@ -2024,7 +2031,8 @@
                     { "name": "templateContent", "$ref": "Node", "optional": true, "description": "Content document fragment for template elements.", "experimental": true },
                     { "name": "pseudoElements", "type": "array", "items": { "$ref": "Node" }, "optional": true, "description": "Pseudo elements associated with this node.", "experimental": true },
                     { "name": "importedDocument", "$ref": "Node", "optional": true, "description": "Import document for the HTMLImport links." },
-                    { "name": "distributedNodes", "type": "array", "items": { "$ref": "BackendNode" }, "optional": true, "description": "Distributed nodes for given insertion point.", "experimental": true }
+                    { "name": "distributedNodes", "type": "array", "items": { "$ref": "BackendNode" }, "optional": true, "description": "Distributed nodes for given insertion point.", "experimental": true },
+                    { "name": "isSVG", "type": "boolean", "optional": true, "description": "Whether the node is SVG.", "experimental": true }
                 ],
                 "description": "DOM interaction is implemented in terms of mirror objects that represent the actual DOM nodes. DOMNode is a base node mirror type."
             },
@@ -3106,7 +3114,7 @@
                 ],
                 "description": "For the main document and any content documents, return the LayoutTreeNodes and a whitelisted subset of the computed style. It only returns pushed nodes, on way to pull all nodes is to call DOM.getDocument with a depth of -1.",
                 "experimental": true
-        },
+	    },
             {
                 "name": "startRuleUsageTracking",
                 "description": "Enables the selector recording.",
