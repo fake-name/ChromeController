@@ -16,6 +16,11 @@ def test_delete_cookies():
 	crbin = os.path.abspath("../Chromium/src/out/Headless/headless_shell")
 	cr = ChromeController.CromeRemoteDebugInterface(crbin)
 
+	canClear = cr.Network_canClearBrowserCookies()
+	print("Can clear cookies: ", canClear)
+	assert canClear['result']['result'] == True
+
+
 	# print(cr)
 	resp = cr.Emulation_setVisibleSize(1500, 1000)
 	# print("Viewport size", resp)

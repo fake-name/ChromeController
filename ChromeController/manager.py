@@ -250,6 +250,12 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
 		return ret
 
+	def clear_cookies(self):
+
+		canClear = self.Network_canClearBrowserCookies()
+		assert canClear['result']['result'] == True
+		self.Network_clearBrowserCookies()
+
 
 	def navigate_to(self, url):
 		'''

@@ -10,7 +10,7 @@ import time
 import websocket
 import requests
 
-TRANSPORT_DEBUG = False
+TRANSPORT_DEBUG = True
 TRANSPORT_TX_DEBUG = TRANSPORT_DEBUG
 TRANSPORT_RX_DEBUG = TRANSPORT_DEBUG
 
