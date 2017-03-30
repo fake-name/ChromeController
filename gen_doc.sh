@@ -3,8 +3,25 @@
 
 set -e
 
-cp ../Chromium/src/components/ui_devtools/protocol.json                ./ChromeController/protocols/browser_protocol-r1.2.json
-cp ../Chromium/src/out/Headless/gen/blink/core/inspector/protocol.json ./ChromeController/protocols/js_protocol-r1.2.json
+# In a script, because I'll fucking forget if I don't write it down.
+# The crome build process is pretty bizarre.
+if [ ! -f ../Chromium/src/out/Headless/headless_shell ]; then
+	echo "No headless shell file found. Doing a build!"
+	cd ../Chromium/src
+	gclient fetch
+	gclient sync
+	mkdir -p out/Headless
+	echo 'import("//build/args/headless.gn")' > out/Headless/args.gn
+	echo 'is_debug = false' >> out/Headless/args.gn
+	gn gen out/Headless
+	ninja -C out/Headless headless_shell
+
+fi
+
+
+# Update the json files.
+cp ../Chromium/src/third_party/WebKit/Source/core/inspector/browser_protocol.json ./ChromeController/protocols/browser_protocol-r1.2.json
+cp ../Chromium/src/out/Headless/gen/blink/core/inspector/protocol.json            ./ChromeController/protocols/js_protocol-r1.2.json
 
 python3 -m pydoc -w ChromeController.CromeRemoteDebugInterface
 python3 -m pydoc -w ChromeController.ChromeSocketManager
@@ -24,7 +41,6 @@ mv ChromeController.html ./docs/ChromeController.html
 mv ChromeController.manager.html ./docs/ChromeController.manager.html
 mv ChromeController.manager_base.html ./docs/ChromeController.manager_base.html
 mv ChromeController.transport.html ./docs/ChromeController.transport.html
-
 
 
 
