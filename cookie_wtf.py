@@ -15,8 +15,8 @@ def test():
 	ua = dict(WebRequest.getUserAgent())
 	# print(ua)
 
-	crbin = os.path.abspath("../AutoTriever/Headless/headless_shell")
-	cr = ChromeController.CromeRemoteDebugInterface(binary=crbin)
+	crbin = os.path.abspath("./vendored/headless_shell")
+	cr = ChromeController.CromeRemoteDebugInterface(crbin)
 
 	# print(cr)
 	resp = cr.Emulation_setVisibleSize(1500, 1000)

@@ -22,7 +22,6 @@ class ChromeSocketManager():
 	> a = ChromeSocketManager(host='localhost', port=9222)
 
 
-
 	   """
 
 	def __init__(self, host='localhost', port=9222):
@@ -37,6 +36,7 @@ class ChromeSocketManager():
 		self.msg_id = 0
 		self.soc = None
 		self.tablist = None
+		self.connect()
 		self.find_tabs()
 
 		self.messages = []

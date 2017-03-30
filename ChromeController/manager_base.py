@@ -1,10 +1,11 @@
 
-import distutils.spawn
 import os.path
 import subprocess
 import signal
 import time
 import pprint
+import traceback
+import distutils.spawn
 import requests.exceptions
 
 from .transport import ChromeSocketManager
@@ -29,6 +30,8 @@ class ChromeInterface():
 
 		"""
 		print("Binary:", binary, (args, kwargs))
+		print("Args:", args)
+		print("kwargs:", kwargs)
 
 		if binary is None:
 			binary = "chromium"
@@ -49,7 +52,7 @@ class ChromeInterface():
 		print("Spawned process:", self.cr_proc)
 
 
-
+		self.transport = None
 		# Allow the subprocess to start.
 		for x in range(3):
 			try:
@@ -57,7 +60,12 @@ class ChromeInterface():
 				print(self.transport)
 				break
 			except requests.exceptions.ConnectionError:
+				print("Wat")
+				traceback.print_exc()
 				time.sleep(1)
+
+		if not self.transport:
+			raise RuntimeError("Could not start chromium!")
 
 
 	def __check_ret(self, ret):

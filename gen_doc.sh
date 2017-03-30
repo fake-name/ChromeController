@@ -3,6 +3,9 @@
 
 set -e
 
+cp ../Chromium/src/components/ui_devtools/protocol.json                ./ChromeController/protocols/browser_protocol-r1.2.json
+cp ../Chromium/src/out/Headless/gen/blink/core/inspector/protocol.json ./ChromeController/protocols/js_protocol-r1.2.json
+
 python3 -m pydoc -w ChromeController.CromeRemoteDebugInterface
 python3 -m pydoc -w ChromeController.ChromeSocketManager
 python3 -m pydoc -w ChromeController.Generator
