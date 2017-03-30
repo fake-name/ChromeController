@@ -47,7 +47,7 @@ Current Usage so far has been basically to find bugs or strangeness in the
 chromium remote debug interface:
 
  - Strange Behaviour is `network.getCookies` (fixed)  
-     https://bugs.chromium.org/p/chromium/issues/detail?id=672744
- - `network.clearBrowserCookies` appears to have no effect  
      https://bugs.chromium.org/p/chromium/issues/detail?id=668932
+ - `network.clearBrowserCookies` appears to have no effect  
+     https://bugs.chromium.org/p/chromium/issues/detail?id=672744
 
