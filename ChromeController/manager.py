@@ -255,7 +255,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 		canClear = self.Network_canClearBrowserCookies()
 		assert canClear['result']['result'] == True
 		for cookie in self.Network_getAllCookies()['result']['cookies']:
-			print()
+			self.Network_deleteCookie(cookieName=cookie['name'], url=cookie['domain'])
 		self.Network_clearBrowserCookies()
 
 
