@@ -15,7 +15,7 @@ def test():
 	ua = dict(WebRequest.getUserAgent())
 	# print(ua)
 
-	crbin = os.path.abspath("./vendored/headless_shell")
+	crbin = os.path.abspath("../Chromium/src/out/Headless/headless_shell")
 	cr = ChromeController.CromeRemoteDebugInterface(crbin)
 
 	# print(cr)
