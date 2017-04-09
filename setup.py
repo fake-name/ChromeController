@@ -28,7 +28,7 @@ setup(
 	# Dependent packages (distributions)
 	install_requires=[
 		'websocket-client',
-		'astor',
+		'git+https://github.com/berkerpeksag/astor.git',
 		'requests',
 	],
 )

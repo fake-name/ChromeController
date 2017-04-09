@@ -440,7 +440,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
 		resp = self.blocking_navigate(url, timeout)
 		assert 'requestId' in resp
-		# print('resp', resp)
+		print('resp', resp)
 
 		content = self.Network_getResponseBody(resp['requestId'])
 		assert 'result' in content
@@ -551,12 +551,13 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 				if 'params' not in message:
 					return False
 				params = message['params']
-				if 'frameId' not in params:
-					return False
-				if 'frameId' in params:
-					ret = params['frameId'] == expected_id
-					# print("frame_loading_tracker", message)
-					return ret
+				return ret
+				# Disabled. See https://bugs.chromium.org/p/chromedriver/issues/detail?id=1387
+				# if 'frameId' not in params:
+				# 	return False
+				# if 'frameId' in params:
+				# 	ret = params['frameId'] == expected_id
+				# 	# print("frame_loading_tracker", message)
 				return False
 			return frame_loading_tracker
 
@@ -601,7 +602,7 @@ class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
 
 		self.transport.recv_filtered(check_frame_load_command("Page.frameStartedLoading"))
 		self.transport.recv_filtered(check_frame_load_command("Page.frameStoppedLoading"))
-		self.transport.recv_filtered(check_load_event_fired)
+		# self.transport.recv_filtered(check_load_event_fired)
 
 		resp = self.transport.recv_filtered(network_response_recieved_for_url(url))
 
