@@ -59,10 +59,7 @@ class ChromeInterface():
 				self.transport = ChromeSocketManager()
 				break
 			except requests.exceptions.ConnectionError:
-				self.cr_proc.poll()
-				if self.cr_proc.returncode != None:
-					stdout, stderr = self.cr_proc.communicate()
-					raise ChromeError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
+				self.__check_process_ded()
 				print("Wat")
 				time.sleep(1)
 
@@ -74,6 +71,14 @@ class ChromeInterface():
 		if 'error' in ret:
 			err = pprint.pformat(ret)
 			raise ChromeError("Error in response: \n{}".format(err))
+
+	def __check_process_ded(self):
+		self.cr_proc.poll()
+		if self.cr_proc.returncode != None:
+			stdout, stderr = self.cr_proc.communicate()
+			raise ChromeError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
+
+
 
 	def synchronous_command(self, *args, **kwargs):
 		'''
@@ -88,6 +93,7 @@ class ChromeInterface():
 		returned.
 
 		'''
+		self.__check_process_ded()
 		ret = self.transport.synchronous_command(*args, **kwargs)
 		self.__check_ret(ret)
 		return ret
@@ -102,6 +108,7 @@ class ChromeInterface():
 		type needs.
 
 		'''
+		self.__check_process_ded()
 		return self.transport.drain()
 
 	def close(self):
