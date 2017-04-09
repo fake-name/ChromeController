@@ -32,7 +32,7 @@ at the moment.
 
 Note that this tool generates and manipulates the AST directly, so it is 
 EXTREMELY sensitive to implementation details. It is *probably* broken on 
-python 3.6 or < 3.4.
+python > 3.6 or < 3.4.
 
 Transport layer (originally) from https://github.com/minektur/chrome_remote_shell
 

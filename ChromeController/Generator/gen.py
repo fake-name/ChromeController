@@ -119,7 +119,8 @@ class JsonInterfaceGenerator(object):
 	def __build__init(self):
 
 		super_func = ast.Call(func=ast.Name(id='super', ctx=ast.Load()), args=[], keywords=[])
-		if (sys.version_info[0], sys.version_info[1]) == (3, 5):
+		if (sys.version_info[0], sys.version_info[1]) == (3, 5) or \
+			(sys.version_info[0], sys.version_info[1]) == (3, 6):
 			super_func = ast.Call(
 									func=ast.Attribute(value=super_func, attr='__init__', ctx=ast.Load()),
 									args=[ast.Starred(value=ast.Name(id='args', ctx=ast.Load()), ctx=ast.Load())],
@@ -136,7 +137,7 @@ class JsonInterfaceGenerator(object):
 							)
 		else:
 			print("Version:", sys.version_info)
-			raise RuntimeError("This script only functions on python 3.4 and 3.5. Active python version {}.{}".format(*sys.version_info))
+			raise RuntimeError("This script only functions on python 3.4, 3.5 or 3.6. Active python version {}.{}".format(*sys.version_info))
 
 		super_init = ast.Expr(
 							value=super_func,
@@ -375,7 +376,7 @@ class JsonInterfaceGenerator(object):
 
 			func_body.append(passed_arg_list)
 
-			comprehension = ast.comprehension(target=ast.Name(id='key', ctx=ast.Store()), iter=ast.Name(id='passed_keys', ctx=ast.Load()), ifs=[])
+			comprehension = ast.comprehension(target=ast.Name(id='key', ctx=ast.Store()), iter=ast.Name(id='passed_keys', ctx=ast.Load()), ifs=[], is_async=False)
 			comparator = ast.Name(id='expected', ctx=ast.Load())
 
 			listcomp = ast.ListComp(elt=ast.Compare(left=ast.Name(id='key', ctx=ast.Load()), ops=[ast.In()], comparators=[comparator]), generators=[comprehension])
@@ -396,7 +397,8 @@ class JsonInterfaceGenerator(object):
 		fname = ast.Str(s=fname, ctx=ast.Load())
 
 
-		if (sys.version_info[0], sys.version_info[1]) == (3, 5):
+		if (sys.version_info[0], sys.version_info[1]) == (3, 5) or \
+			(sys.version_info[0], sys.version_info[1]) == (3, 6):
 
 			# More irritating minor semantic differences in the AST between 3.4 and 3.5
 			if func_kwargs:
@@ -416,7 +418,7 @@ class JsonInterfaceGenerator(object):
 					keywords=message_params)
 		else:
 			print("Version:", sys.version_info)
-			raise RuntimeError("This script only functions on python 3.4 and 3.5. Active python version {}.{}".format(*sys.version_info))
+			raise RuntimeError("This script only functions on python 3.4, 3.5 or 3.6. Active python version {}.{}".format(*sys.version_info))
 
 
 		do_communicate = ast.Assign(targets=[ast.Name(id='subdom_funcs', ctx=ast.Store())], value=communicate_call)
