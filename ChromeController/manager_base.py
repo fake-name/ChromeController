@@ -57,11 +57,13 @@ class ChromeInterface():
 		for x in range(3):
 			try:
 				self.transport = ChromeSocketManager()
-				print(self.transport)
 				break
 			except requests.exceptions.ConnectionError:
+				self.cr_proc.poll()
+				if self.cr_proc.returncode != None:
+					stdout, stderr = self.cr_proc.communicate()
+					raise ChromeError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
 				print("Wat")
-				traceback.print_exc()
 				time.sleep(1)
 
 		if not self.transport:
