@@ -1,7 +1,9 @@
 """
 """
 import json
+import logging
 import ast
+import os.path
 import astor
 import sys
 import pprint
@@ -473,7 +475,6 @@ class JsonInterfaceGenerator(object):
 		return mod
 
 	def dump_class(self):
-		print("Dumping class source")
 		indent = "	"
 		return astor.to_source(self.__to_module(), indent_with=indent)
 
@@ -511,6 +512,36 @@ def print_file_ast():
 	print("AST:")
 	print("astor.dump_tree(this_ast)")
 	print(astor.dump_tree(this_ast))
+
+def update_generated_class():
+	log = logging.getLogger("Main.ChromeController.WrapperGenerator")
+	gen_filename = "Generated.py"
+	cur_file = os.path.abspath(__file__)
+	cur_dir  = os.path.dirname(cur_file)
+
+	fname = os.path.join(cur_dir, gen_filename)
+
+	cls_def = get_source()
+	try:
+		with open(fname, "r", encoding='utf-8') as fp:
+			have = fp.read()
+	except IOError:
+		# The class hasn't been generated yet?
+		have = ""
+
+	if have.strip() != cls_def.strip():
+		log.info("ChromeController wrapper is up to date. Nothing to do")
+	else:
+		log.warning("Generated wrapper appears to be out of date. Regenerating.")
+		log.warning("Note: If ChromeController is installed as a module, "
+		                 "this may require administrator permissions")
+		try:
+			with open(fname, "w", encoding='utf-8') as fp:
+				fp.write(cls_def)
+		except IOError:
+			raise IOError("Could not update class definition file: {}, and "
+			              "it is out of date!".format(fname))
+
 
 def test():
 	print(JsonInterfaceGenerator)

@@ -12,12 +12,25 @@ import time
 import http.cookiejar
 import urllib.parse
 
-from .Generator import gen
-ChromeRemoteDebugInterfaceBase = gen.get_class_def()
 from .manager_base import ChromeError
-
-
 from .resources import js
+
+
+try:
+	# Try to import the aparatus for generating the wrapper class, and
+	# import it, if possible.
+	from .Generator import gen
+	gen.update_generated_class()
+	ChromeRemoteDebugInterfaceBase = gen.get_class_def()
+except ImportError:
+	# If that failed, use the pre-generated version
+	try:
+		from .Generator.Generated import ChromeRemoteDebugInterfaceBase
+	except ImportError:
+		raise RuntimeError("Generated class wrapper doesn't exist, and couldn't be created!")
+
+
+
 
 DEFAULT_TIMEOUT_SECS = 30
 

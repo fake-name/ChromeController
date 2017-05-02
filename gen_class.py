@@ -11,7 +11,10 @@ import ChromeController
 
 
 def gen():
+	print("__file__", __file__)
 	# print("Manager: ", mgr)
+	cls_def = mgr.gen.update_generated_class()
+
 	cls_def = mgr.gen.get_source()
 	with open("class.py", "w") as fp:
 		fp.write(cls_def)
