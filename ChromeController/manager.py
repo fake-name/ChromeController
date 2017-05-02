@@ -13,7 +13,7 @@ import http.cookiejar
 import urllib.parse
 
 from .Generator import gen
-CromeRemoteDebugInterfaceBase = gen.get_class_def()
+ChromeRemoteDebugInterfaceBase = gen.get_class_def()
 from .manager_base import ChromeError
 
 
@@ -21,7 +21,7 @@ from .resources import js
 
 DEFAULT_TIMEOUT_SECS = 30
 
-class CromeRemoteDebugInterface(CromeRemoteDebugInterfaceBase):
+class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)

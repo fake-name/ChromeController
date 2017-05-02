@@ -102,7 +102,7 @@ class JsonInterfaceGenerator(object):
 		# print(body)
 
 		self.interface_class = ast.ClassDef(
-				name           = "CromeRemoteDebugInterface",
+				name           = "ChromeRemoteDebugInterface",
 				bases          = [ast.Name(id="ChromeInterface", ctx=ast.Load())],
 				body           = body,
 				keywords       = [],
@@ -484,7 +484,7 @@ class JsonInterfaceGenerator(object):
 		mod = self.__to_module()
 		code = compile(self.__to_module(), "no filename", "exec")
 		exec(code)
-		built_class = locals()['CromeRemoteDebugInterface']
+		built_class = locals()['ChromeRemoteDebugInterface']
 
 		return built_class
 

@@ -16,7 +16,7 @@ def test():
 	# print(ua)
 
 	crbin = os.path.abspath("../Chromium/src/out/Headless/headless_shell")
-	cr = ChromeController.CromeRemoteDebugInterface(crbin)
+	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
 
 	# print(cr)
 	resp = cr.Emulation_setVisibleSize(1500, 1000)

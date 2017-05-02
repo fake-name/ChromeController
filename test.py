@@ -14,7 +14,7 @@ import ChromeController
 def test_delete_cookies():
 
 	crbin = os.path.abspath("./vendored/headless_shell")
-	cr = ChromeController.CromeRemoteDebugInterface(crbin)
+	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
 
 	canClear = cr.Network_canClearBrowserCookies()
 	print("Can clear cookies: ", canClear)
@@ -98,7 +98,7 @@ def test():
 	# print(ua)
 
 	crbin = os.path.abspath("./vendored/headless_shell")
-	cr = ChromeController.CromeRemoteDebugInterface(crbin)
+	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
 
 	cooks1 = cr.get_cookies()
 
