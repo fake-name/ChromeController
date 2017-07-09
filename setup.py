@@ -2,6 +2,7 @@
 import setuptools
 from distutils.core import setup
 import sys
+import time
 setup(
 	# Application name:
 	name="ChromeController",
@@ -24,11 +25,12 @@ setup(
 	description="Chrome Remote Debugger interface.",
 
 	long_description=open("README.md").read(),
-
+	dependency_links=[
+		'https://github.com/berkerpeksag/astor/tarball/master#egg=lol_%s_wat' % int(time.time()),
+	],
 	# Dependent packages (distributions)
 	install_requires=[
 		'websocket-client',
-		'git+https://github.com/berkerpeksag/astor.git',
 		'requests',
 	],
 )
