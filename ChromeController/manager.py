@@ -12,8 +12,8 @@ import time
 import http.cookiejar
 import urllib.parse
 
-from .manager_base import ChromeError
-from .resources import js
+from ChromeController.manager_base import ChromeError
+from ChromeController.resources import js
 
 
 try:

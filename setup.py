@@ -16,6 +16,8 @@ setup(
 
 	# Packages
 	packages=["ChromeController"],
+	package_dir = {'ChromeController': 'ChromeController'},
+	package_data={'ChromeController': ['protocols/*.json']},
 
 	# Details
 	url="https://github.com/fake-name/ChromeController",
