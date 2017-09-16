@@ -21,6 +21,7 @@ set -e
 # 	cp ../Chromium/src/out/Headless/gen/blink/core/inspector/protocol.json            ./ChromeController/protocols/js_protocol-r1.2.json
 # fi
 
+python3 gen_class.py
 
 
 python3 -m pydoc -w ChromeController.CromeRemoteDebugInterface

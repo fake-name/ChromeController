@@ -513,7 +513,7 @@ def print_file_ast():
 	print("astor.dump_tree(this_ast)")
 	print(astor.dump_tree(this_ast))
 
-def update_generated_class():
+def update_generated_class(force=False):
 	log = logging.getLogger("Main.ChromeController.WrapperGenerator")
 	gen_filename = "Generated.py"
 	cur_file = os.path.abspath(__file__)
@@ -529,7 +529,7 @@ def update_generated_class():
 		# The class hasn't been generated yet?
 		have = ""
 
-	if have.strip() != cls_def.strip():
+	if have.strip() != cls_def.strip() and not force:
 		log.info("ChromeController wrapper is up to date. Nothing to do")
 	else:
 		log.warning("Generated wrapper appears to be out of date. Regenerating.")
