@@ -292,6 +292,21 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 		assert "'" not in url
 		return self.__exec_js("window.location.href = '{}'".format(url))
 
+	def get_current_url(self):
+		'''
+		Probe the remote session for the current window URL.
+
+		This is primarily used to do things like unwrap redirects,
+		or circumvent outbound url wrappers.
+
+		'''
+		res = self.Page_getNavigationHistory()
+		assert 'result' in res
+		assert 'currentIndex' in res['result']
+		assert 'entries' in res['result']
+
+		return res['result']['entries'][res['result']['currentIndex']]['url']
+
 
 	def click_link_containing_url(self, url):
 		'''

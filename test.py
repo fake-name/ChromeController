@@ -202,10 +202,19 @@ def test_cycle():
 		cr = ChromeController.ChromeRemoteDebugInterface(crbin)
 
 		cr.close()
+def test_url():
+
+	crbin = "google-chrome"
+	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
+
+	resp = cr.blocking_navigate("http://www.google.com", timeout=10)
+	print("Current URL:", cr.get_current_url())
+	cr.close()
 
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG)
 	# test()
-	test_cycle()
+	# test_cycle()
+	test_url()
 	# test_delete_cookies()
 	# docstring_dbg()
