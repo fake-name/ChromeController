@@ -13,7 +13,7 @@ import ChromeController
 
 def test_delete_cookies():
 
-	crbin = os.path.abspath("google-chrome")
+	crbin = "google-chrome"
 	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
 
 	canClear = cr.Network_canClearBrowserCookies()
