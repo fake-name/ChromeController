@@ -62,6 +62,8 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 		the first item in the tuple will be None
 
 		'''
+		assert isinstance(header_args, dict), "header_args must be a dict, passed type was %s" \
+			% (type(header_args), )
 
 		ua = header_args.pop('User-Agent', None)
 		ret_1 = None
