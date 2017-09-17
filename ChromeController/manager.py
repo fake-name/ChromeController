@@ -375,16 +375,16 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 		assert 'searchId' in res['result']
 		searchid = res['result']['searchId']
 		res_cnt  = res['result']['resultCount']
-		print(res)
-		print(searchid)
+		self.log.debug("%s", res)
+		self.log.debug("%s", searchid)
 
 		if res_cnt == 0:
 			return None
 
 		items = self.DOM_getSearchResults(searchId=searchid, fromIndex=0, toIndex=res_cnt)
 
-		print("Results:")
-		print(items)
+		self.log.debug("Results:")
+		self.log.debug("%s", items)
 
 		# DOM_getSearchResults
 
@@ -475,7 +475,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 
 		resp = self.blocking_navigate(url, timeout)
 		assert 'requestId' in resp
-		print('resp', resp)
+		self.log.debug('blocking_navigate Response', resp)
 
 		content = self.Network_getResponseBody(resp['requestId'])
 		assert 'result' in content

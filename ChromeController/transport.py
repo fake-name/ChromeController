@@ -34,7 +34,7 @@ class ChromeSocketManager():
 		self.soc = None
 		self.tablist = None
 
-		self.log = logging.getLogger("Main.ChromiumSocketTransport")
+		self.log = logging.getLogger("Main.ChromeController.SocketTransport")
 		self.connect()
 
 		self.messages = []

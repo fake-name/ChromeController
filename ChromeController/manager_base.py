@@ -36,7 +36,7 @@ class ChromeInterface():
 		at once.
 
 		"""
-		self.log = logging.getLogger("Main.ChromeInterface")
+		self.log = logging.getLogger("Main.ChromeController.Interface")
 
 		self.log.debug("Binary: %s", binary)
 		self.log.debug("Args: %s", args)
