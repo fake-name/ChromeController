@@ -72,16 +72,6 @@ import random
 random.seed()
 
 
-import selenium.webdriver.chrome.service
-import selenium.webdriver.chrome.options
-import selenium.webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
-
-
 
 def as_soup(str):
 	return bs4.BeautifulSoup(str, "lxml")
@@ -402,9 +392,9 @@ class WebGetRobust:
 		if totalSize:
 			percent = float(bytesSoFar) / totalSize
 			percent = round(percent * 100, 2)
-			self.log.info("Downloaded %d of %d bytes (%0.2f%%)" % (bytesSoFar, totalSize, percent))
+			self.log.info("Downloaded %d of %d bytes (%0.2f%%)", (bytesSoFar, totalSize, percent))
 		else:
-			self.log.info("Downloaded %d bytes" % (bytesSoFar))
+			self.log.info("Downloaded %d bytes", (bytesSoFar))
 
 
 	def chunkRead(self, response, chunkSize=2 ** 18, reportHook=None):
@@ -634,89 +624,6 @@ class WebGetRobust:
 
 		self.log.info("Retreived file of type '%s', name of '%s' with a size of %0.3f K", mType, fileN, len(content)/1000.0)
 		return content, fileN, mType
-
-
-	def _initPjsWebDriver(self):
-		if self.pjs_driver:
-			self.pjs_driver.quit()
-		dcap = dict(DesiredCapabilities.PHANTOMJS)
-		wgSettings = dict(self.browserHeaders)
-		# Install the headers from the WebGet class into phantomjs
-		dcap["phantomjs.page.settings.userAgent"] = wgSettings.pop('User-Agent')
-		for headerName in wgSettings:
-			if headerName != 'Accept-Encoding':
-				dcap['phantomjs.page.customHeaders.{header}'.format(header=headerName)] = wgSettings[headerName]
-
-		self.pjs_driver = selenium.webdriver.PhantomJS(desired_capabilities=dcap)
-		self.pjs_driver.set_window_size(1024, 768)
-
-	def _initCrWebDriver(self):
-		if self.cr_driver:
-			self.cr_driver.quit()
-		dcap = dict(DesiredCapabilities.CHROME)
-		wgSettings = dict(self.browserHeaders)
-		# Install the headers from the WebGet class into phantomjs
-		user_agent = wgSettings.pop('User-Agent')
-		dcap["chrome.page.settings.userAgent"] = user_agent
-		for headerName in wgSettings:
-			if headerName != 'Accept-Encoding':
-				dcap['chrome.page.customHeaders.{header}'.format(header=headerName)] = wgSettings[headerName]
-
-		dcap["chrome.switches"] = ["--user-agent="+user_agent]
-
-
-		chromedriver = r'./venv/bin/chromedriver'
-		chrome       = r'./Headless/headless_shell'
-
-		chrome_options = selenium.webdriver.chrome.options.Options()
-		chrome_options.binary_location = chrome
-		chrome_options.add_argument('--load-component-extension')
-		chrome_options.add_argument("--user-agent=\"{}\"".format(user_agent))
-		chrome_options.add_argument('--verbose')
-		chrome_options.add_argument('--no-sandbox')
-		chrome_options.add_argument('--disable-extension')
-
-		self.cr_driver = selenium.webdriver.Chrome(chrome_options=chrome_options, desired_capabilities=dcap)
-		# We can't set the chrome desired capabilities, since headless chrome
-		# doesn't allow extensions.
-
-		self.cr_driver.set_page_load_timeout(30)
-
-	def _syncIntoPjsWebDriver(self):
-		# TODO
-		pass
-
-	def _syncOutOfPjsWebDriver(self):
-		for cookie in self.pjs_driver.get_cookies():
-			self.addSeleniumCookie(cookie)
-
-
-	def getItemPhantomJS(self, itemUrl):
-		self.log.info("Fetching page for URL: '%s' with PhantomJS" % itemUrl)
-
-		if not self.pjs_driver:
-			self._initPjsWebDriver()
-		self._syncIntoPjsWebDriver()
-
-		with load_delay_context_manager(self.pjs_driver):
-			self.pjs_driver.get(itemUrl)
-		time.sleep(3)
-
-		fileN = urllib.parse.unquote(urllib.parse.urlparse(self.pjs_driver.current_url)[2].split("/")[-1])
-		fileN = bs4.UnicodeDammit(fileN).unicode_markup
-
-		self._syncOutOfPjsWebDriver()
-
-		# Probably a bad assumption
-		mType = "text/html"
-
-		# So, self.pjs_driver.page_source appears to be the *compressed* page source as-rendered. Because reasons.
-		source = self.pjs_driver.execute_script("return document.getElementsByTagName('html')[0].innerHTML")
-
-		assert source != '<head></head><body></body>'
-
-		source = "<html>"+source+"</html>"
-		return source, fileN, mType
 
 
 	def decodeTextContent(self, pgctnt, cType):
@@ -1046,34 +953,6 @@ class WebGetRobust:
 		self.log.info("Updating cookie!")
 		self.cj.set_cookie(inCookie)
 
-	def addSeleniumCookie(self, cookieDict):
-		'''
-		Install a cookie exported from a selenium webdriver into
-		the active opener
-		'''
-		# print cookieDict
-		cookie = http.cookiejar.Cookie(
-				version            = 0,
-				name               = cookieDict['name'],
-				value              = cookieDict['value'],
-				port               = None,
-				port_specified     = False,
-				domain             = cookieDict['domain'],
-				domain_specified   = True,
-				domain_initial_dot = False,
-				path               = cookieDict['path'],
-				path_specified     = False,
-				secure             = cookieDict['secure'],
-				expires            = cookieDict['expiry'] if 'expiry' in cookieDict else None,
-				discard            = False,
-				comment            = None,
-				comment_url        = None,
-				rest               = {"httponly":"%s" % cookieDict['httponly']},
-				rfc2109            = False
-			)
-
-		self.cj.set_cookie(cookie)
-
 	def initLogging(self):
 		print("WARNING - Webget logging re-initialized?")
 		mainLogger = logging.getLogger("Main")			# Main logger
@@ -1133,75 +1012,6 @@ class WebGetRobust:
 
 		if self.pjs_driver != None:
 			self.pjs_driver.quit()
-
-
-
-	def stepThroughCloudFlare(self, url, titleContains='', titleNotContains=''):
-		'''
-		Use Selenium+PhantomJS to access a resource behind cloudflare protection.
-
-		Params:
-			``url`` - The URL to access that is protected by cloudflare
-			``titleContains`` - A string that is in the title of the protected page, and NOT the
-				cloudflare intermediate page. The presence of this string in the page title
-				is used to determine whether the cloudflare protection has been successfully
-				penetrated.
-
-		The current WebGetRobust headers are installed into the selenium browser, which
-		is then used to access the protected resource.
-
-		Once the protected page has properly loaded, the cloudflare access cookie is
-		then extracted from the selenium browser, and installed back into the WebGetRobust
-		instance, so it can continue to use the cloudflare auth in normal requests.
-
-		'''
-
-		if (not titleContains) and (not titleNotContains):
-			raise ValueError("You must pass either a string the title should contain, or a string the title shouldn't contain!")
-
-		if titleContains and titleNotContains:
-			raise ValueError("You can only pass a single conditional statement!")
-
-
-		self.log.info("Attempting to access page through cloudflare browser verification.")
-
-		dcap = dict(DesiredCapabilities.PHANTOMJS)
-		wgSettings = dict(self.browserHeaders)
-
-		# Install the headers from the WebGet class into phantomjs
-		dcap["phantomjs.page.settings.userAgent"] = wgSettings.pop('User-Agent')
-		for headerName in wgSettings:
-			dcap['phantomjs.page.customHeaders.{header}'.format(header=headerName)] = wgSettings[headerName]
-
-		driver = selenium.webdriver.PhantomJS(desired_capabilities=dcap)
-		driver.set_window_size(1024, 768)
-
-		driver.get(url)
-
-		if titleContains:
-			condition = EC.title_contains(titleContains)
-		elif titleNotContains:
-			condition = title_not_contains(titleNotContains)
-		else:
-			raise ValueError("Wat?")
-
-
-		try:
-			WebDriverWait(driver, 20).until(condition)
-			success = True
-			self.log.info("Successfully accessed main page!")
-		except TimeoutException:
-			self.log.error("Could not pass through cloudflare blocking!")
-			success = False
-		# Add cookies to cookiejar
-
-		for cookie in driver.get_cookies():
-			self.addSeleniumCookie(cookie)
-			#print cookie[u"value"]
-
-		self.syncCookiesFromFile()
-
-		return success
 
 
 
