@@ -12,11 +12,6 @@ import logging
 import requests
 from . import cr_exceptions
 
-TRANSPORT_DEBUG = True
-TRANSPORT_TX_DEBUG = TRANSPORT_DEBUG
-TRANSPORT_RX_DEBUG = TRANSPORT_DEBUG
-
-
 class ChromeSocketManager():
 	"""
 	A remote debugging connection to Google Chrome.
@@ -39,7 +34,7 @@ class ChromeSocketManager():
 		self.soc = None
 		self.tablist = None
 
-		self.log = logging.getLogger("Main.ChromiumSocketManager")
+		self.log = logging.getLogger("Main.ChromiumSocketTransport")
 		self.connect()
 
 		self.messages = []
@@ -106,16 +101,14 @@ class ChromeSocketManager():
 
 		"""
 
-		if TRANSPORT_TX_DEBUG:
-			print("Synchronous_command:")
-			print("	command: '%s'" % command)
-			print("	params:  '%s'" % params)
+		self.log.debug("Synchronous_command:")
+		self.log.debug("	command: '%s'" % command)
+		self.log.debug("	params:  '%s'" % params)
 
 		send_id = self.send(command, params)
 		resp = self.recv(message_id=send_id)
 
-		if TRANSPORT_RX_DEBUG:
-			print("	Response: '%s'" % str(resp).encode("ascii", 'ignore').decode("ascii"))
+		self.log.debug("	Response: '%s'" % str(resp).encode("ascii", 'ignore').decode("ascii"))
 
 		return resp
 
@@ -143,8 +136,7 @@ class ChromeSocketManager():
 		navcom = json.dumps(command)
 
 
-		if TRANSPORT_TX_DEBUG:
-			print("		Sending: '%s'" % navcom)
+		self.log.debug("		Sending: '%s'" % navcom)
 
 		self.soc.send(navcom)
 
@@ -155,8 +147,7 @@ class ChromeSocketManager():
 	def ___recv(self):
 		try:
 			tmp = self.soc.recv()
-			if TRANSPORT_RX_DEBUG:
-				print("		Received: '%s'" % tmp)
+			self.log.debug("		Received: '%s'" % tmp)
 
 			decoded = json.loads(tmp)
 			return decoded
@@ -237,7 +228,7 @@ class ChromeSocketManager():
 			if message_id is None:
 				return True
 			if not message:
-				print("Message is not true!", message)
+				self.log.debug("Message is not true!", message)
 				return False
 			if "id" in message:
 				return message['id'] == message_id
