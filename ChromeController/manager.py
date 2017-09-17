@@ -12,7 +12,7 @@ import time
 import http.cookiejar
 import urllib.parse
 
-from ChromeController.manager_base import ChromeError
+from ChromeController.cr_exceptions import ChromeError
 from ChromeController.resources import js
 
 

@@ -8,6 +8,7 @@ import json
 import socket
 import time
 import websocket
+import logging
 import requests
 from . import cr_exceptions
 
@@ -37,6 +38,8 @@ class ChromeSocketManager():
 		self.msg_id = 0
 		self.soc = None
 		self.tablist = None
+
+		self.log = logging.getLogger("Main.ChromiumSocketManager")
 		self.connect()
 
 		self.messages = []
@@ -61,7 +64,7 @@ class ChromeSocketManager():
 		if self.soc is not None and self.soc.connected:
 			self.soc.close()
 		self.soc = websocket.create_connection(wsurl)
-		self.soc.settimeout(1)
+		self.soc.settimeout(5)
 
 	def close(self):
 		""" Close websocket connection to remote browser."""
@@ -73,7 +76,11 @@ class ChromeSocketManager():
 		"""Connect to host:port and request list of tabs
 			 return list of dicts of data about open tabs."""
 		# find websocket endpoint
-		response = requests.get("http://%s:%s/json" % (self.host, self.port))
+		try:
+			response = requests.get("http://%s:%s/json" % (self.host, self.port))
+		except requests.exceptions.ConnectionError:
+			raise cr_exceptions.ChromeConnectFailure("Failed to fetch configuration json from browser!")
+
 		tablist = json.loads(response.text)
 
 		if not tab_idx:

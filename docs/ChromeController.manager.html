@@ -67,7 +67,15 @@ Methods defined here:<br>
 The&nbsp;binary&nbsp;to&nbsp;execute&nbsp;is&nbsp;assumed&nbsp;to&nbsp;be&nbsp;named&nbsp;`chromium`,&nbsp;and&nbsp;on&nbsp;$PATH<br>
 if&nbsp;not&nbsp;specified&nbsp;in&nbsp;the&nbsp;`binary`&nbsp;parameter.<br>
 &nbsp;<br>
-The&nbsp;chromium&nbsp;binary&nbsp;is&nbsp;launched&nbsp;with&nbsp;the&nbsp;arg&nbsp;`--remote-debugging-port=9222`&nbsp;if&nbsp;found.</tt></dd></dl>
+The&nbsp;chromium&nbsp;binary&nbsp;is&nbsp;launched&nbsp;with&nbsp;the&nbsp;arg&nbsp;`--remote-debugging-port={dbg_port}`&nbsp;if&nbsp;found.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;the&nbsp;dbg_port&nbsp;must&nbsp;be&nbsp;GLOBALLY&nbsp;unique&nbsp;on&nbsp;a&nbsp;per-computer&nbsp;basis.&nbsp;If&nbsp;not&nbsp;specified,&nbsp;it<br>
+defaults&nbsp;to&nbsp;9222.<br>
+&nbsp;<br>
+Duplication&nbsp;of&nbsp;the&nbsp;dbg_port&nbsp;parameter&nbsp;can&nbsp;often&nbsp;lead&nbsp;to&nbsp;cr_exceptions.ChromeStartupException<br>
+exceptions.&nbsp;If&nbsp;these&nbsp;happen,&nbsp;you&nbsp;may&nbsp;need&nbsp;to&nbsp;call&nbsp;ChromeInterface.<a href="#ChromeRemoteDebugInterface-close">close</a>()&nbsp;to&nbsp;force&nbsp;shutdown<br>
+of&nbsp;chromium&nbsp;instances,&nbsp;if&nbsp;you&nbsp;are&nbsp;not&nbsp;trying&nbsp;to&nbsp;instantiate&nbsp;multiple&nbsp;instances&nbsp;of&nbsp;chromium<br>
+at&nbsp;once.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-blocking_navigate"><strong>blocking_navigate</strong></a>(self, url, timeout=30)</dt><dd><tt>Do&nbsp;a&nbsp;blocking&nbsp;navigate&nbsp;to&nbsp;url&nbsp;`url`.<br>
 &nbsp;<br>
@@ -4463,7 +4471,10 @@ Methods inherited from <a href="ChromeController.manager_base.html#ChromeInterfa
 &nbsp;<br>
 This&nbsp;command&nbsp;is&nbsp;normally&nbsp;executed&nbsp;as&nbsp;part&nbsp;of&nbsp;the&nbsp;class&nbsp;destructor.<br>
 It&nbsp;can&nbsp;be&nbsp;called&nbsp;early&nbsp;without&nbsp;issue,&nbsp;but&nbsp;calling&nbsp;ANY&nbsp;class&nbsp;functions<br>
-after&nbsp;the&nbsp;remote&nbsp;chromium&nbsp;instance&nbsp;is&nbsp;shut&nbsp;down&nbsp;will&nbsp;have&nbsp;unknown&nbsp;effects.</tt></dd></dl>
+after&nbsp;the&nbsp;remote&nbsp;chromium&nbsp;instance&nbsp;is&nbsp;shut&nbsp;down&nbsp;will&nbsp;have&nbsp;unknown&nbsp;effects.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;if&nbsp;you&nbsp;are&nbsp;rapidly&nbsp;creating&nbsp;and&nbsp;destroying&nbsp;ChromeController&nbsp;instances,<br>
+you&nbsp;may&nbsp;need&nbsp;to&nbsp;*explicitly*&nbsp;call&nbsp;this&nbsp;before&nbsp;destruction.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-drain_transport"><strong>drain_transport</strong></a>(self)</dt><dd><tt>"Drain"&nbsp;the&nbsp;transport&nbsp;connection.<br>
 &nbsp;<br>

@@ -19,12 +19,14 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="ChromeController.cr_exceptions.html">ChromeController.cr_exceptions</a><br>
+<a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="logging.html">logging</a><br>
 <a href="requests.html">requests</a><br>
 </td><td width="25%" valign=top><a href="socket.html">socket</a><br>
 <a href="time.html">time</a><br>
 </td><td width="25%" valign=top><a href="websocket.html">websocket</a><br>
-</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+</td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -57,7 +59,7 @@ Assumes&nbsp;remote&nbsp;is&nbsp;listening&nbsp;for&nbsp;websocket&nbsp;connecti
 
 <dl><dt><a name="ChromeSocketManager-close"><strong>close</strong></a>(self)</dt><dd><tt>Close&nbsp;websocket&nbsp;connection&nbsp;to&nbsp;remote&nbsp;browser.</tt></dd></dl>
 
-<dl><dt><a name="ChromeSocketManager-connect"><strong>connect</strong></a>(self, tab=None, update_tabs=True)</dt><dd><tt>Open&nbsp;a&nbsp;websocket&nbsp;connection&nbsp;to&nbsp;remote&nbsp;browser,&nbsp;determined&nbsp;by<br>
+<dl><dt><a name="ChromeSocketManager-connect"><strong>connect</strong></a>(self, tab_idx=None, update_tabs=True)</dt><dd><tt>Open&nbsp;a&nbsp;websocket&nbsp;connection&nbsp;to&nbsp;remote&nbsp;browser,&nbsp;determined&nbsp;by<br>
 self.<strong>host</strong>&nbsp;and&nbsp;self.<strong>port</strong>.&nbsp;&nbsp;Each&nbsp;tab&nbsp;has&nbsp;it's&nbsp;own&nbsp;websocket<br>
 endpoint&nbsp;-&nbsp;you&nbsp;specify&nbsp;which&nbsp;with&nbsp;the&nbsp;tab&nbsp;parameter,&nbsp;defaulting<br>
 to&nbsp;0.&nbsp;&nbsp;The&nbsp;parameter&nbsp;update_tabs,&nbsp;if&nbsp;True,&nbsp;will&nbsp;force&nbsp;a&nbsp;rescan<br>
@@ -65,7 +67,7 @@ of&nbsp;open&nbsp;tabs&nbsp;before&nbsp;connection.</tt></dd></dl>
 
 <dl><dt><a name="ChromeSocketManager-drain"><strong>drain</strong></a>(self)</dt><dd><tt>Return&nbsp;all&nbsp;messages&nbsp;in&nbsp;waiting&nbsp;for&nbsp;the&nbsp;websocket&nbsp;connection.</tt></dd></dl>
 
-<dl><dt><a name="ChromeSocketManager-find_tabs"><strong>find_tabs</strong></a>(self)</dt><dd><tt>Connect&nbsp;to&nbsp;host:port&nbsp;and&nbsp;request&nbsp;list&nbsp;of&nbsp;tabs<br>
+<dl><dt><a name="ChromeSocketManager-find_tabs"><strong>find_tabs</strong></a>(self, tab_idx)</dt><dd><tt>Connect&nbsp;to&nbsp;host:port&nbsp;and&nbsp;request&nbsp;list&nbsp;of&nbsp;tabs<br>
 return&nbsp;list&nbsp;of&nbsp;dicts&nbsp;of&nbsp;data&nbsp;about&nbsp;open&nbsp;tabs.</tt></dd></dl>
 
 <dl><dt><a name="ChromeSocketManager-recv"><strong>recv</strong></a>(self, message_id=None, timeout=30)</dt><dd><tt>Recieve&nbsp;a&nbsp;message,&nbsp;optionally&nbsp;filtering&nbsp;for&nbsp;a&nbsp;specified&nbsp;message&nbsp;id.<br>

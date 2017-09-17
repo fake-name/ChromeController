@@ -30,6 +30,7 @@ python3 -m pydoc -w ChromeController.Generator
 python3 -m pydoc -w ChromeController.Generator.gen
 python3 -m pydoc -w ChromeController
 python3 -m pydoc -w ChromeController.manager
+python3 -m pydoc -w ChromeController.cr_exceptions
 python3 -m pydoc -w ChromeController.manager_base
 python3 -m pydoc -w ChromeController.transport
 

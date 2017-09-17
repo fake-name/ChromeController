@@ -1,5 +1,5 @@
 
-
+import logging
 import os.path
 import astor
 import pprint
@@ -195,9 +195,17 @@ def test():
 	# print("Draining!")
 	# pprint.pprint(cr.drain_transport())
 
+def test_cycle():
+	for _ in range(10):
 
+		crbin = "google-chrome"
+		cr = ChromeController.ChromeRemoteDebugInterface(crbin)
+
+		cr.close()
 
 if __name__ == '__main__':
+	logging.basicConfig(level=logging.DEBUG)
 	# test()
-	test_delete_cookies()
+	test_cycle()
+	# test_delete_cookies()
 	# docstring_dbg()
