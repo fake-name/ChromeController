@@ -219,6 +219,9 @@ class ChromeSocketManager():
 		def check_func(message):
 			if message_id is None:
 				return True
+			if not message:
+				print("Message is not true!", message)
+				return False
 			if "id" in message:
 				return message['id'] == message_id
 			return False

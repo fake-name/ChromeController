@@ -26,9 +26,7 @@ validator in raw AST broke my brain).
 
 Tested mostly on python 3.5, lightly on 3.4 and 3.6, all on linux. If you are 
 using python 2, please stahp. Will probably work with normal chromium/windows, 
-but that's not tested. My  use-case is controlling chromium's `headless_shell`, 
-and the system I do testing on has no X install at all, so non-headless testing 
-is not something I can do at the moment.
+but that's not tested. My test-target is the google-provided `chrome` binary.
 
 Note that this tool generates and manipulates the AST directly, so it is 
 EXTREMELY sensitive to implementation details. It is *probably* broken on 
