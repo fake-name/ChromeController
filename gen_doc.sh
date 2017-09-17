@@ -24,7 +24,7 @@ set -e
 python3 gen_class.py
 
 
-python3 -m pydoc -w ChromeController.CromeRemoteDebugInterface
+python3 -m pydoc -w ChromeController.ChromeRemoteDebugInterface
 python3 -m pydoc -w ChromeController.ChromeSocketManager
 python3 -m pydoc -w ChromeController.Generator
 python3 -m pydoc -w ChromeController.Generator.gen
@@ -33,7 +33,7 @@ python3 -m pydoc -w ChromeController.manager
 python3 -m pydoc -w ChromeController.manager_base
 python3 -m pydoc -w ChromeController.transport
 
-mv ChromeController.CromeRemoteDebugInterface.html ./docs/ChromeController.CromeRemoteDebugInterface.html
+mv ChromeController.ChromeRemoteDebugInterface.html ./docs/ChromeController.ChromeRemoteDebugInterface.html
 mv ChromeController.ChromeSocketManager.html ./docs/ChromeController.ChromeSocketManager.html
 mv ChromeController.Generator.html ./docs/ChromeController.Generator.html
 mv ChromeController.Generator.gen.html ./docs/ChromeController.Generator.gen.html

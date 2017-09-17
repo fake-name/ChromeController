@@ -532,7 +532,10 @@ def update_generated_class(force=False):
 	if have.strip() != cls_def.strip() and not force:
 		log.info("ChromeController wrapper is up to date. Nothing to do")
 	else:
-		log.warning("Generated wrapper appears to be out of date. Regenerating.")
+		if not force:
+			log.warning("Generated wrapper appears to be out of date. Regenerating.")
+		else:
+			log.warning("Generated wrapper being force-regenerated")
 		log.warning("Note: If ChromeController is installed as a module, "
 		                 "this may require administrator permissions")
 		try:

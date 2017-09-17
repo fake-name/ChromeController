@@ -35,6 +35,9 @@ except ImportError:
 DEFAULT_TIMEOUT_SECS = 30
 
 class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
+	'''
+	Remote control class for Chromium.
+	'''
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
