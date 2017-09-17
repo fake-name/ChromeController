@@ -9,6 +9,7 @@ import socket
 import time
 import websocket
 import requests
+from . import cr_exceptions
 
 TRANSPORT_DEBUG = True
 TRANSPORT_TX_DEBUG = TRANSPORT_DEBUG
@@ -37,13 +38,12 @@ class ChromeSocketManager():
 		self.soc = None
 		self.tablist = None
 		self.connect()
-		self.find_tabs()
 
 		self.messages = []
 
 
 
-	def connect(self, tab=None, update_tabs=True):
+	def connect(self, tab_idx=None, update_tabs=True):
 		"""
 		Open a websocket connection to remote browser, determined by
 		self.host and self.port.  Each tab has it's own websocket
@@ -54,10 +54,10 @@ class ChromeSocketManager():
 		"""
 
 		if update_tabs or not self.tablist:
-			self.find_tabs()
-		if not tab:
-			tab = 0
-		wsurl = self.tablist[tab]['webSocketDebuggerUrl']
+			self.tablist = self.find_tabs(tab_idx)
+		if not tab_idx:
+			tab_idx = 0
+		wsurl = self.tablist[tab_idx]['webSocketDebuggerUrl']
 		if self.soc is not None and self.soc.connected:
 			self.soc.close()
 		self.soc = websocket.create_connection(wsurl)
@@ -69,18 +69,27 @@ class ChromeSocketManager():
 			self.soc.close()
 			self.soc = None
 
-	def find_tabs(self):
+	def find_tabs(self, tab_idx):
 		"""Connect to host:port and request list of tabs
 			 return list of dicts of data about open tabs."""
 		# find websocket endpoint
 		response = requests.get("http://%s:%s/json" % (self.host, self.port))
-		self.tablist = json.loads(response.text)
-		return self.tablist
+		tablist = json.loads(response.text)
+
+		if not tab_idx:
+			tab_idx = 0
+		if not tab_idx <= len(tablist):
+			raise cr_exceptions.ChromeConnectFailure("Tab %s not found in tablist (%s)" % (tab_idx, tablist))
+		if not 'webSocketDebuggerUrl' in tablist[tab_idx]:
+			raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)" % (tab_idx, tablist))
+
+
+		return tablist
 
 
 	def __check_open_socket(self):
 		if self.soc is None or (self.soc is not None and not self.soc.connected):
-			self.connect(tab=0)
+			self.connect()
 
 
 	def synchronous_command(self, command, **params):
