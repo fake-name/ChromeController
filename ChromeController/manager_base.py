@@ -43,7 +43,13 @@ class ChromeInterface():
 			raise RuntimeError("Could not find binary '%s'" % binary)
 
 
-		argv = [binary, '--remote-debugging-port=9222']
+		argv = [
+				binary,
+				'--headless',
+				'--disable-gpu',
+				'--remote-debugging-port=9222'
+			]
+
 		self.cr_proc = subprocess.Popen(argv,
 										stdin=open(os.path.devnull, "r"),
 										stdout=subprocess.PIPE,
