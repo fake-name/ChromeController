@@ -210,9 +210,10 @@ class ChromeSocketManager():
 
 		# First, check if the message has already been received.
 		for idx in range(len(self.messages)):
-			if "id" in self.messages[idx] and message_id:
-				if self.messages[idx]['id'] == message_id:
-					return self.messages.pop(idx)
+			if self.messages[idx]:
+				if "id" in self.messages[idx] and message_id:
+					if self.messages[idx]['id'] == message_id:
+						return self.messages.pop(idx)
 
 		# Then spin untill we either have the message,
 		# or have timed out.
