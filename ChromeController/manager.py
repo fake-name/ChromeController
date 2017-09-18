@@ -308,6 +308,32 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 
 		return res['result']['entries'][res['result']['currentIndex']]['url']
 
+	def get_page_url_title(self):
+		'''
+		Get the title and current url from the remote session.
+
+		Return is a 2-tuple: (page_title, page_url).
+
+		Note that this will raise an exception if more then one tab are open in the remote session.
+		'''
+		targets = self._cr.Target_getTargets()
+		assert 'result' in targets
+		assert 'targetInfos' in targets['result']
+		assert len(targets['result']['targetInfos']) == 1
+
+		# {
+		# 	'title': 'Page Title 1',
+		# 	'targetId': '9d2c503c-e39e-42cc-b950-96db073918ee',
+		# 	'attached': True,
+		# 	'url': 'http://localhost:47181/with_title_1',
+		# 	'type': 'page'
+		# }
+
+		meta    = targets['result']['targetInfos'][0]
+		title   = meta['title']
+		cur_url = meta['url']
+		return title, cur_url
+
 
 	def click_link_containing_url(self, url):
 		'''

@@ -34,7 +34,7 @@ exceptions.&nbsp;If&nbsp;these&nbsp;happen,&nbsp;you&nbsp;may&nbsp;need&nbsp;to&
 of&nbsp;chromium&nbsp;instances,&nbsp;if&nbsp;you&nbsp;are&nbsp;not&nbsp;trying&nbsp;to&nbsp;instantiate&nbsp;multiple&nbsp;instances&nbsp;of&nbsp;chromium<br>
 at&nbsp;once.</tt></dd></dl>
 
-<dl><dt><a name="ChromeRemoteDebugInterface-blocking_navigate"><strong>blocking_navigate</strong></a>(self, url, timeout=30)</dt><dd><tt>Do&nbsp;a&nbsp;blocking&nbsp;navigate&nbsp;to&nbsp;url&nbsp;`url`.<br>
+<dl><dt><a name="ChromeRemoteDebugInterface-blocking_navigate"><strong>blocking_navigate</strong></a>(self, url, timeout=10)</dt><dd><tt>Do&nbsp;a&nbsp;blocking&nbsp;navigate&nbsp;to&nbsp;url&nbsp;`url`.<br>
 &nbsp;<br>
 This&nbsp;function&nbsp;triggers&nbsp;a&nbsp;navigation,&nbsp;and&nbsp;then&nbsp;waits&nbsp;for&nbsp;the&nbsp;browser<br>
 to&nbsp;claim&nbsp;the&nbsp;page&nbsp;has&nbsp;finished&nbsp;loading.<br>
@@ -54,7 +54,7 @@ A&nbsp;navigation&nbsp;command&nbsp;results&nbsp;in&nbsp;a&nbsp;sequence&nbsp;of
 Therefore,&nbsp;this&nbsp;call&nbsp;triggers&nbsp;a&nbsp;navigation&nbsp;option,<br>
 and&nbsp;then&nbsp;waits&nbsp;for&nbsp;the&nbsp;expected&nbsp;set&nbsp;of&nbsp;response&nbsp;event&nbsp;messages.</tt></dd></dl>
 
-<dl><dt><a name="ChromeRemoteDebugInterface-blocking_navigate_and_get_source"><strong>blocking_navigate_and_get_source</strong></a>(self, url, timeout=30)</dt><dd><tt>Do&nbsp;a&nbsp;blocking&nbsp;navigate&nbsp;to&nbsp;url&nbsp;`url`,&nbsp;and&nbsp;then&nbsp;extract&nbsp;the<br>
+<dl><dt><a name="ChromeRemoteDebugInterface-blocking_navigate_and_get_source"><strong>blocking_navigate_and_get_source</strong></a>(self, url, timeout=10)</dt><dd><tt>Do&nbsp;a&nbsp;blocking&nbsp;navigate&nbsp;to&nbsp;url&nbsp;`url`,&nbsp;and&nbsp;then&nbsp;extract&nbsp;the<br>
 response&nbsp;body&nbsp;and&nbsp;return&nbsp;that.<br>
 &nbsp;<br>
 This&nbsp;effectively&nbsp;returns&nbsp;the&nbsp;*unrendered*&nbsp;page&nbsp;content&nbsp;that's&nbsp;sent&nbsp;over&nbsp;the&nbsp;wire.&nbsp;As&nbsp;such,<br>
@@ -177,6 +177,12 @@ cookie&nbsp;management&nbsp;classes.</tt></dd></dl>
 &nbsp;<br>
 This&nbsp;is&nbsp;primarily&nbsp;used&nbsp;to&nbsp;do&nbsp;things&nbsp;like&nbsp;unwrap&nbsp;redirects,<br>
 or&nbsp;circumvent&nbsp;outbound&nbsp;url&nbsp;wrappers.</tt></dd></dl>
+
+<dl><dt><a name="ChromeRemoteDebugInterface-get_page_url_title"><strong>get_page_url_title</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;title&nbsp;and&nbsp;current&nbsp;url&nbsp;from&nbsp;the&nbsp;remote&nbsp;session.<br>
+&nbsp;<br>
+Return&nbsp;is&nbsp;a&nbsp;2-tuple:&nbsp;(page_title,&nbsp;page_url).<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;this&nbsp;will&nbsp;raise&nbsp;an&nbsp;exception&nbsp;if&nbsp;more&nbsp;then&nbsp;one&nbsp;tab&nbsp;are&nbsp;open&nbsp;in&nbsp;the&nbsp;remote&nbsp;session.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-get_rendered_page_source"><strong>get_rendered_page_source</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;HTML&nbsp;markup&nbsp;for&nbsp;the&nbsp;current&nbsp;page.<br>
 &nbsp;<br>
