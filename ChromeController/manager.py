@@ -33,7 +33,7 @@ except ImportError:
 
 
 
-DEFAULT_TIMEOUT_SECS = 30
+DEFAULT_TIMEOUT_SECS = 10
 
 class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 	'''
