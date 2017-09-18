@@ -316,7 +316,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 
 		Note that this will raise an exception if more then one tab are open in the remote session.
 		'''
-		targets = self._cr.Target_getTargets()
+		targets = self.Target_getTargets()
 		assert 'result' in targets
 		assert 'targetInfos' in targets['result']
 		assert len(targets['result']['targetInfos']) == 1
