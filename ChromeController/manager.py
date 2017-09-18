@@ -12,6 +12,7 @@ import time
 import http.cookiejar
 import urllib.parse
 
+from ChromeController.cr_exceptions import ChromeNavigateTimedOut
 from ChromeController.cr_exceptions import ChromeError
 from ChromeController.resources import js
 
@@ -642,7 +643,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 		resp = self.transport.recv_filtered(network_response_recieved_for_url(url))
 
 		if resp is None:
-			raise ChromeError("Blocking navigate timed out!")
+			raise ChromeNavigateTimedOut("Blocking navigate timed out!")
 
 		return resp['params']
 

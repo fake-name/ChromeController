@@ -10,3 +10,6 @@ class ChromeConnectFailure(ChromeControllerException):
 
 class ChromeError(ChromeControllerException):
 	pass
+
+class ChromeNavigateTimedOut(ChromeError):
+	pass
