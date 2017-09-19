@@ -247,16 +247,16 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 			))
 
 		params = {
-				'url'            : fake_url,
+				'url'      : fake_url,
 
-				'name'           : cookie.name,
-				'value'          : cookie.value,
-				'domain'         : cookie.domain,
-				'path'           : cookie.path,
-				'secure'         : cookie.secure,
-				'expirationDate' : cookie.expires,
+				'name'     : cookie.name,
+				'value'    : cookie.value,
+				'domain'   : cookie.domain,
+				'path'     : cookie.path,
+				'secure'   : cookie.secure,
+				'expires'  : cookie.expires,
 
-				'httpOnly'       : is_http_only,
+				'httpOnly' : is_http_only,
 
 				# The "sameSite" flag appears to be a chromium-only extension for controlling
 				# cookie sending in non-first-party contexts. See:

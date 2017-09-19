@@ -43,6 +43,7 @@ mv ChromeController.html ./docs/ChromeController.html
 mv ChromeController.manager.html ./docs/ChromeController.manager.html
 mv ChromeController.manager_base.html ./docs/ChromeController.manager_base.html
 mv ChromeController.transport.html ./docs/ChromeController.transport.html
+mv ChromeController.cr_exceptions.html ./docs/ChromeController.cr_exceptions.html
 
 
 
