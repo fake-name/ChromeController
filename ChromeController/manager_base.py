@@ -37,7 +37,6 @@ class ChromeInterface():
 
 		"""
 		self.log = logging.getLogger("Main.ChromeController.Interface")
-
 		self.log.debug("Binary: %s", binary)
 		self.log.debug("Args: %s", args)
 		self.log.debug("Kwargs: %s", kwargs)
@@ -74,6 +73,7 @@ class ChromeInterface():
 		for x in range(3):
 			try:
 				self.transport = ChromeSocketManager(port=dbg_port)
+
 				break
 			except cr_exceptions.ChromeConnectFailure:
 

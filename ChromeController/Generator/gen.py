@@ -120,22 +120,22 @@ class JsonInterfaceGenerator(object):
 
 	def __build__init(self):
 
-		super_func = ast.Call(func=ast.Name(id='super', ctx=ast.Load()), args=[], keywords=[])
+		super_func_call = ast.Call(func=ast.Name(id='super', ctx=ast.Load()), args=[], keywords=[])
 		if (sys.version_info[0], sys.version_info[1]) == (3, 5) or \
 			(sys.version_info[0], sys.version_info[1]) == (3, 6):
 			super_func = ast.Call(
-									func=ast.Attribute(value=super_func, attr='__init__', ctx=ast.Load()),
+									func=ast.Attribute(value=super_func_call, attr='__init__', ctx=ast.Load()),
 									args=[ast.Starred(value=ast.Name(id='args', ctx=ast.Load()), ctx=ast.Load())],
-									keywords=[],
-									kwargs=ast.Name(id='kwargs', ctx=ast.Load()),
+									keywords=[ast.keyword(arg=None, value=ast.Name(id='kwargs', ctx=ast.Load()), ctx=ast.Load())],
 							)
 		elif (sys.version_info[0], sys.version_info[1]) == (3,4):
 			super_func = ast.Call(
-									func=ast.Attribute(value=super_func, attr='__init__', ctx=ast.Load()),
+									func=ast.Attribute(value=super_func_call, attr='__init__', ctx=ast.Load()),
 									args=[],
 									keywords=[],
 									starargs=ast.Name(id='args', ctx=ast.Load()),
 									kwargs=ast.Name(id='kwargs', ctx=ast.Load()),
+
 							)
 		else:
 			print("Version:", sys.version_info)

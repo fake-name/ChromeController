@@ -14,7 +14,7 @@ import ChromeController
 def test_delete_cookies():
 
 	crbin = "google-chrome"
-	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
+	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin, dbg_port=9232)
 
 	canClear = cr.Network_canClearBrowserCookies()
 	print("Can clear cookies: ", canClear)
@@ -98,7 +98,7 @@ def test():
 	# print(ua)
 
 	crbin = os.path.abspath("./vendored/headless_shell")
-	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
+	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin, dbg_port=9232)
 
 	cooks1 = cr.get_cookies()
 
@@ -205,7 +205,7 @@ def test_cycle():
 def test_url():
 
 	crbin = "google-chrome"
-	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
+	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin, dbg_port=9232)
 
 	resp = cr.blocking_navigate("http://www.google.com", timeout=10)
 	print("Current URL:", cr.get_current_url())

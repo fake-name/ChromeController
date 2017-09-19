@@ -22,11 +22,12 @@ try:
 	# import it, if possible.
 	from .Generator import gen
 	gen.update_generated_class()
-	ChromeRemoteDebugInterfaceBase = gen.get_class_def()
+	ChromeRemoteDebugInterface_base = gen.get_class_def()
 except ImportError:
 	# If that failed, use the pre-generated version
 	try:
-		from .Generator.Generated import ChromeRemoteDebugInterfaceBase
+		from ChromeController.Generator.Generated import ChromeRemoteDebugInterface as \
+			ChromeRemoteDebugInterface_base
 	except ImportError:
 		raise RuntimeError("Generated class wrapper doesn't exist, and couldn't be created!")
 
@@ -35,7 +36,7 @@ except ImportError:
 
 DEFAULT_TIMEOUT_SECS = 10
 
-class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
+class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 	'''
 	Remote control class for Chromium.
 	'''

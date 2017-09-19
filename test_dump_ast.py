@@ -91,14 +91,16 @@ def func():
 	class TestWat(object):
 		def __init__(self, *args, **kwargs):
 			print("Lol?", (args, kwargs))
+			print("wat")
 			super().__init__(*args, **kwargs)
-			super().__init__(args, kwargs)
+			print("wat")
+			# super().__init__(args, kwargs)
 
 	instance = TestWat()
 
 
 def docstring_dbg():
-	print(astor.dump_tree(astor.code_to_ast(test_func)))
+	print(astor.dump_tree(astor.code_to_ast(func)))
 
 
 

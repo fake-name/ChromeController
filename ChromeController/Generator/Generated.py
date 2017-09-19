@@ -77,7 +77,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Enable/disable suppressing memory pressure notifications in all processes.
 		"""
 		assert isinstance(suppressed, (bool,)
-		    ), 'Argument suppressed must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument suppressed must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    suppressed)
 		subdom_funcs = self.synchronous_command(
 		    'Memory.setPressureNotificationsSuppressed', suppressed=suppressed)
@@ -183,7 +183,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Deprecated, please use addScriptToEvaluateOnNewDocument instead.
 		"""
 		assert isinstance(scriptSource, (str,)
-		    ), 'Argument scriptSource must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument scriptSource must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    scriptSource)
 		subdom_funcs = self.synchronous_command('Page.addScriptToEvaluateOnLoad',
 		    scriptSource=scriptSource)
@@ -225,7 +225,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Evaluates given script in every frame upon creation (before loading frame's scripts).
 		"""
 		assert isinstance(source, (str,)
-		    ), 'Argument source must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument source must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    source)
 		subdom_funcs = self.synchronous_command(
 		    'Page.addScriptToEvaluateOnNewDocument', source=source)
@@ -266,7 +266,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Controls whether browser will open a new inspector window for connected pages.
 		"""
 		assert isinstance(autoAttach, (bool,)
-		    ), 'Argument autoAttach must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument autoAttach must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    autoAttach)
 		subdom_funcs = self.synchronous_command('Page.setAutoAttachToCreatedPages',
 		    autoAttach=autoAttach)
@@ -317,7 +317,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Enable Chrome's experimental ad filter on all sites.
 		"""
 		assert isinstance(enabled, (bool,)
-		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    enabled)
 		subdom_funcs = self.synchronous_command('Page.setAdBlockingEnabled',
 		    enabled=enabled)
@@ -341,7 +341,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Navigates current page to the given URL.
 		"""
 		assert isinstance(url, (str,)
-		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    url)
 		if 'referrer' in kwargs:
 			assert isinstance(kwargs['referrer'], (str,)
@@ -402,7 +402,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Navigates current page to the given history entry.
 		"""
 		assert isinstance(entryId, (int,)
-		    ), 'Argument entryId must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument entryId must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    entryId)
 		subdom_funcs = self.synchronous_command('Page.navigateToHistoryEntry',
 		    entryId=entryId)
@@ -441,10 +441,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Deletes browser cookie with given name, domain and path.
 		"""
 		assert isinstance(cookieName, (str,)
-		    ), 'Argument cookieName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument cookieName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    cookieName)
 		assert isinstance(url, (str,)
-		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    url)
 		subdom_funcs = self.synchronous_command('Page.deleteCookie', cookieName=
 		    cookieName, url=url)
@@ -485,7 +485,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Returns content of the given resource.
 		"""
 		assert isinstance(url, (str,)
-		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    url)
 		subdom_funcs = self.synchronous_command('Page.getResourceContent',
 		    frameId=frameId, url=url)
@@ -513,10 +513,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Searches for given string in resource content.
 		"""
 		assert isinstance(url, (str,)
-		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    url)
 		assert isinstance(query, (str,)
-		    ), 'Argument query must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument query must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    query)
 		if 'caseSensitive' in kwargs:
 			assert isinstance(kwargs['caseSensitive'], (bool,)
@@ -551,7 +551,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets given markup as the document's HTML.
 		"""
 		assert isinstance(html, (str,)
-		    ), 'Argument html must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument html must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    html)
 		subdom_funcs = self.synchronous_command('Page.setDocumentContent',
 		    frameId=frameId, html=html)
@@ -585,16 +585,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Overrides the values of device screen dimensions (window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media query results).
 		"""
 		assert isinstance(width, (int,)
-		    ), 'Argument width must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument width must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    width)
 		assert isinstance(height, (int,)
-		    ), 'Argument height must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument height must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    height)
 		assert isinstance(deviceScaleFactor, (float, int)
-		    ), 'Argument deviceScaleFactor must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument deviceScaleFactor must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    deviceScaleFactor)
 		assert isinstance(mobile, (bool,)
-		    ), 'Argument mobile must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument mobile must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    mobile)
 		if 'scale' in kwargs:
 			assert isinstance(kwargs['scale'], (float, int)
@@ -711,13 +711,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Overrides the Device Orientation.
 		"""
 		assert isinstance(alpha, (float, int)
-		    ), 'Argument alpha must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument alpha must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    alpha)
 		assert isinstance(beta, (float, int)
-		    ), 'Argument beta must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument beta must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    beta)
 		assert isinstance(gamma, (float, int)
-		    ), 'Argument gamma must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument gamma must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    gamma)
 		subdom_funcs = self.synchronous_command('Page.setDeviceOrientationOverride',
 		    alpha=alpha, beta=beta, gamma=gamma)
@@ -757,7 +757,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Toggles mouse event-based touch event emulation.
 		"""
 		assert isinstance(enabled, (bool,)
-		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    enabled)
 		if 'configuration' in kwargs:
 			assert isinstance(kwargs['configuration'], (str,)
@@ -970,7 +970,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Acknowledges that a screencast frame has been received by the frontend.
 		"""
 		assert isinstance(sessionId, (int,)
-		    ), 'Argument sessionId must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument sessionId must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    sessionId)
 		subdom_funcs = self.synchronous_command('Page.screencastFrameAck',
 		    sessionId=sessionId)
@@ -992,7 +992,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
 		"""
 		assert isinstance(accept, (bool,)
-		    ), 'Argument accept must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument accept must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    accept)
 		if 'promptText' in kwargs:
 			assert isinstance(kwargs['promptText'], (str,)
@@ -1121,7 +1121,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Set the behavior when downloading a file.
 		"""
 		assert isinstance(behavior, (str,)
-		    ), 'Argument behavior must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument behavior must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    behavior)
 		if 'downloadPath' in kwargs:
 			assert isinstance(kwargs['downloadPath'], (str,)
@@ -1175,7 +1175,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests that backend shows paint rectangles
 		"""
 		assert isinstance(result, (bool,)
-		    ), 'Argument result must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument result must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    result)
 		subdom_funcs = self.synchronous_command('Overlay.setShowPaintRects',
 		    result=result)
@@ -1195,7 +1195,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests that backend shows debug borders on layers
 		"""
 		assert isinstance(show, (bool,)
-		    ), 'Argument show must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument show must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    show)
 		subdom_funcs = self.synchronous_command('Overlay.setShowDebugBorders',
 		    show=show)
@@ -1215,7 +1215,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests that backend shows the FPS counter
 		"""
 		assert isinstance(show, (bool,)
-		    ), 'Argument show must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument show must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    show)
 		subdom_funcs = self.synchronous_command('Overlay.setShowFPSCounter', show
 		    =show)
@@ -1235,7 +1235,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests that backend shows scroll bottleneck rects
 		"""
 		assert isinstance(show, (bool,)
-		    ), 'Argument show must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument show must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    show)
 		subdom_funcs = self.synchronous_command(
 		    'Overlay.setShowScrollBottleneckRects', show=show)
@@ -1255,7 +1255,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Paints viewport size upon main frame resize.
 		"""
 		assert isinstance(show, (bool,)
-		    ), 'Argument show must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument show must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    show)
 		subdom_funcs = self.synchronous_command('Overlay.setShowViewportSizeOnResize'
 		    , show=show)
@@ -1298,7 +1298,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(suspended, (bool,)
-		    ), 'Argument suspended must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument suspended must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    suspended)
 		subdom_funcs = self.synchronous_command('Overlay.setSuspended', suspended
 		    =suspended)
@@ -1347,16 +1347,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Highlights given rectangle. Coordinates are absolute with respect to the main frame viewport.
 		"""
 		assert isinstance(x, (int,)
-		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    x)
 		assert isinstance(y, (int,)
-		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    y)
 		assert isinstance(width, (int,)
-		    ), 'Argument width must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument width must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    width)
 		assert isinstance(height, (int,)
-		    ), 'Argument height must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument height must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    height)
 		expected = ['color', 'outlineColor']
 		passed_keys = list(kwargs.keys())
@@ -1496,16 +1496,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Overrides the values of device screen dimensions (window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media query results).
 		"""
 		assert isinstance(width, (int,)
-		    ), 'Argument width must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument width must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    width)
 		assert isinstance(height, (int,)
-		    ), 'Argument height must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument height must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    height)
 		assert isinstance(deviceScaleFactor, (float, int)
-		    ), 'Argument deviceScaleFactor must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument deviceScaleFactor must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    deviceScaleFactor)
 		assert isinstance(mobile, (bool,)
-		    ), 'Argument mobile must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument mobile must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    mobile)
 		if 'scale' in kwargs:
 			assert isinstance(kwargs['scale'], (float, int)
@@ -1586,7 +1586,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets a specified page scale factor.
 		"""
 		assert isinstance(pageScaleFactor, (float, int)
-		    ), 'Argument pageScaleFactor must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument pageScaleFactor must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    pageScaleFactor)
 		subdom_funcs = self.synchronous_command('Emulation.setPageScaleFactor',
 		    pageScaleFactor=pageScaleFactor)
@@ -1609,10 +1609,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Resizes the frame/viewport of the page. Note that this does not affect the frame's container (e.g. browser window). Can be used to produce screenshots of the specified size. Not supported on Android.
 		"""
 		assert isinstance(width, (int,)
-		    ), 'Argument width must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument width must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    width)
 		assert isinstance(height, (int,)
-		    ), 'Argument height must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument height must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    height)
 		subdom_funcs = self.synchronous_command('Emulation.setVisibleSize', width
 		    =width, height=height)
@@ -1634,7 +1634,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Switches script execution in the page.
 		"""
 		assert isinstance(value, (bool,)
-		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    value)
 		subdom_funcs = self.synchronous_command(
 		    'Emulation.setScriptExecutionDisabled', value=value)
@@ -1708,7 +1708,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Enables touch on platforms which do not support them.
 		"""
 		assert isinstance(enabled, (bool,)
-		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    enabled)
 		if 'maxTouchPoints' in kwargs:
 			assert isinstance(kwargs['maxTouchPoints'], (int,)
@@ -1739,7 +1739,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(enabled, (bool,)
-		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    enabled)
 		if 'configuration' in kwargs:
 			assert isinstance(kwargs['configuration'], (str,)
@@ -1767,7 +1767,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Emulates the given media for CSS media queries.
 		"""
 		assert isinstance(media, (str,)
-		    ), 'Argument media must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument media must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    media)
 		subdom_funcs = self.synchronous_command('Emulation.setEmulatedMedia',
 		    media=media)
@@ -1789,7 +1789,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Enables CPU throttling to emulate slow CPUs.
 		"""
 		assert isinstance(rate, (float, int)
-		    ), 'Argument rate must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument rate must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    rate)
 		subdom_funcs = self.synchronous_command('Emulation.setCPUThrottlingRate',
 		    rate=rate)
@@ -1856,7 +1856,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Overrides value returned by the javascript navigator object.
 		"""
 		assert isinstance(platform, (str,)
-		    ), 'Argument platform must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument platform must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    platform)
 		subdom_funcs = self.synchronous_command('Emulation.setNavigatorOverrides',
 		    platform=platform)
@@ -1926,7 +1926,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Handles a certificate error that fired a certificateError event.
 		"""
 		assert isinstance(eventId, (int,)
-		    ), 'Argument eventId must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument eventId must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    eventId)
 		subdom_funcs = self.synchronous_command('Security.handleCertificateError',
 		    eventId=eventId, action=action)
@@ -1946,7 +1946,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Enable/disable overriding certificate errors. If enabled, all certificate error events need to be handled by the DevTools client and should be answered with handleCertificateError commands.
 		"""
 		assert isinstance(override, (bool,)
-		    ), 'Argument override must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument override must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    override)
 		subdom_funcs = self.synchronous_command(
 		    'Security.setOverrideCertificateErrors', override=override)
@@ -1973,7 +1973,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Returns the response body and size if it were re-encoded with the specified settings. Only applies to images.
 		"""
 		assert isinstance(encoding, (str,)
-		    ), 'Argument encoding must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument encoding must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    encoding)
 		if 'quality' in kwargs:
 			assert isinstance(kwargs['quality'], (float, int)
@@ -2047,7 +2047,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Allows overriding user agent with the given string.
 		"""
 		assert isinstance(userAgent, (str,)
-		    ), 'Argument userAgent must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument userAgent must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    userAgent)
 		subdom_funcs = self.synchronous_command('Network.setUserAgentOverride',
 		    userAgent=userAgent)
@@ -2105,7 +2105,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Blocks URLs from loading.
 		"""
 		assert isinstance(urls, (list, tuple)
-		    ), 'Argument urls must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument urls must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    urls)
 		subdom_funcs = self.synchronous_command('Network.setBlockedURLs', urls=urls)
 		return subdom_funcs
@@ -2246,7 +2246,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Deletes browser cookies with matching name and url or domain/path pair.
 		"""
 		assert isinstance(name, (str,)
-		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    name)
 		if 'url' in kwargs:
 			assert isinstance(kwargs['url'], (str,)
@@ -2294,10 +2294,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
 		"""
 		assert isinstance(name, (str,)
-		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    name)
 		assert isinstance(value, (str,)
-		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    value)
 		if 'url' in kwargs:
 			assert isinstance(kwargs['url'], (str,)
@@ -2344,7 +2344,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets given cookies.
 		"""
 		assert isinstance(cookies, (list, tuple)
-		    ), 'Argument cookies must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument cookies must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    cookies)
 		subdom_funcs = self.synchronous_command('Network.setCookies', cookies=cookies
 		    )
@@ -2387,16 +2387,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Activates emulation of network conditions.
 		"""
 		assert isinstance(offline, (bool,)
-		    ), 'Argument offline must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument offline must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    offline)
 		assert isinstance(latency, (float, int)
-		    ), 'Argument latency must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument latency must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    latency)
 		assert isinstance(downloadThroughput, (float, int)
-		    ), 'Argument downloadThroughput must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument downloadThroughput must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    downloadThroughput)
 		assert isinstance(uploadThroughput, (float, int)
-		    ), 'Argument uploadThroughput must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument uploadThroughput must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    uploadThroughput)
 		expected = ['connectionType']
 		passed_keys = list(kwargs.keys())
@@ -2421,7 +2421,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Toggles ignoring cache for each request. If <code>true</code>, cache will not be used.
 		"""
 		assert isinstance(cacheDisabled, (bool,)
-		    ), 'Argument cacheDisabled must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument cacheDisabled must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    cacheDisabled)
 		subdom_funcs = self.synchronous_command('Network.setCacheDisabled',
 		    cacheDisabled=cacheDisabled)
@@ -2443,7 +2443,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Toggles ignoring of service worker for each request.
 		"""
 		assert isinstance(bypass, (bool,)
-		    ), 'Argument bypass must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument bypass must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    bypass)
 		subdom_funcs = self.synchronous_command('Network.setBypassServiceWorker',
 		    bypass=bypass)
@@ -2466,10 +2466,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: For testing.
 		"""
 		assert isinstance(maxTotalSize, (int,)
-		    ), 'Argument maxTotalSize must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument maxTotalSize must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    maxTotalSize)
 		assert isinstance(maxResourceSize, (int,)
-		    ), 'Argument maxResourceSize must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument maxResourceSize must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    maxResourceSize)
 		subdom_funcs = self.synchronous_command('Network.setDataSizeLimitsForTest',
 		    maxTotalSize=maxTotalSize, maxResourceSize=maxResourceSize)
@@ -2492,7 +2492,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Returns the DER-encoded certificate.
 		"""
 		assert isinstance(origin, (str,)
-		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    origin)
 		subdom_funcs = self.synchronous_command('Network.getCertificate', origin=
 		    origin)
@@ -2516,7 +2516,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets the requests to intercept that match a the provided patterns.
 		"""
 		assert isinstance(enabled, (bool,)
-		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    enabled)
 		if 'patterns' in kwargs:
 			assert isinstance(kwargs['patterns'], (list, tuple)
@@ -2638,7 +2638,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(query, (str,)
-		    ), 'Argument query must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument query must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    query)
 		subdom_funcs = self.synchronous_command('Database.executeSQL', databaseId
 		    =databaseId, query=query)
@@ -2685,7 +2685,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests database names for given security origin.
 		"""
 		assert isinstance(securityOrigin, (str,)
-		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    securityOrigin)
 		subdom_funcs = self.synchronous_command('IndexedDB.requestDatabaseNames',
 		    securityOrigin=securityOrigin)
@@ -2707,10 +2707,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests database with given name in given frame.
 		"""
 		assert isinstance(securityOrigin, (str,)
-		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    securityOrigin)
 		assert isinstance(databaseName, (str,)
-		    ), 'Argument databaseName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument databaseName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    databaseName)
 		subdom_funcs = self.synchronous_command('IndexedDB.requestDatabase',
 		    securityOrigin=securityOrigin, databaseName=databaseName)
@@ -2740,22 +2740,22 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests data from object store or index.
 		"""
 		assert isinstance(securityOrigin, (str,)
-		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    securityOrigin)
 		assert isinstance(databaseName, (str,)
-		    ), 'Argument databaseName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument databaseName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    databaseName)
 		assert isinstance(objectStoreName, (str,)
-		    ), 'Argument objectStoreName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument objectStoreName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    objectStoreName)
 		assert isinstance(indexName, (str,)
-		    ), 'Argument indexName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument indexName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    indexName)
 		assert isinstance(skipCount, (int,)
-		    ), 'Argument skipCount must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument skipCount must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    skipCount)
 		assert isinstance(pageSize, (int,)
-		    ), 'Argument pageSize must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument pageSize must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    pageSize)
 		expected = ['keyRange']
 		passed_keys = list(kwargs.keys())
@@ -2784,13 +2784,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Clears all entries from an object store.
 		"""
 		assert isinstance(securityOrigin, (str,)
-		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    securityOrigin)
 		assert isinstance(databaseName, (str,)
-		    ), 'Argument databaseName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument databaseName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    databaseName)
 		assert isinstance(objectStoreName, (str,)
-		    ), 'Argument objectStoreName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument objectStoreName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    objectStoreName)
 		subdom_funcs = self.synchronous_command('IndexedDB.clearObjectStore',
 		    securityOrigin=securityOrigin, databaseName=databaseName,
@@ -2812,10 +2812,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Deletes a database.
 		"""
 		assert isinstance(securityOrigin, (str,)
-		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    securityOrigin)
 		assert isinstance(databaseName, (str,)
-		    ), 'Argument databaseName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument databaseName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    databaseName)
 		subdom_funcs = self.synchronous_command('IndexedDB.deleteDatabase',
 		    securityOrigin=securityOrigin, databaseName=databaseName)
@@ -2836,7 +2836,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests cache names.
 		"""
 		assert isinstance(securityOrigin, (str,)
-		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument securityOrigin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    securityOrigin)
 		subdom_funcs = self.synchronous_command('CacheStorage.requestCacheNames',
 		    securityOrigin=securityOrigin)
@@ -2860,10 +2860,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests data from cache.
 		"""
 		assert isinstance(skipCount, (int,)
-		    ), 'Argument skipCount must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument skipCount must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    skipCount)
 		assert isinstance(pageSize, (int,)
-		    ), 'Argument pageSize must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument pageSize must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    pageSize)
 		subdom_funcs = self.synchronous_command('CacheStorage.requestEntries',
 		    cacheId=cacheId, skipCount=skipCount, pageSize=pageSize)
@@ -2901,7 +2901,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Deletes a cache entry.
 		"""
 		assert isinstance(request, (str,)
-		    ), 'Argument request must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument request must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    request)
 		subdom_funcs = self.synchronous_command('CacheStorage.deleteEntry',
 		    cacheId=cacheId, request=request)
@@ -2923,7 +2923,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Fetches cache entry.
 		"""
 		assert isinstance(requestURL, (str,)
-		    ), 'Argument requestURL must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument requestURL must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    requestURL)
 		subdom_funcs = self.synchronous_command('CacheStorage.requestCachedResponse',
 		    cacheId=cacheId, requestURL=requestURL)
@@ -3003,10 +3003,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(key, (str,)
-		    ), 'Argument key must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument key must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    key)
 		assert isinstance(value, (str,)
-		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    value)
 		subdom_funcs = self.synchronous_command('DOMStorage.setDOMStorageItem',
 		    storageId=storageId, key=key, value=value)
@@ -3026,7 +3026,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(key, (str,)
-		    ), 'Argument key must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument key must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    key)
 		subdom_funcs = self.synchronous_command('DOMStorage.removeDOMStorageItem',
 		    storageId=storageId, key=key)
@@ -3250,7 +3250,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Executes <code>querySelector</code> on a given node.
 		"""
 		assert isinstance(selector, (str,)
-		    ), 'Argument selector must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument selector must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    selector)
 		subdom_funcs = self.synchronous_command('DOM.querySelector', nodeId=
 		    nodeId, selector=selector)
@@ -3272,7 +3272,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Executes <code>querySelectorAll</code> on a given node.
 		"""
 		assert isinstance(selector, (str,)
-		    ), 'Argument selector must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument selector must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    selector)
 		subdom_funcs = self.synchronous_command('DOM.querySelectorAll', nodeId=
 		    nodeId, selector=selector)
@@ -3294,7 +3294,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets node name for a node with given id.
 		"""
 		assert isinstance(name, (str,)
-		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    name)
 		subdom_funcs = self.synchronous_command('DOM.setNodeName', nodeId=nodeId,
 		    name=name)
@@ -3315,7 +3315,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets node value for a node with given id.
 		"""
 		assert isinstance(value, (str,)
-		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    value)
 		subdom_funcs = self.synchronous_command('DOM.setNodeValue', nodeId=nodeId,
 		    value=value)
@@ -3353,10 +3353,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets attribute for an element with given id.
 		"""
 		assert isinstance(name, (str,)
-		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    name)
 		assert isinstance(value, (str,)
-		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    value)
 		subdom_funcs = self.synchronous_command('DOM.setAttributeValue', nodeId=
 		    nodeId, name=name, value=value)
@@ -3379,7 +3379,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets attributes on element with given id. This method is useful when user edits some existing attribute value and types in several attribute name/value pairs.
 		"""
 		assert isinstance(text, (str,)
-		    ), 'Argument text must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument text must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    text)
 		if 'name' in kwargs:
 			assert isinstance(kwargs['name'], (str,)
@@ -3408,7 +3408,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Removes attribute with given name from an element with given id.
 		"""
 		assert isinstance(name, (str,)
-		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument name must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    name)
 		subdom_funcs = self.synchronous_command('DOM.removeAttribute', nodeId=
 		    nodeId, name=name)
@@ -3452,7 +3452,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets node HTML markup, returns new node id.
 		"""
 		assert isinstance(outerHTML, (str,)
-		    ), 'Argument outerHTML must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument outerHTML must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    outerHTML)
 		subdom_funcs = self.synchronous_command('DOM.setOuterHTML', nodeId=nodeId,
 		    outerHTML=outerHTML)
@@ -3478,7 +3478,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Searches for a given string in the DOM tree. Use <code>getSearchResults</code> to access search results or <code>cancelSearch</code> to end this search session.
 		"""
 		assert isinstance(query, (str,)
-		    ), 'Argument query must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument query must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    query)
 		if 'includeUserAgentShadowDOM' in kwargs:
 			assert isinstance(kwargs['includeUserAgentShadowDOM'], (bool,)
@@ -3511,13 +3511,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Returns search results from given <code>fromIndex</code> to given <code>toIndex</code> from the sarch with the given identifier.
 		"""
 		assert isinstance(searchId, (str,)
-		    ), 'Argument searchId must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument searchId must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    searchId)
 		assert isinstance(fromIndex, (int,)
-		    ), 'Argument fromIndex must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument fromIndex must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    fromIndex)
 		assert isinstance(toIndex, (int,)
-		    ), 'Argument toIndex must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument toIndex must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    toIndex)
 		subdom_funcs = self.synchronous_command('DOM.getSearchResults', searchId=
 		    searchId, fromIndex=fromIndex, toIndex=toIndex)
@@ -3539,7 +3539,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Discards search results from the session with the given id. <code>getSearchResults</code> should no longer be called for that search.
 		"""
 		assert isinstance(searchId, (str,)
-		    ), 'Argument searchId must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument searchId must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    searchId)
 		subdom_funcs = self.synchronous_command('DOM.discardSearchResults',
 		    searchId=searchId)
@@ -3618,7 +3618,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests that the node is sent to the caller given its path. // FIXME, use XPath
 		"""
 		assert isinstance(path, (str,)
-		    ), 'Argument path must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument path must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    path)
 		subdom_funcs = self.synchronous_command('DOM.pushNodeByPathToFrontend',
 		    path=path)
@@ -3641,7 +3641,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Requests that a batch of nodes is sent to the caller given their backend node ids.
 		"""
 		assert isinstance(backendNodeIds, (list, tuple)
-		    ), 'Argument backendNodeIds must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument backendNodeIds must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    backendNodeIds)
 		subdom_funcs = self.synchronous_command('DOM.pushNodesByBackendIdsToFrontend'
 		    , backendNodeIds=backendNodeIds)
@@ -3851,7 +3851,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets files for the given file input element.
 		"""
 		assert isinstance(files, (list, tuple)
-		    ), 'Argument files must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument files must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    files)
 		expected = ['nodeId', 'backendNodeId', 'objectId']
 		passed_keys = list(kwargs.keys())
@@ -3906,10 +3906,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Returns node id at given location.
 		"""
 		assert isinstance(x, (int,)
-		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    x)
 		assert isinstance(y, (int,)
-		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    y)
 		if 'includeUserAgentShadowDOM' in kwargs:
 			assert isinstance(kwargs['includeUserAgentShadowDOM'], (bool,)
@@ -4136,7 +4136,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets the new stylesheet text.
 		"""
 		assert isinstance(text, (str,)
-		    ), 'Argument text must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument text must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    text)
 		subdom_funcs = self.synchronous_command('CSS.setStyleSheetText',
 		    styleSheetId=styleSheetId, text=text)
@@ -4159,7 +4159,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Modifies the rule selector.
 		"""
 		assert isinstance(selector, (str,)
-		    ), 'Argument selector must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument selector must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    selector)
 		subdom_funcs = self.synchronous_command('CSS.setRuleSelector',
 		    styleSheetId=styleSheetId, range=range, selector=selector)
@@ -4182,7 +4182,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Modifies the keyframe rule key text.
 		"""
 		assert isinstance(keyText, (str,)
-		    ), 'Argument keyText must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument keyText must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    keyText)
 		subdom_funcs = self.synchronous_command('CSS.setKeyframeKey',
 		    styleSheetId=styleSheetId, range=range, keyText=keyText)
@@ -4203,7 +4203,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Applies specified style edits one after another in the given order.
 		"""
 		assert isinstance(edits, (list, tuple)
-		    ), 'Argument edits must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument edits must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    edits)
 		subdom_funcs = self.synchronous_command('CSS.setStyleTexts', edits=edits)
 		return subdom_funcs
@@ -4225,7 +4225,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Modifies the rule selector.
 		"""
 		assert isinstance(text, (str,)
-		    ), 'Argument text must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument text must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    text)
 		subdom_funcs = self.synchronous_command('CSS.setMediaText', styleSheetId=
 		    styleSheetId, range=range, text=text)
@@ -4266,7 +4266,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Inserts a new rule with the given <code>ruleText</code> in a stylesheet with given <code>styleSheetId</code>, at the position specified by <code>location</code>.
 		"""
 		assert isinstance(ruleText, (str,)
-		    ), 'Argument ruleText must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument ruleText must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    ruleText)
 		subdom_funcs = self.synchronous_command('CSS.addRule', styleSheetId=
 		    styleSheetId, ruleText=ruleText, location=location)
@@ -4287,7 +4287,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Ensures that the given node will have specified pseudo-classes whenever its style is computed by the browser.
 		"""
 		assert isinstance(forcedPseudoClasses, (list, tuple)
-		    ), 'Argument forcedPseudoClasses must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument forcedPseudoClasses must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    forcedPseudoClasses)
 		subdom_funcs = self.synchronous_command('CSS.forcePseudoState', nodeId=
 		    nodeId, forcedPseudoClasses=forcedPseudoClasses)
@@ -4327,10 +4327,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Find a rule with the given active property for the given node and set the new value for this property
 		"""
 		assert isinstance(propertyName, (str,)
-		    ), 'Argument propertyName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument propertyName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    propertyName)
 		assert isinstance(value, (str,)
-		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    value)
 		subdom_funcs = self.synchronous_command(
 		    'CSS.setEffectivePropertyValueForNode', nodeId=nodeId, propertyName=
@@ -4423,7 +4423,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Returns a document snapshot, including the full DOM tree of the root node (including iframes, template contents, and imported documents) in a flattened array, as well as layout and white-listed computed style information for the nodes. Shadow DOM in the returned DOM tree is flattened. 
 		"""
 		assert isinstance(computedStyleWhitelist, (list, tuple)
-		    ), 'Argument computedStyleWhitelist must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument computedStyleWhitelist must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    computedStyleWhitelist)
 		subdom_funcs = self.synchronous_command('DOMSnapshot.getSnapshot',
 		    computedStyleWhitelist=computedStyleWhitelist)
@@ -4548,7 +4548,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets breakpoint on particular DOM event.
 		"""
 		assert isinstance(eventName, (str,)
-		    ), 'Argument eventName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument eventName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    eventName)
 		if 'targetName' in kwargs:
 			assert isinstance(kwargs['targetName'], (str,)
@@ -4578,7 +4578,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Removes breakpoint on particular DOM event.
 		"""
 		assert isinstance(eventName, (str,)
-		    ), 'Argument eventName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument eventName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    eventName)
 		if 'targetName' in kwargs:
 			assert isinstance(kwargs['targetName'], (str,)
@@ -4609,7 +4609,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets breakpoint on particular native event.
 		"""
 		assert isinstance(eventName, (str,)
-		    ), 'Argument eventName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument eventName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    eventName)
 		subdom_funcs = self.synchronous_command(
 		    'DOMDebugger.setInstrumentationBreakpoint', eventName=eventName)
@@ -4631,7 +4631,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Removes breakpoint on particular native event.
 		"""
 		assert isinstance(eventName, (str,)
-		    ), 'Argument eventName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument eventName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    eventName)
 		subdom_funcs = self.synchronous_command(
 		    'DOMDebugger.removeInstrumentationBreakpoint', eventName=eventName)
@@ -4651,7 +4651,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets breakpoint on XMLHttpRequest.
 		"""
 		assert isinstance(url, (str,)
-		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    url)
 		subdom_funcs = self.synchronous_command('DOMDebugger.setXHRBreakpoint',
 		    url=url)
@@ -4671,7 +4671,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Removes breakpoint from XMLHttpRequest.
 		"""
 		assert isinstance(url, (str,)
-		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    url)
 		subdom_funcs = self.synchronous_command('DOMDebugger.removeXHRBreakpoint',
 		    url=url)
@@ -4726,7 +4726,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Controls whether to discover available targets and notify via <code>targetCreated/targetInfoChanged/targetDestroyed</code> events.
 		"""
 		assert isinstance(discover, (bool,)
-		    ), 'Argument discover must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument discover must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    discover)
 		subdom_funcs = self.synchronous_command('Target.setDiscoverTargets',
 		    discover=discover)
@@ -4747,10 +4747,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Controls whether to automatically attach to new targets which are considered to be related to this one. When turned on, attaches to all existing related targets as well. When turned off, automatically detaches from all currently attached targets.
 		"""
 		assert isinstance(autoAttach, (bool,)
-		    ), 'Argument autoAttach must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument autoAttach must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    autoAttach)
 		assert isinstance(waitForDebuggerOnStart, (bool,)
-		    ), 'Argument waitForDebuggerOnStart must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument waitForDebuggerOnStart must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    waitForDebuggerOnStart)
 		subdom_funcs = self.synchronous_command('Target.setAutoAttach',
 		    autoAttach=autoAttach, waitForDebuggerOnStart=waitForDebuggerOnStart)
@@ -4769,7 +4769,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(value, (bool,)
-		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument value must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    value)
 		subdom_funcs = self.synchronous_command('Target.setAttachToFrames', value
 		    =value)
@@ -4789,7 +4789,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Enables target discovery for the specified locations, when <code>setDiscoverTargets</code> was set to <code>true</code>.
 		"""
 		assert isinstance(locations, (list, tuple)
-		    ), 'Argument locations must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument locations must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    locations)
 		subdom_funcs = self.synchronous_command('Target.setRemoteLocations',
 		    locations=locations)
@@ -4812,7 +4812,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sends protocol message over session with given id.
 		"""
 		assert isinstance(message, (str,)
-		    ), 'Argument message must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument message must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    message)
 		expected = ['sessionId', 'targetId']
 		passed_keys = list(kwargs.keys())
@@ -4965,7 +4965,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Creates a new page.
 		"""
 		assert isinstance(url, (str,)
-		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument url must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    url)
 		if 'width' in kwargs:
 			assert isinstance(kwargs['width'], (int,)
@@ -5034,7 +5034,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(scopeURL, (str,)
-		    ), 'Argument scopeURL must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument scopeURL must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    scopeURL)
 		subdom_funcs = self.synchronous_command('ServiceWorker.unregister',
 		    scopeURL=scopeURL)
@@ -5053,7 +5053,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(scopeURL, (str,)
-		    ), 'Argument scopeURL must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument scopeURL must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    scopeURL)
 		subdom_funcs = self.synchronous_command('ServiceWorker.updateRegistration',
 		    scopeURL=scopeURL)
@@ -5072,7 +5072,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(scopeURL, (str,)
-		    ), 'Argument scopeURL must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument scopeURL must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    scopeURL)
 		subdom_funcs = self.synchronous_command('ServiceWorker.startWorker',
 		    scopeURL=scopeURL)
@@ -5091,7 +5091,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(scopeURL, (str,)
-		    ), 'Argument scopeURL must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument scopeURL must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    scopeURL)
 		subdom_funcs = self.synchronous_command('ServiceWorker.skipWaiting',
 		    scopeURL=scopeURL)
@@ -5110,7 +5110,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(versionId, (str,)
-		    ), 'Argument versionId must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument versionId must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    versionId)
 		subdom_funcs = self.synchronous_command('ServiceWorker.stopWorker',
 		    versionId=versionId)
@@ -5141,7 +5141,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(versionId, (str,)
-		    ), 'Argument versionId must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument versionId must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    versionId)
 		subdom_funcs = self.synchronous_command('ServiceWorker.inspectWorker',
 		    versionId=versionId)
@@ -5160,7 +5160,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(forceUpdateOnPageLoad, (bool,)
-		    ), 'Argument forceUpdateOnPageLoad must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument forceUpdateOnPageLoad must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    forceUpdateOnPageLoad)
 		subdom_funcs = self.synchronous_command(
 		    'ServiceWorker.setForceUpdateOnPageLoad', forceUpdateOnPageLoad=
@@ -5182,13 +5182,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(origin, (str,)
-		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    origin)
 		assert isinstance(registrationId, (str,)
-		    ), 'Argument registrationId must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument registrationId must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    registrationId)
 		assert isinstance(data, (str,)
-		    ), 'Argument data must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument data must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    data)
 		subdom_funcs = self.synchronous_command('ServiceWorker.deliverPushMessage',
 		    origin=origin, registrationId=registrationId, data=data)
@@ -5211,16 +5211,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(origin, (str,)
-		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    origin)
 		assert isinstance(registrationId, (str,)
-		    ), 'Argument registrationId must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument registrationId must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    registrationId)
 		assert isinstance(tag, (str,)
-		    ), 'Argument tag must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument tag must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    tag)
 		assert isinstance(lastChance, (bool,)
-		    ), 'Argument lastChance must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument lastChance must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    lastChance)
 		subdom_funcs = self.synchronous_command('ServiceWorker.dispatchSyncEvent',
 		    origin=origin, registrationId=registrationId, tag=tag, lastChance=
@@ -5241,7 +5241,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Ignores input events (useful while auditing page).
 		"""
 		assert isinstance(ignore, (bool,)
-		    ), 'Argument ignore must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument ignore must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    ignore)
 		subdom_funcs = self.synchronous_command('Input.setIgnoreInputEvents',
 		    ignore=ignore)
@@ -5274,7 +5274,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Dispatches a key event to the page.
 		"""
 		assert isinstance(type, (str,)
-		    ), 'Argument type must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument type must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    type)
 		if 'modifiers' in kwargs:
 			assert isinstance(kwargs['modifiers'], (int,)
@@ -5353,13 +5353,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Dispatches a mouse event to the page.
 		"""
 		assert isinstance(type, (str,)
-		    ), 'Argument type must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument type must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    type)
 		assert isinstance(x, (float, int)
-		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    x)
 		assert isinstance(y, (float, int)
-		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    y)
 		if 'modifiers' in kwargs:
 			assert isinstance(kwargs['modifiers'], (int,)
@@ -5410,10 +5410,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Dispatches a touch event to the page.
 		"""
 		assert isinstance(type, (str,)
-		    ), 'Argument type must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument type must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    type)
 		assert isinstance(touchPoints, (list, tuple)
-		    ), 'Argument touchPoints must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument touchPoints must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    touchPoints)
 		if 'modifiers' in kwargs:
 			assert isinstance(kwargs['modifiers'], (int,)
@@ -5453,16 +5453,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Emulates touch event from the mouse event parameters.
 		"""
 		assert isinstance(type, (str,)
-		    ), 'Argument type must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument type must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    type)
 		assert isinstance(x, (int,)
-		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    x)
 		assert isinstance(y, (int,)
-		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    y)
 		assert isinstance(button, (str,)
-		    ), 'Argument button must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument button must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    button)
 		if 'deltaX' in kwargs:
 			assert isinstance(kwargs['deltaX'], (float, int)
@@ -5509,13 +5509,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Synthesizes a pinch gesture over a time period by issuing appropriate touch events.
 		"""
 		assert isinstance(x, (float, int)
-		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    x)
 		assert isinstance(y, (float, int)
-		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    y)
 		assert isinstance(scaleFactor, (float, int)
-		    ), 'Argument scaleFactor must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument scaleFactor must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    scaleFactor)
 		if 'relativeSpeed' in kwargs:
 			assert isinstance(kwargs['relativeSpeed'], (int,)
@@ -5557,10 +5557,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Synthesizes a scroll gesture over a time period by issuing appropriate touch events.
 		"""
 		assert isinstance(x, (float, int)
-		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    x)
 		assert isinstance(y, (float, int)
-		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    y)
 		if 'xDistance' in kwargs:
 			assert isinstance(kwargs['xDistance'], (float, int)
@@ -5629,10 +5629,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Synthesizes a tap gesture over a time period by issuing appropriate touch events.
 		"""
 		assert isinstance(x, (float, int)
-		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument x must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    x)
 		assert isinstance(y, (float, int)
-		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument y must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    y)
 		if 'duration' in kwargs:
 			assert isinstance(kwargs['duration'], (int,)
@@ -5727,7 +5727,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Returns the snapshot identifier.
 		"""
 		assert isinstance(tiles, (list, tuple)
-		    ), 'Argument tiles must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument tiles must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    tiles)
 		subdom_funcs = self.synchronous_command('LayerTree.loadSnapshot', tiles=tiles
 		    )
@@ -5855,13 +5855,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Overrides the Device Orientation.
 		"""
 		assert isinstance(alpha, (float, int)
-		    ), 'Argument alpha must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument alpha must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    alpha)
 		assert isinstance(beta, (float, int)
-		    ), 'Argument beta must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument beta must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    beta)
 		assert isinstance(gamma, (float, int)
-		    ), 'Argument gamma must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument gamma must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    gamma)
 		subdom_funcs = self.synchronous_command(
 		    'DeviceOrientation.setDeviceOrientationOverride', alpha=alpha, beta=
@@ -5979,7 +5979,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Record a clock sync marker in the trace.
 		"""
 		assert isinstance(syncId, (str,)
-		    ), 'Argument syncId must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument syncId must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    syncId)
 		subdom_funcs = self.synchronous_command('Tracing.recordClockSyncMarker',
 		    syncId=syncId)
@@ -6039,7 +6039,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets the playback rate of the document timeline.
 		"""
 		assert isinstance(playbackRate, (float, int)
-		    ), 'Argument playbackRate must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument playbackRate must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    playbackRate)
 		subdom_funcs = self.synchronous_command('Animation.setPlaybackRate',
 		    playbackRate=playbackRate)
@@ -6060,7 +6060,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Returns the current time of the an animation.
 		"""
 		assert isinstance(id, (str,)
-		    ), 'Argument id must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument id must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    id)
 		subdom_funcs = self.synchronous_command('Animation.getCurrentTime', id=id)
 		return subdom_funcs
@@ -6080,10 +6080,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets the paused state of a set of animations.
 		"""
 		assert isinstance(animations, (list, tuple)
-		    ), 'Argument animations must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument animations must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    animations)
 		assert isinstance(paused, (bool,)
-		    ), 'Argument paused must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument paused must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    paused)
 		subdom_funcs = self.synchronous_command('Animation.setPaused', animations
 		    =animations, paused=paused)
@@ -6105,13 +6105,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets the timing of an animation node.
 		"""
 		assert isinstance(animationId, (str,)
-		    ), 'Argument animationId must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument animationId must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    animationId)
 		assert isinstance(duration, (float, int)
-		    ), 'Argument duration must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument duration must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    duration)
 		assert isinstance(delay, (float, int)
-		    ), 'Argument delay must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument delay must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    delay)
 		subdom_funcs = self.synchronous_command('Animation.setTiming',
 		    animationId=animationId, duration=duration, delay=delay)
@@ -6132,10 +6132,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Seek a set of animations to a particular time within each animation.
 		"""
 		assert isinstance(animations, (list, tuple)
-		    ), 'Argument animations must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument animations must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    animations)
 		assert isinstance(currentTime, (float, int)
-		    ), 'Argument currentTime must be of type (<_ast.Tuple object at 0x7fac7ab3cdd8>). Received type: %s' % type(
+		    ), 'Argument currentTime must be of type (<_ast.Tuple object at 0x7f60acbdfdd8>). Received type: %s' % type(
 		    currentTime)
 		subdom_funcs = self.synchronous_command('Animation.seekAnimations',
 		    animations=animations, currentTime=currentTime)
@@ -6155,7 +6155,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Releases a set of animations to no longer be manipulated.
 		"""
 		assert isinstance(animations, (list, tuple)
-		    ), 'Argument animations must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument animations must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    animations)
 		subdom_funcs = self.synchronous_command('Animation.releaseAnimations',
 		    animations=animations)
@@ -6176,7 +6176,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Gets the remote object of the Animation.
 		"""
 		assert isinstance(animationId, (str,)
-		    ), 'Argument animationId must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument animationId must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    animationId)
 		subdom_funcs = self.synchronous_command('Animation.resolveAnimation',
 		    animationId=animationId)
@@ -6227,10 +6227,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Clears storage for origin.
 		"""
 		assert isinstance(origin, (str,)
-		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    origin)
 		assert isinstance(storageTypes, (str,)
-		    ), 'Argument storageTypes must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument storageTypes must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    storageTypes)
 		subdom_funcs = self.synchronous_command('Storage.clearDataForOrigin',
 		    origin=origin, storageTypes=storageTypes)
@@ -6253,7 +6253,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Returns usage and quota in bytes.
 		"""
 		assert isinstance(origin, (str,)
-		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    origin)
 		subdom_funcs = self.synchronous_command('Storage.getUsageAndQuota',
 		    origin=origin)
@@ -6273,7 +6273,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Registers origin to be notified when an update occurs to its cache storage list.
 		"""
 		assert isinstance(origin, (str,)
-		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    origin)
 		subdom_funcs = self.synchronous_command('Storage.trackCacheStorageForOrigin',
 		    origin=origin)
@@ -6293,7 +6293,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Unregisters origin from receiving notifications for cache storage.
 		"""
 		assert isinstance(origin, (str,)
-		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument origin must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    origin)
 		subdom_funcs = self.synchronous_command(
 		    'Storage.untrackCacheStorageForOrigin', origin=origin)
@@ -6352,7 +6352,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: start violation reporting.
 		"""
 		assert isinstance(config, (list, tuple)
-		    ), 'Argument config must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument config must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    config)
 		subdom_funcs = self.synchronous_command('Log.startViolationsReport',
 		    config=config)
@@ -6402,7 +6402,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Request browser port binding.
 		"""
 		assert isinstance(port, (int,)
-		    ), 'Argument port must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument port must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    port)
 		subdom_funcs = self.synchronous_command('Tethering.bind', port=port)
 		return subdom_funcs
@@ -6421,7 +6421,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Request browser port unbinding.
 		"""
 		assert isinstance(port, (int,)
-		    ), 'Argument port must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument port must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    port)
 		subdom_funcs = self.synchronous_command('Tethering.unbind', port=port)
 		return subdom_funcs
@@ -6538,7 +6538,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Evaluates expression on global object.
 		"""
 		assert isinstance(expression, (str,)
-		    ), 'Argument expression must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument expression must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    expression)
 		if 'objectGroup' in kwargs:
 			assert isinstance(kwargs['objectGroup'], (str,)
@@ -6637,7 +6637,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Calls function with given declaration on the given object. Object group of the result is inherited from the target object.
 		"""
 		assert isinstance(functionDeclaration, (str,)
-		    ), 'Argument functionDeclaration must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument functionDeclaration must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    functionDeclaration)
 		if 'arguments' in kwargs:
 			assert isinstance(kwargs['arguments'], (list, tuple)
@@ -6748,7 +6748,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Releases all remote objects that belong to a given group.
 		"""
 		assert isinstance(objectGroup, (str,)
-		    ), 'Argument objectGroup must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument objectGroup must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    objectGroup)
 		subdom_funcs = self.synchronous_command('Runtime.releaseObjectGroup',
 		    objectGroup=objectGroup)
@@ -6821,7 +6821,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		
 		"""
 		assert isinstance(enabled, (bool,)
-		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument enabled must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    enabled)
 		subdom_funcs = self.synchronous_command(
 		    'Runtime.setCustomObjectFormatterEnabled', enabled=enabled)
@@ -6848,13 +6848,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Compiles expression.
 		"""
 		assert isinstance(expression, (str,)
-		    ), 'Argument expression must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument expression must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    expression)
 		assert isinstance(sourceURL, (str,)
-		    ), 'Argument sourceURL must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument sourceURL must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    sourceURL)
 		assert isinstance(persistScript, (bool,)
-		    ), 'Argument persistScript must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument persistScript must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    persistScript)
 		expected = ['executionContextId']
 		passed_keys = list(kwargs.keys())
@@ -6981,7 +6981,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Activates / deactivates all breakpoints on the page.
 		"""
 		assert isinstance(active, (bool,)
-		    ), 'Argument active must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument active must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    active)
 		subdom_funcs = self.synchronous_command('Debugger.setBreakpointsActive',
 		    active=active)
@@ -7001,7 +7001,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Makes page not interrupt on any pauses (breakpoint, exception, dom exception etc).
 		"""
 		assert isinstance(skip, (bool,)
-		    ), 'Argument skip must be of type (<_ast.Tuple object at 0x7fac7ab3cba8>). Received type: %s' % type(
+		    ), 'Argument skip must be of type (<_ast.Tuple object at 0x7f60acbdfba8>). Received type: %s' % type(
 		    skip)
 		subdom_funcs = self.synchronous_command('Debugger.setSkipAllPauses', skip
 		    =skip)
@@ -7028,7 +7028,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Sets JavaScript breakpoint at given location specified either by URL or URL regex. Once this command is issued, all existing parsed scripts will have breakpoints resolved and returned in <code>locations</code> property. Further matching script parsing will result in subsequent <code>breakpointResolved</code> events issued. This logical breakpoint will survive page reloads.
 		"""
 		assert isinstance(lineNumber, (int,)
-		    ), 'Argument lineNumber must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument lineNumber must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    lineNumber)
 		if 'url' in kwargs:
 			assert isinstance(kwargs['url'], (str,)
@@ -7259,7 +7259,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Searches for given string in script content.
 		"""
 		assert isinstance(query, (str,)
-		    ), 'Argument query must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument query must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    query)
 		if 'caseSensitive' in kwargs:
 			assert isinstance(kwargs['caseSensitive'], (bool,)
@@ -7298,7 +7298,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Edits JavaScript source live.
 		"""
 		assert isinstance(scriptSource, (str,)
-		    ), 'Argument scriptSource must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument scriptSource must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    scriptSource)
 		if 'dryRun' in kwargs:
 			assert isinstance(kwargs['dryRun'], (bool,)
@@ -7363,7 +7363,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Defines pause on exceptions state. Can be set to stop on all exceptions, uncaught exceptions or no exceptions. Initial pause on exceptions state is <code>none</code>.
 		"""
 		assert isinstance(state, (str,)
-		    ), 'Argument state must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument state must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    state)
 		subdom_funcs = self.synchronous_command('Debugger.setPauseOnExceptions',
 		    state=state)
@@ -7393,7 +7393,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Evaluates expression on a given call frame.
 		"""
 		assert isinstance(expression, (str,)
-		    ), 'Argument expression must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument expression must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    expression)
 		if 'objectGroup' in kwargs:
 			assert isinstance(kwargs['objectGroup'], (str,)
@@ -7446,10 +7446,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Changes value of variable in a callframe. Object-based scopes are not supported and must be mutated manually.
 		"""
 		assert isinstance(scopeNumber, (int,)
-		    ), 'Argument scopeNumber must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument scopeNumber must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    scopeNumber)
 		assert isinstance(variableName, (str,)
-		    ), 'Argument variableName must be of type (<_ast.Tuple object at 0x7fac7ab3ceb8>). Received type: %s' % type(
+		    ), 'Argument variableName must be of type (<_ast.Tuple object at 0x7f60acbdfeb8>). Received type: %s' % type(
 		    variableName)
 		subdom_funcs = self.synchronous_command('Debugger.setVariableValue',
 		    scopeNumber=scopeNumber, variableName=variableName, newValue=newValue,
@@ -7470,7 +7470,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Enables or disables async call stacks tracking.
 		"""
 		assert isinstance(maxDepth, (int,)
-		    ), 'Argument maxDepth must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument maxDepth must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    maxDepth)
 		subdom_funcs = self.synchronous_command('Debugger.setAsyncCallStackDepth',
 		    maxDepth=maxDepth)
@@ -7492,7 +7492,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Replace previous blackbox patterns with passed ones. Forces backend to skip stepping/pausing in scripts with url matching one of the patterns. VM will try to leave blackboxed script by performing 'step in' several times, finally resorting to 'step out' if unsuccessful.
 		"""
 		assert isinstance(patterns, (list, tuple)
-		    ), 'Argument patterns must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument patterns must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    patterns)
 		subdom_funcs = self.synchronous_command('Debugger.setBlackboxPatterns',
 		    patterns=patterns)
@@ -7515,7 +7515,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Makes backend skip steps in the script in blackboxed ranges. VM will try leave blacklisted scripts by performing 'step in' several times, finally resorting to 'step out' if unsuccessful. Positions array contains positions where blackbox state is changed. First interval isn't blackboxed. Array should be sorted.
 		"""
 		assert isinstance(positions, (list, tuple)
-		    ), 'Argument positions must be of type (<_ast.Tuple object at 0x7fac7ab3cac8>). Received type: %s' % type(
+		    ), 'Argument positions must be of type (<_ast.Tuple object at 0x7f60acbdfac8>). Received type: %s' % type(
 		    positions)
 		subdom_funcs = self.synchronous_command('Debugger.setBlackboxedRanges',
 		    scriptId=scriptId, positions=positions)
@@ -7598,7 +7598,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Description: Changes CPU profiler sampling interval. Must be called before CPU profiles recording started.
 		"""
 		assert isinstance(interval, (int,)
-		    ), 'Argument interval must be of type (<_ast.Tuple object at 0x7fac7ab3cc88>). Received type: %s' % type(
+		    ), 'Argument interval must be of type (<_ast.Tuple object at 0x7f60acbdfc88>). Received type: %s' % type(
 		    interval)
 		subdom_funcs = self.synchronous_command('Profiler.setSamplingInterval',
 		    interval=interval)
