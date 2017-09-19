@@ -15,7 +15,7 @@ from .transport import ChromeSocketManager
 
 class ChromeInterface():
 	"""
-
+	Document me, maybe?
 	"""
 
 	def __init__(self, binary=None, dbg_port=None, *args, **kwargs):
@@ -85,6 +85,9 @@ class ChromeInterface():
 
 
 	def __check_ret(self, ret):
+		if ret is False:
+			raise cr_exceptions.ChromeError("Null response from Chromium!")
+			
 		if 'error' in ret:
 			err = pprint.pformat(ret)
 			raise cr_exceptions.ChromeError("Error in response: \n{}".format(err))
