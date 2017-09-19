@@ -13,7 +13,7 @@ wrapper. Both the higher-level interface, and it's associated documentation are
 very much a work in process at the moment.
 
 Interface documentation is here:  
-https://fake-name.github.io/ChromeController/ChromeController.CromeRemoteDebugInterface.html
+https://fake-name.github.io/ChromeController/ChromeController.ChromeRemoteDebugInterface.html
 
 All remote methods are wrapped in named functions, with (partial) validation 
 of passed parameter types and return types.
