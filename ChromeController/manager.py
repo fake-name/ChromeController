@@ -48,9 +48,9 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		resp2 = self.DOM_enable()
 		resp3 = self.Network_enable()
 
-		cr_ver = self.Browser_getVersion()
-		self.log.debug("Remote browser version info:")
-		self.log.debug(str(cr_ver))
+		# cr_ver = self.Browser_getVersion()
+		# self.log.debug("Remote browser version info:")
+		# self.log.debug(str(cr_ver))
 		# 'protocolVersion'
 		# 'product'
 		# 'revision'
