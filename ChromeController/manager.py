@@ -228,7 +228,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterfaceBase):
 
 		# Yeah, the cookielib stores this attribute as a string, despite it containing a
 		# boolean value. No idea why.
-		is_http_only = cookie.get_nonstandard_attr('httponly', 'False').lower() == "true"
+		is_http_only = str(cookie.get_nonstandard_attr('httponly', 'False')).lower() == "true"
 
 
 		# I'm unclear what the "url" field is actually for. A cookie only needs the domain and
