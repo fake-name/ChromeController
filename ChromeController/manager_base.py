@@ -86,8 +86,8 @@ class ChromeInterface():
 
 	def __check_ret(self, ret):
 		if ret is False:
-			raise cr_exceptions.ChromeError("Null response from Chromium!")
-			
+			raise cr_exceptions.ChromeError("Null response from Chromium (or timed out)!")
+
 		if 'error' in ret:
 			err = pprint.pformat(ret)
 			raise cr_exceptions.ChromeError("Error in response: \n{}".format(err))
