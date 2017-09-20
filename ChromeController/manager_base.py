@@ -65,7 +65,7 @@ class ChromeInterface():
 										stdout=subprocess.PIPE,
 										stderr=subprocess.PIPE)
 
-		self.log.debug("Spawned process: %s", self.cr_proc)
+		self.log.debug("Spawned process: %s, PID: %s", self.cr_proc, self.cr_proc.pid)
 
 
 		self.transport = None
@@ -131,7 +131,7 @@ class ChromeInterface():
 		self.__check_process_ded()
 		return self.transport.drain()
 
-	def close(self):
+	def close_chromium(self):
 		'''
 		Close the remote chromium instance.
 
@@ -143,16 +143,22 @@ class ChromeInterface():
 		you may need to *explicitly* call this before destruction.
 		'''
 
+		if self.cr_proc:
+			self.log.debug("Sending sigint to chromium")
+			self.cr_proc.send_signal(signal.SIGINT)
+			self.cr_proc.terminate()
+			self.log.debug("Waiting for chromium to exit")
+			self.cr_proc.wait(timeout=5)
+			self.log.debug("Pid: %s, Return code: %s", self.cr_proc.pid, self.cr_proc.returncode)
+			self.log.debug("Chromium closed!")
 
-		self.log.debug("Sending sigint to chromium")
-		self.cr_proc.send_signal(signal.SIGINT)
-		self.cr_proc.terminate()
 
 	def __del__(self):
 		try:
-			self.close()
+			self.close_chromium()
 		except:
 			pass
+
 
 if __name__ == '__main__':
 	import doctest

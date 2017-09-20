@@ -1,10 +1,11 @@
 
 import logging
 import os.path
-import astor
+import gc
 import pprint
 import time
 
+import astor
 import WebRequest
 
 import ChromeController.manager as mgr
@@ -196,12 +197,16 @@ def test():
 	# pprint.pprint(cr.drain_transport())
 
 def test_cycle():
-	for _ in range(10):
-
+	for x in range(10):
+		print("Looping:", x)
 		crbin = "google-chrome"
 		cr = ChromeController.ChromeRemoteDebugInterface(crbin)
+		print("deleting....")
+		del cr
+		gc.collect()
+		print("Deleted")
+		time.sleep(3)
 
-		cr.close()
 def test_url():
 
 	crbin = "google-chrome"
@@ -214,7 +219,7 @@ def test_url():
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG)
 	# test()
-	# test_cycle()
+	test_cycle()
 	test_url()
 	# test_delete_cookies()
 	# docstring_dbg()
