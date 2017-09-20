@@ -57,10 +57,14 @@ class ChromeSocketManager():
 		if not tab_idx:
 			tab_idx = 0
 		wsurl = self.tablist[tab_idx]['webSocketDebuggerUrl']
-		if self.soc is not None and self.soc.connected:
-			self.soc.close()
-		self.soc = websocket.create_connection(wsurl)
-		self.soc.settimeout(5)
+		try:
+			if self.soc is not None and self.soc.connected:
+				self.soc.close()
+			self.soc = websocket.create_connection(wsurl)
+			self.soc.settimeout(5)
+
+		except (socket.timeout, websocket.WebSocketTimeoutException):
+			raise cr_exceptions.ChromeCommunicationsError("Could not connect to remote chromium.")
 
 	def close(self):
 		""" Close websocket connection to remote browser."""
@@ -82,9 +86,9 @@ class ChromeSocketManager():
 		if not tab_idx:
 			tab_idx = 0
 		if not tab_idx <= len(tablist):
-			raise cr_exceptions.ChromeConnectFailure("Tab %s not found in tablist (%s)" % (tab_idx, tablist))
+			raise cr_exceptions.ChromeConnectFailure("Tab %s not found in tablist (%s)", (tab_idx, tablist))
 		if not 'webSocketDebuggerUrl' in tablist[tab_idx]:
-			raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)" % (tab_idx, tablist))
+			raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)", (tab_idx, tablist))
 
 
 		return tablist
@@ -103,13 +107,13 @@ class ChromeSocketManager():
 		"""
 
 		self.log.debug("Synchronous_command:")
-		self.log.debug("	command: '%s'" % command)
-		self.log.debug("	params:  '%s'" % params)
+		self.log.debug("	command: '%s'", command)
+		self.log.debug("	params:  '%s'", params)
 
 		send_id = self.send(command, params)
 		resp = self.recv(message_id=send_id)
 
-		self.log.debug("	Response: '%s'" % str(resp).encode("ascii", 'ignore').decode("ascii"))
+		self.log.debug("	Response: '%s'", str(resp).encode("ascii", 'ignore').decode("ascii"))
 
 		return resp
 
@@ -137,9 +141,15 @@ class ChromeSocketManager():
 		navcom = json.dumps(command)
 
 
-		self.log.debug("		Sending: '%s'" % navcom)
+		self.log.debug("		Sending: '%s'", navcom)
+		try:
+			self.soc.send(navcom)
+		except (socket.timeout, websocket.WebSocketTimeoutException):
+			raise cr_exceptions.ChromeCommunicationsError("Failure sending command to chromium.")
+		except websocket.WebSocketConnectionClosedException:
+			raise cr_exceptions.ChromeCommunicationsError("Websocket appears to have been closed. Is the"
+				" remote chromium instance dead?")
 
-		self.soc.send(navcom)
 
 		self.msg_id += 1
 		return sent_id
@@ -148,12 +158,15 @@ class ChromeSocketManager():
 	def ___recv(self):
 		try:
 			tmp = self.soc.recv()
-			self.log.debug("		Received: '%s'" % tmp)
+			self.log.debug("		Received: '%s'", tmp)
 
 			decoded = json.loads(tmp)
 			return decoded
 		except (socket.timeout, websocket.WebSocketTimeoutException):
 			return None
+		except websocket.WebSocketConnectionClosedException:
+			raise cr_exceptions.ChromeCommunicationsError("Websocket appears to have been closed. Is the"
+				" remote chromium instance dead?")
 
 	def recv_filtered(self, keycheck, timeout=30):
 		'''
@@ -229,7 +242,7 @@ class ChromeSocketManager():
 			if message_id is None:
 				return True
 			if not message:
-				self.log.debug("Message is not true!", message)
+				self.log.debug("Message is not true (%s)!", message)
 				return False
 			if "id" in message:
 				return message['id'] == message_id

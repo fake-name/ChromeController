@@ -8,6 +8,9 @@ class ChromeStartupException(ChromeControllerException):
 class ChromeConnectFailure(ChromeControllerException):
 	pass
 
+class ChromeCommunicationsError(ChromeControllerException):
+	pass
+
 class ChromeError(ChromeControllerException):
 	pass
 
