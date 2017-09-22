@@ -18,12 +18,13 @@ class ChromeSocketManager():
 
 	> a = ChromeSocketManager(host='localhost', port=9222)
 
-
 	   """
 
-	def __init__(self, host='localhost', port=9222):
+	def __init__(self, host='localhost', port=9222, timeout=10):
 		"""
 		Create connection to remote host `host`, on port `port`.
+
+		Websocket timeout is set to `timeout`.
 
 		Assumes remote is listening for websocket connections.
 
@@ -31,6 +32,7 @@ class ChromeSocketManager():
 		self.host = host
 		self.port = port
 		self.msg_id = 0
+		self.timeout = timeout
 		self.soc = None
 		self.tablist = None
 
@@ -39,8 +41,6 @@ class ChromeSocketManager():
 		self.connect()
 
 		self.messages = []
-
-
 
 	def connect(self, tab_idx=None, update_tabs=True):
 		"""
@@ -61,7 +61,7 @@ class ChromeSocketManager():
 			if self.soc is not None and self.soc.connected:
 				self.soc.close()
 			self.soc = websocket.create_connection(wsurl)
-			self.soc.settimeout(5)
+			self.soc.settimeout(self.timeout)
 
 		except (socket.timeout, websocket.WebSocketTimeoutException):
 			raise cr_exceptions.ChromeCommunicationsError("Could not connect to remote chromium.")
@@ -90,9 +90,7 @@ class ChromeSocketManager():
 		if not 'webSocketDebuggerUrl' in tablist[tab_idx]:
 			raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)", (tab_idx, tablist))
 
-
 		return tablist
-
 
 	def __check_open_socket(self):
 		if self.soc is None or (self.soc is not None and not self.soc.connected):
