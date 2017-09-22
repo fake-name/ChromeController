@@ -7,12 +7,17 @@
 import json
 import socket
 import time
-import websocket
+import pprint
 import logging
+import os.path
 import requests
+import signal
+import websocket
+import subprocess
+import distutils.spawn
 from . import cr_exceptions
 
-class ChromeSocketManager():
+class ChromeExecutionManager():
 	"""
 	A remote debugging connection to Google Chrome.
 
@@ -20,7 +25,13 @@ class ChromeSocketManager():
 
 	   """
 
-	def __init__(self, host='localhost', port=9222, timeout=10):
+	def __init__(self,
+			binary,
+			base_tab_key,
+			host='localhost',
+			port=9222,
+			timeout=10,
+			):
 		"""
 		Create connection to remote host `host`, on port `port`.
 
@@ -29,20 +40,83 @@ class ChromeSocketManager():
 		Assumes remote is listening for websocket connections.
 
 		"""
+		self.binary = binary
 		self.host = host
+		if port is None:
+			port = 9222
 		self.port = port
 		self.msg_id = 0
 		self.timeout = timeout
-		self.soc = None
-		self.tablist = None
 
-		self.log = logging.getLogger("Main.ChromeController.SocketTransport")
+		self.tablist = None
+		self.soclist = {}
+		self.tab_idx_map = {}
+
+		self.log = logging.getLogger("Main.ChromeController.ExecutionManager")
+
+		self.log.info("Launching binary %s", self.binary)
+		self._launch_process(self.binary, self.port)
+
 		self.log.info("Connecting to %s:%s", self.host, self.port)
-		self.connect()
+		self.connect(base_tab_key)
 
 		self.messages = []
 
-	def connect(self, tab_idx=None, update_tabs=True):
+	def _launch_process(self, binary, dbg_port):
+
+		if binary is None:
+			binary = "chromium"
+		if not os.path.exists(binary):
+			fixed = distutils.spawn.find_executable(binary)
+			if fixed:
+				binary = fixed
+		if not binary or not os.path.exists(binary):
+			raise RuntimeError("Could not find binary '%s'" % binary)
+
+		argv = [
+				binary,
+				'--headless',
+				'--disable-gpu',
+				'--remote-debugging-port={dbg_port}'.format(dbg_port=dbg_port)
+			]
+
+		self.cr_proc = subprocess.Popen(argv,
+										stdin=open(os.path.devnull, "r"),
+										stdout=subprocess.PIPE,
+										stderr=subprocess.PIPE)
+
+		self.log.debug("Spawned process: %s, PID: %s", self.cr_proc, self.cr_proc.pid)
+
+	def close_chromium(self):
+		'''
+		Close the remote chromium instance.
+
+		This command is normally executed as part of the class destructor.
+		It can be called early without issue, but calling ANY class functions
+		after the remote chromium instance is shut down will have unknown effects.
+
+		Note that if you are rapidly creating and destroying ChromeController instances,
+		you may need to *explicitly* call this before destruction.
+		'''
+
+		if self.cr_proc:
+			self.log.debug("Sending sigint to chromium")
+			self.cr_proc.send_signal(signal.SIGINT)
+			self.cr_proc.terminate()
+			self.log.debug("Waiting for chromium to exit")
+			self.cr_proc.wait(timeout=5)
+			self.log.debug("Pid: %s, Return code: %s", self.cr_proc.pid, self.cr_proc.returncode)
+			self.log.debug("Chromium closed!")
+
+
+	def check_process_ded(self):
+		self.cr_proc.poll()
+		if self.cr_proc.returncode != None:
+			stdout, stderr = self.cr_proc.communicate()
+			raise cr_exceptions.ChromeError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
+
+
+	def connect(self, tab_key=None):
 		"""
 		Open a websocket connection to remote browser, determined by
 		self.host and self.port.  Each tab has it's own websocket
@@ -52,27 +126,95 @@ class ChromeSocketManager():
 
 		"""
 
-		if update_tabs or not self.tablist:
-			self.tablist = self.find_tabs(tab_idx)
-		if not tab_idx:
-			tab_idx = 0
-		wsurl = self.tablist[tab_idx]['webSocketDebuggerUrl']
-		try:
-			if self.soc is not None and self.soc.connected:
-				self.soc.close()
-			self.soc = websocket.create_connection(wsurl)
-			self.soc.settimeout(self.timeout)
+		if tab_key not in self.tab_idx_map:
+			tab_idx = len(self.tab_idx_map)
+		else:
+			tab_idx = self.tab_idx_map[tab_key]
 
+		if not self.tablist or (self.tablist and tab_idx not in self.tablist):
+			self.tablist = self.fetch_tablist()
+
+		self.pprint_tablist()
+
+		# If we're one past the end of the tablist, we need to create a new tab
+		if tab_idx == len(self.tablist):
+			self.log.debug("Creating new tab")
+			self.__create_new_tab()
+		elif tab_idx >= len(self.tablist):
+			raise cr_exceptions.ChromeConnectFailure("Tab %s not found in tablist (%s)" % (tab_idx, self.tablist))
+
+		for fails in range(9999):
+			try:
+				self.tablist = self.fetch_tablist()
+
+
+				if not 'webSocketDebuggerUrl' in self.tablist[tab_idx]:
+					raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)" % (tab_idx, self.tablist))
+				break
+			except cr_exceptions.ChromeConnectFailure as e:
+				if fails > 5:
+					self.log.error("Failed to fetch tab websocket URL after %s retries. Aborting!" % fails)
+					raise e
+				self.log.info("Tab may not have started yet. Waiting.")
+				self.log.info("Tag: %s", self.tablist[tab_idx])
+				time.sleep(1)
+
+		if self.tablist and tab_idx not in self.tablist:
+
+			print("Tab list:", self.tablist)
+
+		wsurl = self.tablist[tab_idx]['webSocketDebuggerUrl']
+
+		try:
+			if tab_key in self.soclist and self.soclist[tab_key] is not None and self.soclist[tab_key].connected:
+				self.soclist[tab_key].close()
+			self.soclist[tab_key] = websocket.create_connection(wsurl)
+			self.soclist[tab_key].settimeout(self.timeout)
+			self.tab_idx_map[tab_key] = tab_idx
 		except (socket.timeout, websocket.WebSocketTimeoutException):
 			raise cr_exceptions.ChromeCommunicationsError("Could not connect to remote chromium.")
 
+	def pprint_tablist(self):
+		self.log.info("Tablist type: %s", type(self.tablist))
+		for idx, tab in enumerate(self.tablist):
+			self.log.info(" Tab %s -> %s", idx, pprint.pformat(tab))
+
+	def __create_new_tab(self, start_at_url=None):
+		url = "http://%s:%s/json/new" % (self.host, self.port)
+		if start_at_url:
+			url += "?%s" % (start_at_url, )
+		try:
+			response = requests.get(url)
+			print("Newtab: ", response)
+		except requests.exceptions.ConnectionError:
+			raise cr_exceptions.ChromeConnectFailure("Failed to create a new tab in remote chromium!")
+
+
+	# def close_tab(self, tab_id, timeout=None):
+	#     if isinstance(tab_id, Tab):
+	#         tab_id = tab_id.id
+
+	#     tab = self._tabs.pop(tab_id, None)
+	#     if tab and tab.status == Tab.status_started:  # pragma: no cover
+	#         tab.stop()
+
+	#     rp = requests.get("%s/json/close/%s" % (self.dev_url, tab_id), timeout=timeout)
+	#     return rp.text
+
+	# def version(self, timeout=None):
+	#     rp = requests.get("%s/json/version" % self.dev_url, json=True, timeout=timeout)
+	#     return rp.json()
+
+
 	def close(self):
 		""" Close websocket connection to remote browser."""
-		if self.soc:
-			self.soc.close()
-			self.soc = None
+		for key in list(self.soclist.keys()):
+			if self.soclist[key]:
+				self.soclist[key].close()
+			self.soclist.pop(key)
 
-	def find_tabs(self, tab_idx):
+
+	def fetch_tablist(self):
 		"""Connect to host:port and request list of tabs
 			 return list of dicts of data about open tabs."""
 		# find websocket endpoint
@@ -83,39 +225,39 @@ class ChromeSocketManager():
 
 		tablist = json.loads(response.text)
 
-		if not tab_idx:
-			tab_idx = 0
-		if not tab_idx <= len(tablist):
-			raise cr_exceptions.ChromeConnectFailure("Tab %s not found in tablist (%s)", (tab_idx, tablist))
-		if not 'webSocketDebuggerUrl' in tablist[tab_idx]:
-			raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)", (tab_idx, tablist))
-
 		return tablist
 
-	def __check_open_socket(self):
-		if self.soc is None or (self.soc is not None and not self.soc.connected):
-			self.connect()
+	def __check_open_socket(self, tab_key):
+		print("Tab key:", tab_key)
+		if not tab_key in self.soclist:
+			self.connect(tab_key=tab_key)
+		if self.soclist[tab_key].connected is not True:
+			self.connect(tab_key=tab_key)
 
 
-	def synchronous_command(self, command, **params):
+	def synchronous_command(self, command, tab_key, **params):
 		"""
 		Synchronously execute command `command` with params `params` in the
 		remote chrome instance, returning the response from the chrome instance.
 
 		"""
 
-		self.log.debug("Synchronous_command:")
+		self.log.debug("Synchronous_command to tab %s:", tab_key)
 		self.log.debug("	command: '%s'", command)
 		self.log.debug("	params:  '%s'", params)
+		self.log.debug("	tab_key:  '%s'", tab_key)
 
-		send_id = self.send(command, params)
-		resp = self.recv(message_id=send_id)
+		send_id = self.send(command=command, tab_key=tab_key, params=params)
+		resp = self.recv(message_id=send_id, tab_key=tab_key)
 
 		self.log.debug("	Response: '%s'", str(resp).encode("ascii", 'ignore').decode("ascii"))
 
+		print(self.tab_idx_map)
+		print(self.tablist)
+		self.log.debug("	resolved tab idx %s:", self.tab_idx_map[tab_key])
 		return resp
 
-	def send(self, command, params=None):
+	def send(self, command, tab_key, params=None):
 		'''
 		Send command `command` with optional parameters `params` to the
 		remote chrome instance.
@@ -125,7 +267,7 @@ class ChromeSocketManager():
 		return value is the command id, which can be used to match a command
 		to it's associated response.
 		'''
-		self.__check_open_socket()
+		self.__check_open_socket(tab_key)
 
 		sent_id = self.msg_id
 
@@ -141,7 +283,7 @@ class ChromeSocketManager():
 
 		self.log.debug("		Sending: '%s'", navcom)
 		try:
-			self.soc.send(navcom)
+			self.soclist[tab_key].send(navcom)
 		except (socket.timeout, websocket.WebSocketTimeoutException):
 			raise cr_exceptions.ChromeCommunicationsError("Failure sending command to chromium.")
 		except websocket.WebSocketConnectionClosedException:
@@ -153,9 +295,9 @@ class ChromeSocketManager():
 		return sent_id
 
 
-	def ___recv(self):
+	def ___recv(self, tab_key):
 		try:
-			tmp = self.soc.recv()
+			tmp = self.soclist[tab_key].recv()
 			self.log.debug("		Received: '%s'", tmp)
 
 			decoded = json.loads(tmp)
@@ -166,7 +308,7 @@ class ChromeSocketManager():
 			raise cr_exceptions.ChromeCommunicationsError("Websocket appears to have been closed. Is the"
 				" remote chromium instance dead?")
 
-	def recv_filtered(self, keycheck, timeout=30):
+	def recv_filtered(self, keycheck, tab_key, timeout=30):
 		'''
 		Receive a filtered message, using the callable `keycheck` to filter received messages
 		for content.
@@ -193,7 +335,7 @@ class ChromeSocketManager():
 		'''
 
 
-		self.__check_open_socket()
+		self.__check_open_socket(tab_key)
 
 		# First, check if the message has already been received.
 		for idx in range(len(self.messages)):
@@ -202,7 +344,7 @@ class ChromeSocketManager():
 
 		timeout_at = time.time() + timeout
 		while 1:
-			tmp = self.___recv()
+			tmp = self.___recv(tab_key)
 			if keycheck(tmp):
 				return tmp
 			else:
@@ -212,7 +354,7 @@ class ChromeSocketManager():
 				return None
 
 
-	def recv(self, message_id=None, timeout=30):
+	def recv(self, tab_key, message_id=None, timeout=30):
 		'''
 		Recieve a message, optionally filtering for a specified message id.
 
@@ -225,7 +367,7 @@ class ChromeSocketManager():
 
 		'''
 
-		self.__check_open_socket()
+		self.__check_open_socket(tab_key)
 
 		# First, check if the message has already been received.
 		for idx in range(len(self.messages)):
@@ -246,10 +388,10 @@ class ChromeSocketManager():
 				return message['id'] == message_id
 			return False
 
-		return self.recv_filtered(check_func, timeout)
+		return self.recv_filtered(check_func, tab_key, timeout)
 
 
-	def drain(self):
+	def drain(self, tab_key):
 		'''
 		Return all messages in waiting for the websocket connection.
 		'''
@@ -258,10 +400,10 @@ class ChromeSocketManager():
 		while len(self.messages):
 			ret.append(self.messages.pop(0))
 
-		tmp = self.___recv()
+		tmp = self.___recv(tab_key)
 		while tmp is not None:
 			ret.append(tmp)
-			tmp = self.___recv()
+			tmp = self.___recv(tab_key)
 		return ret
 
 

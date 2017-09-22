@@ -1,5 +1,5 @@
 
-from .transport import ChromeSocketManager
+from .transport import ChromeExecutionManager
 from .manager import ChromeRemoteDebugInterface
 from .Generator import gen
 

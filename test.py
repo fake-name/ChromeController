@@ -207,6 +207,16 @@ def test_cycle():
 		print("Deleted")
 		time.sleep(3)
 
+def test_tabs():
+	crbin = "google-chrome"
+	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
+	tabl = []
+	for x in range(10):
+
+		cr_2 = cr.new_tab()
+		tabl.append(cr_2)
+		print("Looping:", x)
+
 def test_url():
 
 	crbin = "google-chrome"
@@ -219,6 +229,7 @@ def test_url():
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG)
 	# test()
+	# test_tabs()
 	test_cycle()
 	test_url()
 	# test_delete_cookies()

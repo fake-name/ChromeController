@@ -463,7 +463,7 @@ class JsonInterfaceGenerator(object):
 	def __to_module(self):
 
 		module_components = [
-			ast.ImportFrom(module="ChromeController.transport",    names=[ast.alias('ChromeSocketManager', None)], level=0),
+			ast.ImportFrom(module="ChromeController.transport",    names=[ast.alias('ChromeExecutionManager', None)], level=0),
 			ast.ImportFrom(module="ChromeController.manager_base", names=[ast.alias('ChromeInterface',     None)], level=0),
 			self.interface_class,
 		]

@@ -1,15 +1,11 @@
 
-import os.path
-import subprocess
-import signal
 import time
 import pprint
+import uuid
 import logging
-import traceback
-import distutils.spawn
-from . import cr_exceptions
 
-from .transport import ChromeSocketManager
+from . import cr_exceptions
+from .transport import ChromeExecutionManager
 
 
 
@@ -18,7 +14,7 @@ class ChromeInterface():
 	Document me, maybe?
 	"""
 
-	def __init__(self, binary=None, dbg_port=None, *args, **kwargs):
+	def __init__(self, binary=None, dbg_port=None, use_execution_manager=None, *args, **kwargs):
 		"""
 		Base chromium transport initialization.
 
@@ -37,51 +33,28 @@ class ChromeInterface():
 
 		"""
 		self.log = logging.getLogger("Main.ChromeController.Interface")
-		self.log.debug("Binary: %s", binary)
-		self.log.debug("Args: %s", args)
-		self.log.debug("Kwargs: %s", kwargs)
+		if use_execution_manager:
+			self.transport, self.tab_id = use_execution_manager
+		else:
+			self.log.debug("Binary: %s", binary)
+			self.log.debug("Args: %s", args)
+			self.log.debug("Kwargs: %s", kwargs)
 
-		if binary is None:
-			binary = "chromium"
-		if dbg_port is None:
-			dbg_port = 9222
-		if not os.path.exists(binary):
-			fixed = distutils.spawn.find_executable(binary)
-			if fixed:
-				binary = fixed
-		if not binary or not os.path.exists(binary):
-			raise RuntimeError("Could not find binary '%s'" % binary)
+			self.tab_id = uuid.uuid4()
 
+			self.transport = None
+			# Allow the subprocess to start.
+			for x in range(3):
+				try:
+					self.transport = ChromeExecutionManager(binary=binary, port=dbg_port, base_tab_key=self.tab_id)
+					self.transport.check_process_ded()
 
-		argv = [
-				binary,
-				'--headless',
-				'--disable-gpu',
-				'--remote-debugging-port={dbg_port}'.format(dbg_port=dbg_port)
-			]
+				except cr_exceptions.ChromeConnectFailure:
 
-		self.cr_proc = subprocess.Popen(argv,
-										stdin=open(os.path.devnull, "r"),
-										stdout=subprocess.PIPE,
-										stderr=subprocess.PIPE)
+					time.sleep(1)
 
-		self.log.debug("Spawned process: %s, PID: %s", self.cr_proc, self.cr_proc.pid)
-
-
-		self.transport = None
-		# Allow the subprocess to start.
-		for x in range(3):
-			try:
-				self.transport = ChromeSocketManager(port=dbg_port)
-
-				break
-			except cr_exceptions.ChromeConnectFailure:
-
-				self.__check_process_ded()
-				time.sleep(1)
-
-		if not self.transport:
-			raise cr_exceptions.ChromeStartupException("Could not start chromium! This can be caused by dangling chromium processes.")
+			if not self.transport:
+				raise cr_exceptions.ChromeStartupException("Could not start chromium! This can be caused by dangling chromium processes.")
 
 
 	def __check_ret(self, ret):
@@ -91,12 +64,6 @@ class ChromeInterface():
 		if 'error' in ret:
 			err = pprint.pformat(ret)
 			raise cr_exceptions.ChromeError("Error in response: \n{}".format(err))
-
-	def __check_process_ded(self):
-		self.cr_proc.poll()
-		if self.cr_proc.returncode != None:
-			stdout, stderr = self.cr_proc.communicate()
-			raise cr_exceptions.ChromeError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
 
 
 
@@ -113,8 +80,8 @@ class ChromeInterface():
 		returned.
 
 		'''
-		self.__check_process_ded()
-		ret = self.transport.synchronous_command(*args, **kwargs)
+		self.transport.check_process_ded()
+		ret = self.transport.synchronous_command(tab_key=self.tab_id, *args, **kwargs)
 		self.__check_ret(ret)
 		return ret
 
@@ -128,36 +95,14 @@ class ChromeInterface():
 		type needs.
 
 		'''
-		self.__check_process_ded()
+		self.transport.check_process_ded()
 		return self.transport.drain()
 
-	def close_chromium(self):
-		'''
-		Close the remote chromium instance.
-
-		This command is normally executed as part of the class destructor.
-		It can be called early without issue, but calling ANY class functions
-		after the remote chromium instance is shut down will have unknown effects.
-
-		Note that if you are rapidly creating and destroying ChromeController instances,
-		you may need to *explicitly* call this before destruction.
-		'''
-
-		if self.cr_proc:
-			self.log.debug("Sending sigint to chromium")
-			self.cr_proc.send_signal(signal.SIGINT)
-			self.cr_proc.terminate()
-			self.log.debug("Waiting for chromium to exit")
-			self.cr_proc.wait(timeout=5)
-			self.log.debug("Pid: %s, Return code: %s", self.cr_proc.pid, self.cr_proc.returncode)
-			self.log.debug("Chromium closed!")
+	def new_tab(self):
+		new = self.__class__(use_execution_manager=(self.transport, uuid.uuid4()))
+		return new
 
 
-	def __del__(self):
-		try:
-			self.close_chromium()
-		except:
-			pass
 
 
 if __name__ == '__main__':
