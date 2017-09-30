@@ -110,7 +110,10 @@ class ChromeExecutionManager():
 			self.cr_proc.send_signal(signal.SIGINT)
 			self.log.debug("Waiting for chromium to exit")
 			self.cr_proc.wait(timeout=5)
-			self.cr_proc.terminate()
+			try:
+				self.cr_proc.terminate()
+			except ProcessLookupError:
+				self.log.debug("Process exited normally, no need to terminate.")
 			self.log.debug("Pid: %s, Return code: %s", self.cr_proc.pid, self.cr_proc.returncode)
 			self.log.debug("Chromium closed!")
 
