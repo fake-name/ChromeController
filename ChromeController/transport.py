@@ -143,9 +143,9 @@ class ChromeExecutionManager():
 
 		self.pprint_tablist()
 
-		print('tab_key', tab_key)
-		print('self.tab_idx_map', self.tab_idx_map)
-		print('len(self.tablist)', len(self.tablist))
+		# print('tab_key', tab_key)
+		# print('self.tab_idx_map', self.tab_idx_map)
+		# print('len(self.tablist)', len(self.tablist))
 
 		if tab_idx >= len(self.tablist):
 			raise cr_exceptions.ChromeConnectFailure("Tab %s not found in tablist (%s)" % (tab_idx, self.tablist))
@@ -175,9 +175,8 @@ class ChromeExecutionManager():
 
 				time.sleep(1)
 
-		if self.tablist and tab_idx not in self.tablist:
-
-			print("Tab list:", self.tablist)
+		# if self.tablist and tab_idx not in self.tablist:
+		# 	print("Tab list:", self.tablist)
 
 		wsurl = self.tablist[tab_idx]['webSocketDebuggerUrl']
 
@@ -193,7 +192,8 @@ class ChromeExecutionManager():
 	def pprint_tablist(self):
 		self.log.info("Tablist type: %s", type(self.tablist))
 		for idx, tab in enumerate(self.tablist):
-			self.log.info(" Tab %s -> %s", idx, pprint.pformat(tab))
+			for line in pprint.pformat(tab).split("\n"):
+				self.log.info(" Tab %s -> %s", idx, line)
 
 	def __create_new_tab(self, start_at_url=None):
 		url = "http://%s:%s/json/new" % (self.host, self.port)
@@ -201,7 +201,7 @@ class ChromeExecutionManager():
 			url += "?%s" % (start_at_url, )
 		try:
 			response = requests.get(url)
-			print("Newtab: ", response)
+			# print("Newtab: ", response)
 			self.tablist = self.fetch_tablist()
 		except requests.exceptions.ConnectionError:
 			raise cr_exceptions.ChromeConnectFailure("Failed to create a new tab in remote chromium!")
@@ -244,7 +244,7 @@ class ChromeExecutionManager():
 		return tablist
 
 	def __check_open_socket(self, tab_key):
-		print("Tab key:", tab_key)
+		# print("Tab key:", tab_key)
 		if not tab_key in self.soclist:
 			self.connect(tab_key=tab_key)
 		if self.soclist[tab_key].connected is not True:
@@ -267,8 +267,8 @@ class ChromeExecutionManager():
 
 		self.log.debug("	Response: '%s'", str(resp).encode("ascii", 'ignore').decode("ascii"))
 
-		print(self.tab_idx_map)
-		print(self.tablist)
+		# print(self.tab_idx_map)
+		# print(self.tablist)
 		self.log.debug("	resolved tab idx %s:", self.tab_idx_map[tab_key])
 		return resp
 

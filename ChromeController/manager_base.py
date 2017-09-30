@@ -114,6 +114,8 @@ class ChromeInterface():
 		new = self.__class__(use_execution_manager=(self.transport, uuid.uuid4()))
 		return new
 
+	def close(self):
+		gc.collect()
 
 
 

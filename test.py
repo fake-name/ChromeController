@@ -225,12 +225,24 @@ def test_url():
 	print("Current URL:", cr.get_current_url())
 	# cr.close()
 
+def test_rendered_fetch():
+
+	crbin = "google-chrome"
+	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin, dbg_port=9232)
+
+	resp = cr.blocking_navigate("https://www.catatopatch.com/appraise-chapter-15", timeout=10)
+	print("Current URL:", cr.get_current_url())
+	rcnt = cr.get_rendered_page_source()
+	print("content:", type(rcnt))
+	# cr.close()
+
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG)
 	# test()
 	# test_tabs()
-	test_cycle()
+	test_rendered_fetch()
 
-	test_url()
-	test_delete_cookies()
+	# test_cycle()
+	# test_url()
+	# test_delete_cookies()
 	# docstring_dbg()
