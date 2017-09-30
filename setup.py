@@ -8,7 +8,7 @@ setup(
 	name="ChromeController",
 
 	# Version number (initial):
-	version="0.0.7",
+	version="0.1.0",
 
 	# Application author details:
 	author="Connor Wolf	",

@@ -86,7 +86,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		return (ret_1, ret_2)
 
 
-	def __exec_js(self, script, args={}):
+	def __exec_js(self, script, args=None):
 		'''
 
 		Execute the passed javascript statement, optionally with passed
@@ -99,19 +99,21 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		'''
 
-		'''
-		How chromedriver does this:
+		if args is None:
+			args = {}
 
-		 std::unique_ptr<base::Value>* result) {
-		  std::string json;
-		  base::JSONWriter::Write(args, &json);
-		  // TODO(zachconrad): Second null should be array of shadow host ids.
-		  std::string expression = base::StringPrintf(
-		      "(%s).apply(null, [null, %s, %s])",
-		      kCallFunctionScript,
-		      function.c_str(),
-		      json.c_str());
-		'''
+		# How chromedriver does this:
+
+		#  std::unique_ptr<base::Value>* result) {
+		#   std::string json;
+		#   base::JSONWriter::Write(args, &json);
+		#   // TODO(zachconrad): Second null should be array of shadow host ids.
+		#   std::string expression = base::StringPrintf(
+		#       "(%s).apply(null, [null, %s, %s])",
+		#       kCallFunctionScript,
+		#       function.c_str(),
+		#       json.c_str());
+
 		expression = "({}).apply(null, [null, {}, {}])".format(
 				js.kCallFunctionScript,
 				script,
@@ -126,7 +128,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 
 	# Interact with http.cookiejar.Cookie() instances
-	def get_cookies(self, all_cookies=True):
+	def get_cookies(self):
 		'''
 		Retreive the cookies from the remote browser.
 
@@ -134,9 +136,6 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		These can be directly used with the various http.cookiejar.XXXCookieJar
 		cookie management classes.
 		'''
-		# 'global' is a reserved keyword. You can't specify it as a kwarg directly,
-		# because it results in a syntax error.
-		# Use a intermediate dict with an explicitly string "global" to work around.
 		ret = self.Network_getAllCookies()
 
 		assert 'result' in ret, "No return value in function response!"
@@ -208,30 +207,27 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		Passed value `cookie` must be an instance of `http.cookiejar.Cookie()`.
 		'''
-		'''
-			Function path: Network.setCookie
-			Domain: Network
-			Method name: setCookie
 
-			WARNING: This function is marked 'Experimental'!
+		# Function path: Network.setCookie
+		# Domain: Network
+		# Method name: setCookie
+		# WARNING: This function is marked 'Experimental'!
+		# Parameters:
+		#         Required arguments:
+		#                 'url' (type: string) -> The request-URI to associate with the setting of the cookie. This value can affect the default domain and path values of the created cookie.
+		#                 'name' (type: string) -> The name of the cookie.
+		#                 'value' (type: string) -> The value of the cookie.
+		#         Optional arguments:
+		#                 'domain' (type: string) -> If omitted, the cookie becomes a host-only cookie.
+		#                 'path' (type: string) -> Defaults to the path portion of the url parameter.
+		#                 'secure' (type: boolean) -> Defaults ot false.
+		#                 'httpOnly' (type: boolean) -> Defaults to false.
+		#                 'sameSite' (type: CookieSameSite) -> Defaults to browser default behavior.
+		#                 'expirationDate' (type: Timestamp) -> If omitted, the cookie becomes a session cookie.
+		# Returns:
+		#         'success' (type: boolean) -> True if successfully set cookie.
 
-			Parameters:
-			        Required arguments:
-			                'url' (type: string) -> The request-URI to associate with the setting of the cookie. This value can affect the default domain and path values of the created cookie.
-			                'name' (type: string) -> The name of the cookie.
-			                'value' (type: string) -> The value of the cookie.
-			        Optional arguments:
-			                'domain' (type: string) -> If omitted, the cookie becomes a host-only cookie.
-			                'path' (type: string) -> Defaults to the path portion of the url parameter.
-			                'secure' (type: boolean) -> Defaults ot false.
-			                'httpOnly' (type: boolean) -> Defaults to false.
-			                'sameSite' (type: CookieSameSite) -> Defaults to browser default behavior.
-			                'expirationDate' (type: Timestamp) -> If omitted, the cookie becomes a session cookie.
-			Returns:
-			        'success' (type: boolean) -> True if successfully set cookie.
-
-			Description: Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
-		'''
+		# Description: Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
 
 		assert isinstance(cookie, http.cookiejar.Cookie), 'The value passed to `set_cookie` must be an instance of http.cookiejar.Cookie().'
 
@@ -281,7 +277,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 	def clear_cookies(self):
 
 		canClear = self.Network_canClearBrowserCookies()
-		assert canClear['result']['result'] == True
+		assert canClear['result']['result'] is True
 		for cookie in self.Network_getAllCookies()['result']['cookies']:
 			self.Network_deleteCookie(cookieName=cookie['name'], url=cookie['domain'])
 		self.Network_clearBrowserCookies()
@@ -406,7 +402,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		        Description: Discards search results from the session with the given id. <code>getSearchResults</code> should no longer be called for that search.
 		'''
 
-		res = self.DOM_performSearch(search, False)
+		res = self.DOM_performSearch(search, includeUserAgentShadowDOM=False)
 		assert 'result' in res
 		assert 'searchId' in res['result']
 		searchid = res['result']['searchId']
@@ -511,7 +507,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		resp = self.blocking_navigate(url, timeout)
 		assert 'requestId' in resp
-		self.log.debug('blocking_navigate Response', resp)
+		self.log.debug('blocking_navigate Response %s', resp)
 
 		content = self.Network_getResponseBody(resp['requestId'])
 		assert 'result' in content
@@ -537,6 +533,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		page. For unmodified content, use `blocking_navigate_and_get_source()`
 		'''
 
+		# We have to find the DOM root node ID
 		dom_attr = self.DOM_getDocument(depth=-1, pierce=False)
 		assert 'result' in dom_attr
 		assert 'root' in dom_attr['result']
@@ -545,8 +542,12 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		# Now, we have the root node ID.
 		root_node_id = dom_attr['result']['root']['nodeId']
 
-		ret = self.DOM_getOuterHTML(nodeId=root_node_id)
-		return ret
+		# Use that to get the HTML for the specified node
+		response = self.DOM_getOuterHTML(nodeId=root_node_id)
+
+		assert 'result' in response
+		assert 'outerHTML' in response['result']
+		return response['result']['outerHTML']
 
 
 	def take_screeshot(self):
@@ -621,15 +622,17 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 					return False
 				if 'params' not in message:
 					return False
-				params = message['params']
 				return ret
+
 				# Disabled. See https://bugs.chromium.org/p/chromedriver/issues/detail?id=1387
+				# params = message['params']
 				# if 'frameId' not in params:
 				# 	return False
 				# if 'frameId' in params:
 				# 	ret = params['frameId'] == expected_id
 				# 	# print("frame_loading_tracker", message)
-				return False
+				# return False
+
 			return frame_loading_tracker
 
 		def check_load_event_fired(message):
@@ -669,13 +672,13 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 			return network_response_recieved_tracker
 
 
-		self.transport.recv_filtered(check_frame_navigated)
+		self.transport.recv_filtered(check_frame_navigated, tab_key=self.tab_id)
 
-		self.transport.recv_filtered(check_frame_load_command("Page.frameStartedLoading"))
-		self.transport.recv_filtered(check_frame_load_command("Page.frameStoppedLoading"))
-		# self.transport.recv_filtered(check_load_event_fired)
+		self.transport.recv_filtered(check_frame_load_command("Page.frameStartedLoading"), tab_key=self.tab_id)
+		self.transport.recv_filtered(check_frame_load_command("Page.frameStoppedLoading"), tab_key=self.tab_id)
+		# self.transport.recv_filtered(check_load_event_fired, tab_key=self.tab_id)
 
-		resp = self.transport.recv_filtered(network_response_recieved_for_url(url))
+		resp = self.transport.recv_filtered(network_response_recieved_for_url(url), tab_key=self.tab_id)
 
 		if resp is None:
 			raise ChromeNavigateTimedOut("Blocking navigate timed out!")

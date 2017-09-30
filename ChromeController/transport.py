@@ -86,6 +86,12 @@ class ChromeExecutionManager():
 										stderr=subprocess.PIPE)
 
 		self.log.debug("Spawned process: %s, PID: %s", self.cr_proc, self.cr_proc.pid)
+		for x in range(10):
+			try:
+				self.fetch_tablist()
+				return
+			except cr_exceptions.ChromeConnectFailure:
+				time.sleep(1)
 
 	def close_chromium(self):
 		'''
@@ -102,9 +108,9 @@ class ChromeExecutionManager():
 		if self.cr_proc:
 			self.log.debug("Sending sigint to chromium")
 			self.cr_proc.send_signal(signal.SIGINT)
-			self.cr_proc.terminate()
 			self.log.debug("Waiting for chromium to exit")
 			self.cr_proc.wait(timeout=5)
+			self.cr_proc.terminate()
 			self.log.debug("Pid: %s, Return code: %s", self.cr_proc.pid, self.cr_proc.returncode)
 			self.log.debug("Chromium closed!")
 
@@ -116,7 +122,7 @@ class ChromeExecutionManager():
 			raise cr_exceptions.ChromeError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
 
 
-	def connect(self, tab_key=None):
+	def connect(self, tab_key):
 		"""
 		Open a websocket connection to remote browser, determined by
 		self.host and self.port.  Each tab has it's own websocket
@@ -128,6 +134,7 @@ class ChromeExecutionManager():
 
 		if tab_key not in self.tab_idx_map:
 			tab_idx = len(self.tab_idx_map)
+			self.tab_idx_map[tab_key] = tab_idx
 		else:
 			tab_idx = self.tab_idx_map[tab_key]
 
@@ -136,27 +143,36 @@ class ChromeExecutionManager():
 
 		self.pprint_tablist()
 
-		# If we're one past the end of the tablist, we need to create a new tab
-		if tab_idx == len(self.tablist):
-			self.log.debug("Creating new tab")
-			self.__create_new_tab()
-		elif tab_idx >= len(self.tablist):
+		print('tab_key', tab_key)
+		print('self.tab_idx_map', self.tab_idx_map)
+		print('len(self.tablist)', len(self.tablist))
+
+		if tab_idx >= len(self.tablist):
 			raise cr_exceptions.ChromeConnectFailure("Tab %s not found in tablist (%s)" % (tab_idx, self.tablist))
 
 		for fails in range(9999):
 			try:
-				self.tablist = self.fetch_tablist()
+
+				# If we're one past the end of the tablist, we need to create a new tab
+				if tab_idx == len(self.tablist):
+					self.log.debug("Creating new tab")
+					self.__create_new_tab()
 
 
 				if not 'webSocketDebuggerUrl' in self.tablist[tab_idx]:
 					raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)" % (tab_idx, self.tablist))
 				break
 			except cr_exceptions.ChromeConnectFailure as e:
-				if fails > 5:
+				if fails > 6:
 					self.log.error("Failed to fetch tab websocket URL after %s retries. Aborting!" % fails)
 					raise e
 				self.log.info("Tab may not have started yet. Waiting.")
 				self.log.info("Tag: %s", self.tablist[tab_idx])
+
+				# we recreate the tab periodically because sometimes they just seem to get stuck.
+				if fails % 3 == 0:
+					self.__close_tab(tab_idx)
+
 				time.sleep(1)
 
 		if self.tablist and tab_idx not in self.tablist:
@@ -186,20 +202,20 @@ class ChromeExecutionManager():
 		try:
 			response = requests.get(url)
 			print("Newtab: ", response)
+			self.tablist = self.fetch_tablist()
 		except requests.exceptions.ConnectionError:
 			raise cr_exceptions.ChromeConnectFailure("Failed to create a new tab in remote chromium!")
 
 
-	# def close_tab(self, tab_id, timeout=None):
-	#     if isinstance(tab_id, Tab):
-	#         tab_id = tab_id.id
+	def __close_tab(self, tab_idx, timeout=None):
 
-	#     tab = self._tabs.pop(tab_id, None)
-	#     if tab and tab.status == Tab.status_started:  # pragma: no cover
-	#         tab.stop()
+		tab_id = self.tablist[tab_idx]['id']
+		url = "http://%s:%s/json/close/%s" % (self.host, self.port, tab_id)
+		requests.get(url, timeout=timeout)
 
-	#     rp = requests.get("%s/json/close/%s" % (self.dev_url, tab_id), timeout=timeout)
-	#     return rp.text
+		self.tablist = self.fetch_tablist()
+
+		return
 
 	# def version(self, timeout=None):
 	#     rp = requests.get("%s/json/version" % self.dev_url, json=True, timeout=timeout)
@@ -241,7 +257,6 @@ class ChromeExecutionManager():
 		remote chrome instance, returning the response from the chrome instance.
 
 		"""
-
 		self.log.debug("Synchronous_command to tab %s:", tab_key)
 		self.log.debug("	command: '%s'", command)
 		self.log.debug("	params:  '%s'", params)
@@ -406,7 +421,9 @@ class ChromeExecutionManager():
 			tmp = self.___recv(tab_key)
 		return ret
 
-
+	def __del__(self):
+		self.log.debug("Transport destructor called. Tearing down chromium")
+		self.close_chromium()
 
 if __name__ == '__main__':
 	import doctest

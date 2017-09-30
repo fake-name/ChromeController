@@ -1,6 +1,8 @@
 
 import time
+import traceback
 import pprint
+import gc
 import uuid
 import logging
 
@@ -23,7 +25,7 @@ class ChromeInterface():
 
 		The chromium binary is launched with the arg `--remote-debugging-port={dbg_port}` if found.
 
-		Note that the dbg_port must be GLOBALLY unique on a per-computer basis. If not specified, it
+		Note that the dbg_port must be GLOBALLY unique on a PER-COMPUTER basis. If not specified, it
 		defaults to 9222.
 
 		Duplication of the dbg_port parameter can often lead to cr_exceptions.ChromeStartupException
@@ -32,6 +34,14 @@ class ChromeInterface():
 		at once.
 
 		"""
+
+		# Force cleanup of dangling processes (if any)
+		# This is needed because the deletion of active chromium processes
+		# can occur dignificantly after the corresponding object goes out-of-scope, which
+		# leads to connecting to the wrong process, and then when it is GC'ed,
+		# you get a connection-died error.
+		gc.collect()
+
 		self.log = logging.getLogger("Main.ChromeController.Interface")
 		if use_execution_manager:
 			self.transport, self.tab_id = use_execution_manager
@@ -50,7 +60,9 @@ class ChromeInterface():
 					self.transport.check_process_ded()
 
 				except cr_exceptions.ChromeConnectFailure:
-
+					self.log.debug("Failure starting chromium. Retrying.")
+					for line in traceback.format_exc().split("\n"):
+						self.log.debug(line)
 					time.sleep(1)
 
 			if not self.transport:
