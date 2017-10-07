@@ -1,4 +1,6 @@
 
+from .chrome_context import ChromeContext
+
 from .transport import ChromeExecutionManager
 from .manager import ChromeRemoteDebugInterface
 from .Generator import gen

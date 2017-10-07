@@ -8,7 +8,7 @@ setup(
 	name="ChromeController",
 
 	# Version number (initial):
-	version="0.1.0",
+	version="0.1.1",
 
 	# Application author details:
 	author="Connor Wolf	",
@@ -39,5 +39,6 @@ setup(
 		'websocket-client',
 		'astor>=0.6',
 		'requests',
+		'cachetools',
 	],
 )

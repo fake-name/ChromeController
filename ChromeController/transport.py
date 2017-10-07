@@ -11,11 +11,14 @@ import pprint
 import logging
 import os.path
 import requests
+import traceback
 import signal
 import websocket
 import subprocess
 import distutils.spawn
 from . import cr_exceptions
+
+ACTIVE_PORTS = set()
 
 class ChromeExecutionManager():
 	"""
@@ -23,7 +26,7 @@ class ChromeExecutionManager():
 
 	> a = ChromeSocketManager(host='localhost', port=9222)
 
-	   """
+	"""
 
 	def __init__(self,
 			binary,
@@ -40,10 +43,19 @@ class ChromeExecutionManager():
 		Assumes remote is listening for websocket connections.
 
 		"""
+
 		self.binary = binary
 		self.host = host
 		if port is None:
 			port = 9222
+			while port in ACTIVE_PORTS:
+				port += 1
+
+		if port in ACTIVE_PORTS:
+			raise cr_exceptions.ReusedPortError("Attempting to start chromium using a already-in-use debug port (%s, %s)!" % (port, ACTIVE_PORTS))
+
+		ACTIVE_PORTS.add(port)
+
 		self.port = port
 		self.msg_id = 0
 		self.timeout = timeout
@@ -90,7 +102,9 @@ class ChromeExecutionManager():
 			try:
 				self.fetch_tablist()
 				return
-			except cr_exceptions.ChromeConnectFailure:
+			except cr_exceptions.ChromeConnectFailure as e:
+				if x > 8:
+					raise e
 				time.sleep(1)
 
 	def close_chromium(self):
@@ -116,6 +130,8 @@ class ChromeExecutionManager():
 				self.log.debug("Process exited normally, no need to terminate.")
 			self.log.debug("Pid: %s, Return code: %s", self.cr_proc.pid, self.cr_proc.returncode)
 			self.log.debug("Chromium closed!")
+
+		ACTIVE_PORTS.discard(self.port)
 
 
 	def check_process_ded(self):
@@ -144,27 +160,23 @@ class ChromeExecutionManager():
 		if not self.tablist or (self.tablist and tab_idx not in self.tablist):
 			self.tablist = self.fetch_tablist()
 
-		self.pprint_tablist()
-
-		# print('tab_key', tab_key)
-		# print('self.tab_idx_map', self.tab_idx_map)
-		# print('len(self.tablist)', len(self.tablist))
-
-		if tab_idx >= len(self.tablist):
+		# If we're one past the end of the tab list, we can create a new tab, so we
+		# use > rather then >=
+		if tab_idx > len(self.tablist):
 			raise cr_exceptions.ChromeConnectFailure("Tab %s not found in tablist (%s)" % (tab_idx, self.tablist))
 
 		for fails in range(9999):
 			try:
-
 				# If we're one past the end of the tablist, we need to create a new tab
 				if tab_idx == len(self.tablist):
 					self.log.debug("Creating new tab")
 					self.__create_new_tab()
 
-
 				if not 'webSocketDebuggerUrl' in self.tablist[tab_idx]:
 					raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)" % (tab_idx, self.tablist))
+
 				break
+
 			except cr_exceptions.ChromeConnectFailure as e:
 				if fails > 6:
 					self.log.error("Failed to fetch tab websocket URL after %s retries. Aborting!" % fails)
@@ -177,9 +189,6 @@ class ChromeExecutionManager():
 					self.__close_tab(tab_idx)
 
 				time.sleep(1)
-
-		# if self.tablist and tab_idx not in self.tablist:
-		# 	print("Tab list:", self.tablist)
 
 		wsurl = self.tablist[tab_idx]['webSocketDebuggerUrl']
 
@@ -426,7 +435,12 @@ class ChromeExecutionManager():
 
 	def __del__(self):
 		self.log.debug("Transport destructor called. Tearing down chromium")
-		self.close_chromium()
+		try:
+			self.close_chromium()
+		except Exception:
+			pass
+
+		ACTIVE_PORTS.discard(self.port)
 
 if __name__ == '__main__':
 	import doctest

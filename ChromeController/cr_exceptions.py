@@ -5,6 +5,9 @@ class ChromeControllerException(RuntimeError):
 class ChromeStartupException(ChromeControllerException):
 	pass
 
+class ReusedPortError(ChromeStartupException):
+	pass
+
 class ChromeConnectFailure(ChromeControllerException):
 	pass
 

@@ -26,7 +26,7 @@ class ChromeInterface():
 		The chromium binary is launched with the arg `--remote-debugging-port={dbg_port}` if found.
 
 		Note that the dbg_port must be GLOBALLY unique on a PER-COMPUTER basis. If not specified, it
-		defaults to 9222.
+		will default to an unused port >= 9222.
 
 		Duplication of the dbg_port parameter can often lead to cr_exceptions.ChromeStartupException
 		exceptions. If these happen, you may need to call ChromeInterface.close() to force shutdown
@@ -42,9 +42,13 @@ class ChromeInterface():
 		# you get a connection-died error.
 		gc.collect()
 
+
+
 		self.log = logging.getLogger("Main.ChromeController.Interface")
 		if use_execution_manager:
 			self.transport, self.tab_id = use_execution_manager
+			self.transport.connect(tab_key = self.tab_id)
+
 		else:
 			self.log.debug("Binary: %s", binary)
 			self.log.debug("Args: %s", args)
@@ -108,13 +112,14 @@ class ChromeInterface():
 
 		'''
 		self.transport.check_process_ded()
-		return self.transport.drain()
+		return self.transport.drain(tab_key=self.tab_id)
 
 	def new_tab(self):
 		new = self.__class__(use_execution_manager=(self.transport, uuid.uuid4()))
 		return new
 
 	def close(self):
+		self.transport.close_chromium()
 		gc.collect()
 
 

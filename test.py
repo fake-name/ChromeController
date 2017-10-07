@@ -197,38 +197,38 @@ def test():
 	# pprint.pprint(cr.drain_transport())
 
 def test_cycle():
-	for x in range(5):
-		print("Looping:", x)
+	for x in range(15):
 		crbin = "google-chrome"
-		cr = ChromeController.ChromeRemoteDebugInterface(crbin)
-		print("deleting....")
-		del cr
-		print("Deleted")
-		time.sleep(3)
+		print("Starting loop %s" % x)
+		with ChromeController.ChromeContext(crbin) as cr:
+			print("Looping:", x)
+			print(cr)
+			cr.blocking_navigate('http://www.google.com')
+			print("Deleted")
+			print("Ending loop %s" % x)
 
 def test_tabs():
 	crbin = "google-chrome"
-	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
-	tabl = []
-	for x in range(10):
-
-		cr_2 = cr.new_tab()
-		tabl.append(cr_2)
-		print("Looping:", x)
+	with ChromeController.ChromeContext(crbin) as cr:
+		tabl = []
+		for x in range(10):
+			cr_2 = cr.new_tab()
+			tabl.append(cr_2)
+			print("Looping:", x)
 
 def test_url():
 
 	crbin = "google-chrome"
-	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin, dbg_port=9232)
+	with ChromeController.ChromeContext(crbin) as cr:
 
-	resp = cr.blocking_navigate("http://www.google.com", timeout=10)
-	print("Current URL:", cr.get_current_url())
-	# cr.close()
+		resp = cr.blocking_navigate("http://www.google.com", timeout=10)
+		print("Current URL:", cr.get_current_url())
+		# cr.close()
 
 def test_rendered_fetch():
 
 	crbin = "google-chrome"
-	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin, dbg_port=9232)
+	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin)
 
 	resp = cr.blocking_navigate("https://www.catatopatch.com/appraise-chapter-15", timeout=10)
 	print("Current URL:", cr.get_current_url())
@@ -239,10 +239,10 @@ def test_rendered_fetch():
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG)
 	# test()
-	# test_tabs()
+	test_tabs()
+	test_cycle()
 	test_rendered_fetch()
 
-	# test_cycle()
 	# test_url()
 	# test_delete_cookies()
 	# docstring_dbg()

@@ -32,8 +32,6 @@ except ImportError:
 		raise RuntimeError("Generated class wrapper doesn't exist, and couldn't be created!")
 
 
-
-
 DEFAULT_TIMEOUT_SECS = 10
 
 class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
