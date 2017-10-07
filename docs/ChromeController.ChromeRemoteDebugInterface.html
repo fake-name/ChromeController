@@ -27,7 +27,7 @@ if&nbsp;not&nbsp;specified&nbsp;in&nbsp;the&nbsp;`binary`&nbsp;parameter.<br>
 The&nbsp;chromium&nbsp;binary&nbsp;is&nbsp;launched&nbsp;with&nbsp;the&nbsp;arg&nbsp;`--remote-debugging-port={dbg_port}`&nbsp;if&nbsp;found.<br>
 &nbsp;<br>
 Note&nbsp;that&nbsp;the&nbsp;dbg_port&nbsp;must&nbsp;be&nbsp;GLOBALLY&nbsp;unique&nbsp;on&nbsp;a&nbsp;PER-COMPUTER&nbsp;basis.&nbsp;If&nbsp;not&nbsp;specified,&nbsp;it<br>
-defaults&nbsp;to&nbsp;9222.<br>
+will&nbsp;default&nbsp;to&nbsp;an&nbsp;unused&nbsp;port&nbsp;&gt;=&nbsp;9222.<br>
 &nbsp;<br>
 Duplication&nbsp;of&nbsp;the&nbsp;dbg_port&nbsp;parameter&nbsp;can&nbsp;often&nbsp;lead&nbsp;to&nbsp;cr_exceptions.ChromeStartupException<br>
 exceptions.&nbsp;If&nbsp;these&nbsp;happen,&nbsp;you&nbsp;may&nbsp;need&nbsp;to&nbsp;call&nbsp;ChromeInterface.<a href="#ChromeController.ChromeRemoteDebugInterface-close">close</a>()&nbsp;to&nbsp;force&nbsp;shutdown<br>
