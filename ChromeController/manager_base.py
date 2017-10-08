@@ -43,11 +43,10 @@ class ChromeInterface():
 		gc.collect()
 
 
-
 		self.log = logging.getLogger("Main.ChromeController.Interface")
 		if use_execution_manager:
 			self.transport, self.tab_id = use_execution_manager
-			self.transport.connect(tab_key = self.tab_id)
+			# self.transport.connect(tab_key = self.tab_id)
 
 		else:
 			self.log.debug("Binary: %s", binary)
@@ -56,21 +55,8 @@ class ChromeInterface():
 
 			self.tab_id = uuid.uuid4()
 
-			self.transport = None
-			# Allow the subprocess to start.
-			for x in range(3):
-				try:
-					self.transport = ChromeExecutionManager(binary=binary, port=dbg_port, base_tab_key=self.tab_id)
-					self.transport.check_process_ded()
-
-				except cr_exceptions.ChromeConnectFailure:
-					self.log.debug("Failure starting chromium. Retrying.")
-					for line in traceback.format_exc().split("\n"):
-						self.log.debug(line)
-					time.sleep(1)
-
-			if not self.transport:
-				raise cr_exceptions.ChromeStartupException("Could not start chromium! This can be caused by dangling chromium processes.")
+			self.transport = ChromeExecutionManager(binary=binary, port=dbg_port, base_tab_key=self.tab_id)
+			self.transport.check_process_ded()
 
 
 	def __check_ret(self, ret):
@@ -119,7 +105,7 @@ class ChromeInterface():
 		return new
 
 	def close(self):
-		self.transport.close_chromium()
+		self.transport.close_tab(tab_key=self.tab_id)
 		gc.collect()
 
 

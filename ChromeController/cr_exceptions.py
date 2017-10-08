@@ -13,6 +13,8 @@ class ChromeConnectFailure(ChromeControllerException):
 
 class ChromeCommunicationsError(ChromeControllerException):
 	pass
+class ChromeTabNotFoundError(ChromeCommunicationsError):
+	pass
 
 class ChromeError(ChromeControllerException):
 	pass

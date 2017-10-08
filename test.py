@@ -197,8 +197,8 @@ def test():
 	# pprint.pprint(cr.drain_transport())
 
 def test_cycle():
-	for x in range(15):
-		crbin = "google-chrome"
+	crbin = "google-chrome"
+	for x in range(30):
 		print("Starting loop %s" % x)
 		with ChromeController.ChromeContext(crbin) as cr:
 			print("Looping:", x)
@@ -210,17 +210,23 @@ def test_cycle():
 def test_tabs():
 	crbin = "google-chrome"
 	with ChromeController.ChromeContext(crbin) as cr:
-		tabl = []
-		for x in range(10):
-			cr_2 = cr.new_tab()
-			tabl.append(cr_2)
-			print("Looping:", x)
+		print("Context manager entered")
+		tabl = [cr.new_tab(), cr.new_tab(), cr]
+
+		print("Tabs:", tabl)
+		print("Transport:")
+		print(tabl[0].transport)
+		# cr.blocking_navigate("http://www.google.com", timeout=10)
+		print("Loop")
+		for idx, tab in enumerate(tabl):
+			print("Fetching using tab %s -> %s" % (idx, tab))
+			tab.blocking_navigate("http://www.google.com", timeout=10)
+		print("Complete")
 
 def test_url():
 
 	crbin = "google-chrome"
 	with ChromeController.ChromeContext(crbin) as cr:
-
 		resp = cr.blocking_navigate("http://www.google.com", timeout=10)
 		print("Current URL:", cr.get_current_url())
 		# cr.close()
@@ -237,11 +243,12 @@ def test_rendered_fetch():
 	# cr.close()
 
 if __name__ == '__main__':
-	logging.basicConfig(level=logging.DEBUG)
+	import logSetup
+	logSetup.initLogging(logging.DEBUG)
 	# test()
 	test_tabs()
-	test_cycle()
-	test_rendered_fetch()
+	# test_cycle()
+	# test_rendered_fetch()
 
 	# test_url()
 	# test_delete_cookies()
