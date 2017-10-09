@@ -10,7 +10,8 @@ import ChromeController
 
 with ChromeController.ChromeContext(binary="google-chrome") as cr:
     
-    # Do a blocking navigate to a URL, and get the page content as served to the browser
+    # Do a blocking navigate to a URL, and get the page content as served by the remote
+    # server, with no modification by local javascript (if applicable)
     raw_source = cr.blocking_navigate_and_get_source("http://www.google.com")
     
     # Since the page is now rendered by the blocking navigate, we can
@@ -20,7 +21,7 @@ with ChromeController.ChromeContext(binary="google-chrome") as cr:
     # We can get the current browser URL, after any redirects.
     current_url = cr.get_current_url()
     
-    # We can get the page title
+    # We can get the page title as the browser sees it.
     page_title, page_url = cr.get_page_url_title()
     
     # Or take a screenshot
@@ -50,6 +51,17 @@ with ChromeController.ChromeContext(binary="google-chrome") as cr:
     # directly.
     cook = http.cookiejar.Cookie(<params>)
     cr.set_cookie(cook)
+
+    # We can create more tabs in the current browser context.
+    # Note that these additional tabs are scoped to the same lifetime as the original 
+    # chromium object (`cr`), so they will become invalid after leaving the 
+    # ChromeContext() context manager.
+    tab_2 = cr.new_tab()
+    tab_3 = cr.new_tab()
+
+    # At this time, multiple tabs are not thread safe, so they *probably* shouldn't 
+    # be accessed concurrently. This *is* something that I'd like to change.
+
 ```
 
 This library makes extensive use of the python `logging` framework, and logs to 
