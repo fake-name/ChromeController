@@ -6,7 +6,6 @@ Remote Debugger protocol.
 #### Quickstart:
 
 ```
-
 import ChromeController
 
 with ChromeController.ChromeContext(binary="google-chrome") as cr:
@@ -51,7 +50,6 @@ with ChromeController.ChromeContext(binary="google-chrome") as cr:
     # directly.
     cook = http.cookiejar.Cookie(<params>)
     cr.set_cookie(cook)
-
 ```
 
 This library makes extensive use of the python `logging` framework, and logs to 
