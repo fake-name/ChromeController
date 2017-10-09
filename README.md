@@ -5,7 +5,7 @@ Remote Debugger protocol.
 
 #### Quickstart:
 
-```
+```python
 import ChromeController
 
 with ChromeController.ChromeContext(binary="google-chrome") as cr:
