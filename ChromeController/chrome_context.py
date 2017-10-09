@@ -17,7 +17,7 @@ def ChromeContext(*args, **kwargs):
 	log = logging.getLogger("Main.ChromeController.ChromeContext")
 	try:
 		chrome_instance = ChromeRemoteDebugInterface(*args, **kwargs)
-		log.warn("Entering chrome context")
+		log.info("Entering chrome context")
 		yield chrome_instance
 	except Exception as e:
 
@@ -27,7 +27,7 @@ def ChromeContext(*args, **kwargs):
 		raise e
 
 	finally:
-		log.warn("Exiting chrome context")
+		log.info("Exiting chrome context")
 		chrome_instance.close()
 
 

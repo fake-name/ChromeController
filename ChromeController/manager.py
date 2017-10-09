@@ -46,6 +46,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		resp2 = self.DOM_enable()
 		resp3 = self.Network_enable()
 
+		resp4 = self.Emulation_setVisibleSize(1024, 1366)
 		# cr_ver = self.Browser_getVersion()
 		# self.log.debug("Remote browser version info:")
 		# self.log.debug(str(cr_ver))
@@ -317,12 +318,13 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		Return is a 2-tuple: (page_title, page_url).
 
-		Note that this will raise an exception if more then one tab are open in the remote session.
 		'''
+
+		tab_idx = self.transport._get_tab_idx_for_key(self.tab_id)
 		targets = self.Target_getTargets()
 		assert 'result' in targets
 		assert 'targetInfos' in targets['result']
-		assert len(targets['result']['targetInfos']) == 1
+		assert len(targets['result']['targetInfos']) > tab_idx
 
 		# {
 		# 	'title': 'Page Title 1',
@@ -332,7 +334,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		# 	'type': 'page'
 		# }
 
-		meta    = targets['result']['targetInfos'][0]
+		meta    = targets['result']['targetInfos'][tab_idx]
 		title   = meta['title']
 		cur_url = meta['url']
 		return title, cur_url

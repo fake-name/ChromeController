@@ -130,7 +130,6 @@ class ChromeExecutionManager():
 		Note that if you are rapidly creating and destroying ChromeController instances,
 		you may need to *explicitly* call this before destruction.
 		'''
-		self.log.info("close_chromium")
 		if self.cr_proc:
 			self.log.debug("Sending sigint to chromium")
 			self.cr_proc.send_signal(signal.SIGINT)
@@ -152,7 +151,7 @@ class ChromeExecutionManager():
 			stdout, stderr = self.cr_proc.communicate()
 			raise cr_exceptions.ChromeError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
 
-	def __get_tab_idx_for_key(self, tab_key):
+	def _get_tab_idx_for_key(self, tab_key):
 
 		if tab_key not in self.tab_id_map:
 			return None
@@ -183,9 +182,8 @@ class ChromeExecutionManager():
 
 		assert self.tablist is not None
 
-		tab_idx = self.__get_tab_idx_for_key(tab_key)
+		tab_idx = self._get_tab_idx_for_key(tab_key)
 
-		print("tab idx %s" % (tab_idx, ))
 		if not self.tablist:
 			self.tablist = self.fetch_tablist()
 
@@ -219,7 +217,7 @@ class ChromeExecutionManager():
 	def pprint_tablist(self):
 		self.log.info("Tablist type: %s", type(self.tablist))
 		for line in pprint.pformat(list(enumerate(self.tablist))).split("\n"):
-			self.log.info("%s", line)
+			self.log.info("	%s", line)
 
 	def __create_new_tab(self, tab_key, start_at_url=None):
 		url = "http://%s:%s/json/new" % (self.host, self.port)
@@ -228,9 +226,14 @@ class ChromeExecutionManager():
 		try:
 			requests.get(url)
 			self.tablist = self.fetch_tablist()
+			known_tabs = list(self.tab_id_map.values())
+			for tab in self.tablist:
 
-			self.tab_id_map[tab_key] = self.tablist[-1]['id']
-			print("Newtab: ", self.tablist[-1]['id'])
+				# Glom onto the first tab in the tablist that's not known.
+				if tab['id'] not in known_tabs:
+					self.tab_id_map[tab_key] = tab['id']
+					return
+
 
 		except requests.exceptions.ConnectionError:
 			raise cr_exceptions.ChromeConnectFailure("Failed to create a new tab in remote chromium!")
@@ -238,7 +241,7 @@ class ChromeExecutionManager():
 	def __connect_to_tab(self, tab_key):
 		assert tab_key not in self.soclist
 
-		tab_idx = self.__get_tab_idx_for_key(tab_key)
+		tab_idx = self._get_tab_idx_for_key(tab_key)
 
 		if not 'webSocketDebuggerUrl' in self.tablist[-1]:
 			raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)" % (tab_idx, self.tablist))
@@ -258,7 +261,6 @@ class ChromeExecutionManager():
 		# traceback.print_stack()
 
 		cr_tab_id = self.tab_id_map[tab_key]
-		print("__close_tab called for key %s (cr: %s)" % (tab_key, cr_tab_id))
 
 		url = "http://%s:%s/json/close/%s" % (self.host, self.port, cr_tab_id)
 		requests.get(url, timeout=timeout)
@@ -273,18 +275,18 @@ class ChromeExecutionManager():
 		return self.tablist
 
 	def close_tab(self, tab_key):
-		self.log.warning("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key])
+		self.log.info("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key])
 		self.__close_tab(tab_key)
 
 		# If we've closed all the chrome tabs, shut down the interface.
 		if len(self.tab_id_map) == 0:
-			self.log.warning("All tabs are closed. Closing chromium!")
+			self.log.info("All tabs are closed. Closing chromium!")
 			self.close_websockets()
 			self.close_chromium()
 
 	def close_websockets(self):
 		""" Close websocket connection to remote browser."""
-		self.log.error("Websocket Teardown called")
+		self.log.info("Websocket Teardown called")
 		for key in list(self.soclist.keys()):
 			if self.soclist[key]:
 				self.soclist[key].close()
@@ -305,7 +307,7 @@ class ChromeExecutionManager():
 		return tablist
 
 	def __check_open_socket(self, tab_key):
-		self.log.info("__check_open_socket -> %s", tab_key)
+		# self.log.info("__check_open_socket -> %s", tab_key)
 		if not tab_key in self.soclist:
 			self.connect(tab_key=tab_key)
 		if self.soclist[tab_key].connected is not True:
@@ -318,15 +320,15 @@ class ChromeExecutionManager():
 		remote chrome instance, returning the response from the chrome instance.
 
 		"""
-		self.log.debug("Synchronous_command to tab %s (%s):", tab_key, self.__get_tab_idx_for_key(tab_key))
-		# self.log.debug("	command: '%s'", command)
-		# self.log.debug("	params:  '%s'", params)
-		# self.log.debug("	tab_key:  '%s'", tab_key)
+		self.log.debug("Synchronous_command to tab %s (%s):", tab_key, self._get_tab_idx_for_key(tab_key))
+		self.log.debug("	command: '%s'", command)
+		self.log.debug("	params:  '%s'", params)
+		self.log.debug("	tab_key:  '%s'", tab_key)
 
 		send_id = self.send(command=command, tab_key=tab_key, params=params)
 		resp = self.recv(message_id=send_id, tab_key=tab_key)
 
-		# self.log.debug("	Response: '%s'", str(resp).encode("ascii", 'ignore').decode("ascii"))
+		self.log.debug("	Response: '%s'", str(resp).encode("ascii", 'ignore').decode("ascii"))
 
 		# self.log.debug("	resolved tab idx %s:", self.tab_id_map[tab_key])
 		return resp
@@ -372,7 +374,7 @@ class ChromeExecutionManager():
 	def ___recv(self, tab_key):
 		try:
 			tmp = self.soclist[tab_key].recv()
-			# self.log.debug("		Received: '%s'", tmp)
+			self.log.debug("		Received: '%s'", tmp)
 
 			decoded = json.loads(tmp)
 			return decoded

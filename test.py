@@ -209,26 +209,37 @@ def test_cycle():
 
 def test_tabs():
 	crbin = "google-chrome"
-	with ChromeController.ChromeContext(crbin) as cr:
-		print("Context manager entered")
-		tabl = [cr.new_tab(), cr.new_tab(), cr]
+	for x in range(30):
 
-		print("Tabs:", tabl)
-		print("Transport:")
-		print(tabl[0].transport)
-		# cr.blocking_navigate("http://www.google.com", timeout=10)
-		print("Loop")
-		for idx, tab in enumerate(tabl):
-			print("Fetching using tab %s -> %s" % (idx, tab))
-			tab.blocking_navigate("http://www.google.com", timeout=10)
-		print("Complete")
+		with ChromeController.ChromeContext(binary="google-chrome") as cr:
+			print("Context manager entered")
+			tabl = [cr.new_tab(), cr.new_tab(), cr]
+
+			print("Tabs:", tabl)
+			print("Transport:")
+			print(tabl[0].transport)
+			# cr.blocking_navigate("http://www.google.com", timeout=10)
+			print("Loop")
+			for idx, tab in enumerate(tabl):
+				print("Fetching using tab %s -> %s" % (idx, tab))
+				tab.blocking_navigate("http://www.google.com", timeout=10)
+			print("Complete")
 
 def test_url():
 
 	crbin = "google-chrome"
 	with ChromeController.ChromeContext(crbin) as cr:
-		resp = cr.blocking_navigate("http://www.google.com", timeout=10)
+		cr.blocking_navigate("http://www.google.com", timeout=10)
 		print("Current URL:", cr.get_current_url())
+		# cr.close()
+
+def test_title():
+
+	crbin = "google-chrome"
+	with ChromeController.ChromeContext(crbin) as cr:
+		cr.blocking_navigate("http://www.google.com", timeout=10)
+		print("Current URL:", cr.get_current_url())
+		print(cr.get_page_url_title())
 		# cr.close()
 
 def test_rendered_fetch():
@@ -246,7 +257,8 @@ if __name__ == '__main__':
 	import logSetup
 	logSetup.initLogging(logging.DEBUG)
 	# test()
-	test_tabs()
+	test_title()
+	# test_tabs()
 	# test_cycle()
 	# test_rendered_fetch()
 
