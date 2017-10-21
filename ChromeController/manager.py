@@ -258,7 +258,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 				'domain'   : cookie.domain,
 				'path'     : cookie.path,
 				'secure'   : cookie.secure,
-				'expires'  : cookie.expires,
+				'expires'  : float(cookie.expires) if cookie.expires else float(2**32),
 
 				'httpOnly' : is_http_only,
 
