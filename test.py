@@ -47,49 +47,57 @@ def test_delete_cookies():
 		resp = cr.blocking_navigate_and_get_source("http://goat.com", timeout=10)
 	except Exception as e:
 		raise e
-	print("Doing cookie clear")
-	res = cr.Network_clearBrowserCookies()
-	print("Cookie clear result: ", res)
-	print("sleeping 15")
-	time.sleep(15)
-	print("Sampling cookies #3")
-	cooks3 = cr.Network_getAllCookies()['result']['cookies']
-	print("Doing cookie clear")
-	res = cr.Network_clearBrowserCookies()
-	print("Cookie clear result: ", res)
-	print("sleeping 15")
-	time.sleep(15)
-	print("Sampling cookies #4")
-	cooks4 = cr.Network_getAllCookies()['result']['cookies']
+
+	cooks6 = cr.get_cookies()
+
+	print("Cookies: ", cooks6)
+	for cook in cooks6:
+		cr.set_cookie(cook)
+
+	print("Set cookies")
+	# print("Doing cookie clear")
+	# res = cr.Network_clearBrowserCookies()
+	# print("Cookie clear result: ", res)
+	# print("sleeping 15")
+	# time.sleep(15)
+	# print("Sampling cookies #3")
+	# cooks3 = cr.Network_getAllCookies()['result']['cookies']
+	# print("Doing cookie clear")
+	# res = cr.Network_clearBrowserCookies()
+	# print("Cookie clear result: ", res)
+	# print("sleeping 15")
+	# time.sleep(15)
+	# print("Sampling cookies #4")
+	# cooks4 = cr.Network_getAllCookies()['result']['cookies']
 
 
-	print("Doing cookie clear")
-	res = cr.clear_cookies()
-	print("Cookie clear result: ", res)
-	print("sleeping 15")
-	time.sleep(15)
-	print("Sampling cookies #4")
-	cooks5 = cr.Network_getAllCookies()['result']['cookies']
+	# print("Doing cookie clear")
+	# res = cr.clear_cookies()
+	# print("Cookie clear result: ", res)
+	# print("sleeping 15")
+	# time.sleep(15)
+	# print("Sampling cookies #4")
+	# cooks5 = cr.Network_getAllCookies()['result']['cookies']
 
 
-	print()
-	print("Uncleared Cookies (#1):")
-	for cookie1 in cooks1:
-		print("	", cookie1)
+	# print()
+	# print("Uncleared Cookies (#1):")
+	# for cookie1 in cooks1:
+	# 	print("	", cookie1)
 
-	print()
-	print("Cleared cookies (#2):")
-	for cookie2 in cooks2:
-		print("	", cookie2)
+	# print()
+	# print("Cleared cookies (#2):")
+	# for cookie2 in cooks2:
+	# 	print("	", cookie2)
 
-	print()
-	print("Navigated and cleared cookies after delay (#3):")
-	for cookie3 in cooks3:
-		print("	", cookie3)
-	print()
-	print("Navigated and cleared cookies after another delay (#4):")
-	for cookie4 in cooks3:
-		print("	", cookie4)
+	# print()
+	# print("Navigated and cleared cookies after delay (#3):")
+	# for cookie3 in cooks3:
+	# 	print("	", cookie3)
+	# print()
+	# print("Navigated and cleared cookies after another delay (#4):")
+	# for cookie4 in cooks3:
+	# 	print("	", cookie4)
 
 
 def test():
@@ -257,11 +265,11 @@ if __name__ == '__main__':
 	import logSetup
 	logSetup.initLogging(logging.DEBUG)
 	# test()
-	test_title()
-	test_tabs()
-	test_cycle()
-	test_rendered_fetch()
+	test_delete_cookies()
+	# test_title()
+	# test_tabs()
+	# test_cycle()
+	# test_rendered_fetch()
 
-	test_url()
-	# test_delete_cookies()
+	# test_url()
 	# docstring_dbg()
