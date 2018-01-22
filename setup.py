@@ -8,7 +8,7 @@ setup(
 	name="ChromeController",
 
 	# Version number (initial):
-	version="0.1.2",
+	version="0.1.3",
 
 	# Application author details:
 	author="Connor Wolf	",
@@ -40,5 +40,6 @@ setup(
 		'astor>=0.6',
 		'requests',
 		'cachetools',
+		'webrequest',
 	],
 )

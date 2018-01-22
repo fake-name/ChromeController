@@ -72,7 +72,17 @@ class ChromeExecutionManager():
 
 
 		self.log.info("Launching binary %s", self.binary)
-		self._launch_process(self.binary, self.port, base_tab_key)
+
+		# We retry starting chromium a few times, because it's either brittle
+		# or sometimes takes more then 10 seconds to start.
+		# Not sure which.
+		for x in range(999):
+			try:
+				self._launch_process(self.binary, self.port, base_tab_key)
+				break
+			except cr_exceptions.ChromeConnectFailure:
+				if x > 3:
+					raise
 
 		# self.log.info("Connecting to %s:%s", self.host, self.port)
 		# self.connect(base_tab_key)
@@ -104,7 +114,7 @@ class ChromeExecutionManager():
 										stderr=subprocess.PIPE)
 
 		self.log.debug("Spawned process: %s, PID: %s", self.cr_proc, self.cr_proc.pid)
-		for x in range(10):
+		for x in range(100):
 			try:
 				self.tablist = self.fetch_tablist()
 
@@ -117,7 +127,7 @@ class ChromeExecutionManager():
 			except cr_exceptions.ChromeConnectFailure as e:
 				if x > 8:
 					raise e
-				time.sleep(1)
+				time.sleep(2)
 
 	def close_chromium(self):
 		'''
