@@ -95,7 +95,6 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		The presence of semicolons not enclosed in a bracket scope will produce
 		an error.
 
-
 		'''
 
 		if args is None:
@@ -357,12 +356,12 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		# elem = self.find_element("//a".format(url))
 		# print(elem)
 
-	def execute_javascript(self, jscript):
+	def execute_javascript(self, *args, **kwargs):
 		'''
 		Execute a javascript string in the context of the browser tab.
 		'''
 
-		ret = self.__exec_js(jscript)
+		ret = self.__exec_js(*args, **kwargs)
 		return ret
 
 	def find_element(self, search):
