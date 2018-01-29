@@ -85,7 +85,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		return (ret_1, ret_2)
 
 
-	def __exec_js(self, script, args=None):
+	def __exec_js(self, script, args=None, **extra_params):
 		'''
 
 		Execute the passed javascript statement, optionally with passed
@@ -119,7 +119,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 				json.dumps(args)
 			)
 
-		resp3 = self.Runtime_evaluate(expression=expression)
+		resp3 = self.Runtime_evaluate(expression=expression, **extra_params)
 
 		return resp3
 
@@ -356,6 +356,14 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		# elem = self.find_element("//a".format(url))
 		# print(elem)
+
+	def execute_javascript(self, jscript):
+		'''
+		Execute a javascript string in the context of the browser tab.
+		'''
+
+		ret = self.__exec_js(jscript)
+		return ret
 
 	def find_element(self, search):
 
