@@ -227,7 +227,8 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		# Description: Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
 
-		assert isinstance(cookie, http.cookiejar.Cookie), 'The value passed to `set_cookie` must be an instance of http.cookiejar.Cookie().'
+		assert isinstance(cookie, http.cookiejar.Cookie), 'The value passed to `set_cookie` must be an instance of http.cookiejar.Cookie().' + \
+			' Passed: %s ("%s").' % (type(cookie), cookie)
 
 		# Yeah, the cookielib stores this attribute as a string, despite it containing a
 		# boolean value. No idea why.
