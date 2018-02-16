@@ -254,7 +254,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 				'url'      : fake_url,
 
 				'name'     : cookie.name,
-				'value'    : cookie.value,
+				'value'    : cookie.value if cookie.value else "",
 				'domain'   : cookie.domain,
 				'path'     : cookie.path,
 				'secure'   : cookie.secure,

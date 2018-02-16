@@ -259,7 +259,7 @@ class JsonInterfaceGenerator(object):
 		types = [t.id for t in argtype.elts]
 
 		check_message = ast.BinOp(
-				left         = ast.Str(s='Argument {} must be of type ({}). Received type: %s'.format(argname, types)),
+				left         = ast.Str(s='Argument \'{}\' must be of type \'{}\'. Received type: \'%s\''.format(argname, types)),
 				op           = ast.Mod(),
 				right        = ast.Call(func=ast.Name(id='type', ctx=ast.Load()), args=[target_value], keywords=[]),
 				lineno       = self.__get_line())
@@ -295,7 +295,7 @@ class JsonInterfaceGenerator(object):
 				lineno       = self.__get_line())
 
 		check_message = ast.BinOp(
-				left         = ast.Str(s='Argument {} must be of type ({}). Received type: %s'.format(argname, argtype)),
+				left         = ast.Str(s='Argument \'{}\' must be of type \'{}\'. Received type: \'%s\''.format(argname, argtype)),
 				op           = ast.Mod(),
 				right        = ast.Call(func=ast.Name(id='type', ctx=ast.Load()), args=[ast.Name(id=argname, ctx=ast.Load())], keywords=[]),
 				lineno       = self.__get_line())
