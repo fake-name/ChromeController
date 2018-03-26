@@ -89,8 +89,9 @@ type validators for their semantics given the architecture (read: writing the
 validator in raw AST broke my brain).
 
 Tested mostly on python 3.5, lightly on 3.4 and 3.6, all on linux. If you are 
-using python 2, please stahp. Will probably work with normal chromium/windows, 
-but that's not tested. My test-target is the google-provided `chrome` binary.
+using python 2, please stahp. It works with normal chromium and on windows, 
+but that has only been very lightly used. My test-target is the 
+google-provided `chrome` binary.
 
 Note that this tool generates and manipulates the AST directly, so it is 
 EXTREMELY sensitive to implementation details. It is *probably* broken on 
