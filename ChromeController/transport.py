@@ -438,7 +438,8 @@ class ChromeExecutionManager():
 
 			if time.time() > timeout_at:
 				return None
-
+			else:
+				time.sleep(0.005)
 
 	def recv(self, tab_key, message_id=None, timeout=30):
 		'''
