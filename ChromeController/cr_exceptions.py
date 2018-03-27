@@ -18,6 +18,8 @@ class ChromeTabNotFoundError(ChromeCommunicationsError):
 
 class ChromeError(ChromeControllerException):
 	pass
+class ChromeDiedError(ChromeError):
+	pass
 
 class ChromeNavigateTimedOut(ChromeError):
 	pass

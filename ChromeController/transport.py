@@ -5,6 +5,7 @@
 
 """
 import json
+import sys
 import socket
 import time
 import pprint
@@ -33,6 +34,7 @@ class ChromeExecutionManager():
 			host              = 'localhost',
 			port              = None,
 			websocket_timeout = 10,
+			enable_gpu        = False,
 			):
 		"""
 
@@ -58,10 +60,11 @@ class ChromeExecutionManager():
 
 		ACTIVE_PORTS.add(port)
 
-		self.binary = binary
-		self.host = host
-		self.port = port
-		self.msg_id = 0
+		self.binary            = binary
+		self.host              = host
+		self.port              = port
+		self.enable_gpu        = enable_gpu
+		self.msg_id            = 0
 		self.websocket_timeout = websocket_timeout
 
 		self.tablist = None
@@ -104,14 +107,23 @@ class ChromeExecutionManager():
 		argv = [
 				binary,
 				'--headless',
-				'--disable-gpu',
 				'--remote-debugging-port={dbg_port}'.format(dbg_port=dbg_port)
 			]
+		if self.enable_gpu is False:
+			argv.append('--disable-gpu')
+
+		# We need a separate process group on windows,
+		# to make ctrl+c work properly.
+		creationflags = 0
+		if 'win' in sys.platform:
+			creationflags |= subprocess.CREATE_NEW_PROCESS_GROUP
 
 		self.cr_proc = subprocess.Popen(argv,
 										stdin=open(os.path.devnull, "r"),
 										stdout=subprocess.PIPE,
-										stderr=subprocess.PIPE)
+										stderr=subprocess.PIPE,
+										creationflags=creationflags
+									)
 
 		self.log.debug("Spawned process: %s, PID: %s", self.cr_proc, self.cr_proc.pid)
 		for x in range(100):
@@ -129,6 +141,83 @@ class ChromeExecutionManager():
 					raise e
 				time.sleep(2)
 
+	def __close_internal_linux(self):
+		self.log.debug("Sending sigint to chromium")
+		self.cr_proc.send_signal(signal.SIGINT)
+		try:
+			self.check_process_ded()  # Needed to flush the communcation pipes, sometimes
+			self.log.debug("Waiting for chromium to exit")
+			try:
+				self.cr_proc.wait(timeout=5)
+			except subprocess.TimeoutExpired:
+				self.log.warning("Chromium failed to exit on sigint")
+
+			try:
+				self.cr_proc.terminate()
+			except ProcessLookupError:
+				self.log.debug("Process exited normally, no need to terminate.")
+
+			self.check_process_ded()  # Processes may dangle until the pipes are closed.
+
+			try:
+				self.cr_proc.kill()
+			except ProcessLookupError:
+				self.log.debug("Process exited normally, no need to terminate.")
+
+			self.check_process_ded()  # Processes may dangle until the pipes are closed.
+
+		except cr_exceptions.ChromeDiedError:
+			# Considering we're /trying/ to kill chrome, it
+			# dying is OK.
+			pass
+
+		self.log.debug("Pid: %s, Return code: %s", self.cr_proc.pid, self.cr_proc.returncode)
+		self.log.debug("Chromium closed!")
+
+	def __close_internal_windows(self):
+		import win32con
+		import win32api
+		self.log.debug("Sending CTRL_C_EVENT to chromium")
+
+		win32api.GenerateConsoleCtrlEvent(win32con.CTRL_C_EVENT, self.cr_proc.pid)
+		self.cr_proc.send_signal(signal.CTRL_BREAK_EVENT)
+		self.cr_proc.send_signal(signal.CTRL_C_EVENT)
+		self.cr_proc.send_signal(1)
+		self.log.debug("Sent")
+		try:
+			self.check_process_ded()  # Needed to flush the communcation pipes, sometimes
+
+			# I can't get this to fucking ever work,
+			# so just skip and go straight to termination.
+			# self.log.debug("Waiting for chromium to exit")
+			# try:
+			# 	self.cr_proc.wait(timeout=5)
+			# except subprocess.TimeoutExpired:
+			# 	pass
+
+			try:
+				self.cr_proc.terminate()
+			except ProcessLookupError:
+				self.log.debug("Process exited normally, no need to terminate.")
+
+			self.check_process_ded()  # Processes may dangle until the pipes are closed.
+
+			try:
+				self.cr_proc.kill()
+			except ProcessLookupError:
+				self.log.debug("Process exited normally, no need to terminate.")
+
+			self.check_process_ded()  # Processes may dangle until the pipes are closed.
+
+		except cr_exceptions.ChromeDiedError:
+			self.log.debug("ChromeDiedError while polling. Ignoring due to shutdown.")
+			# Considering we're /trying/ to kill chrome, it
+			# dying is OK.
+
+		self.log.debug("Pid: %s, Return code: %s", self.cr_proc.pid, self.cr_proc.returncode)
+		self.log.debug("Chromium closed!")
+
+
 	def close_chromium(self):
 		'''
 		Close the remote chromium instance.
@@ -141,16 +230,16 @@ class ChromeExecutionManager():
 		you may need to *explicitly* call this before destruction.
 		'''
 		if self.cr_proc:
-			self.log.debug("Sending sigint to chromium")
-			self.cr_proc.send_signal(signal.SIGINT)
-			self.log.debug("Waiting for chromium to exit")
-			self.cr_proc.wait(timeout=5)
 			try:
-				self.cr_proc.terminate()
-			except ProcessLookupError:
-				self.log.debug("Process exited normally, no need to terminate.")
-			self.log.debug("Pid: %s, Return code: %s", self.cr_proc.pid, self.cr_proc.returncode)
-			self.log.debug("Chromium closed!")
+				if 'win' in sys.platform:
+					self.__close_internal_windows()
+				else:
+					self.__close_internal_linux()
+			except Exception as e:
+				for line in traceback.format_exc().split("\n"):
+					self.log.error(line)
+
+
 
 		ACTIVE_PORTS.discard(self.port)
 
@@ -159,7 +248,7 @@ class ChromeExecutionManager():
 		self.cr_proc.poll()
 		if self.cr_proc.returncode != None:
 			stdout, stderr = self.cr_proc.communicate()
-			raise cr_exceptions.ChromeError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
+			raise cr_exceptions.ChromeDiedError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
 
 	def _get_tab_idx_for_key(self, tab_key):
 

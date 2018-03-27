@@ -55,7 +55,13 @@ class ChromeInterface():
 
 			self.tab_id = uuid.uuid4()
 
-			self.transport = ChromeExecutionManager(binary=binary, port=dbg_port, base_tab_key=self.tab_id)
+			self.transport = ChromeExecutionManager(
+					binary       = binary,
+					port         = dbg_port,
+					base_tab_key = self.tab_id,
+					*args,
+					**kwargs
+				)
 			self.transport.check_process_ded()
 
 

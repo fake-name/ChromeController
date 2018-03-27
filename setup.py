@@ -8,7 +8,7 @@ setup(
 	name="ChromeController",
 
 	# Version number (initial):
-	version="0.1.7",
+	version="0.1.8",
 
 	# Application author details:
 	author="Connor Wolf	",
@@ -41,5 +41,6 @@ setup(
 		'requests',
 		'cachetools',
 		'webrequest',
-	],
+	# We need pywin32 on windows for proper process termination.
+	] + ["pywin32"] if sys.platform.startswith("win") else [],
 )

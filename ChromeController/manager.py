@@ -39,14 +39,21 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 	Remote control class for Chromium.
 	'''
 
-	def __init__(self, *args, **kwargs):
+	def __init__(self, visible_size=None, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 
-		resp1 = self.Page_enable()
-		resp2 = self.DOM_enable()
-		resp3 = self.Network_enable()
+		self.Page_enable()
+		self.DOM_enable()
+		self.Network_enable()
 
-		resp4 = self.Emulation_setVisibleSize(1024, 1366)
+		if visible_size:
+			assert isinstance(visible_size, tuple), "visible_size must be a 2-tuple containing 2 integers"
+			assert len(visible_size) == 2, "visible_size must be a 2-tuple containing 2 integers"
+			assert all([isinstance(val, int) for val in visible_size]), "visible_size must be a 2-tuple containing 2 integers"
+			self.Emulation_setVisibleSize(*visible_size)
+		else:
+			self.Emulation_setVisibleSize(1024, 1366)
+
 		# cr_ver = self.Browser_getVersion()
 		# self.log.debug("Remote browser version info:")
 		# self.log.debug(str(cr_ver))

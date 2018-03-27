@@ -1,7 +1,7 @@
 
 import logging
 import os.path
-import gc
+import sys
 import pprint
 import time
 
@@ -11,11 +11,22 @@ import WebRequest
 import ChromeController.manager as mgr
 import ChromeController
 
+if 'win' in sys.platform:
+	crbin = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+else:
+	crbin = "google-chrome"
+
+def test_creation():
+	cr = ChromeController.ChromeRemoteDebugInterface(
+		binary=crbin,
+		dbg_port=9232,
+		enable_gpu=True)
+
+	return
 
 def test_delete_cookies():
-
-	crbin = "google-chrome"
 	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin, dbg_port=9232)
+
 
 	canClear = cr.Network_canClearBrowserCookies()
 	print("Can clear cookies: ", canClear)
@@ -205,10 +216,9 @@ def test():
 	# pprint.pprint(cr.drain_transport())
 
 def test_cycle():
-	crbin = "google-chrome"
 	for x in range(30):
 		print("Starting loop %s" % x)
-		with ChromeController.ChromeContext(crbin) as cr:
+		with ChromeController.ChromeContext(binary=crbin) as cr:
 			print("Looping:", x)
 			print(cr)
 			cr.blocking_navigate('http://www.google.com')
@@ -216,7 +226,6 @@ def test_cycle():
 			print("Ending loop %s" % x)
 
 def test_tabs():
-	crbin = "google-chrome"
 	for x in range(30):
 
 		with ChromeController.ChromeContext(binary="google-chrome") as cr:
@@ -235,7 +244,6 @@ def test_tabs():
 
 def test_url():
 
-	crbin = "google-chrome"
 	with ChromeController.ChromeContext(crbin) as cr:
 		cr.blocking_navigate("http://www.google.com", timeout=10)
 		print("Current URL:", cr.get_current_url())
@@ -243,7 +251,6 @@ def test_url():
 
 def test_title():
 
-	crbin = "google-chrome"
 	with ChromeController.ChromeContext(crbin) as cr:
 		cr.blocking_navigate("http://www.google.com", timeout=10)
 		print("Current URL:", cr.get_current_url())
@@ -252,7 +259,6 @@ def test_title():
 
 def test_rendered_fetch():
 
-	crbin = "google-chrome"
 	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin)
 
 	resp = cr.blocking_navigate("https://www.catatopatch.com/appraise-chapter-15", timeout=10)
@@ -263,12 +269,13 @@ def test_rendered_fetch():
 
 if __name__ == '__main__':
 	import logSetup
-	logSetup.initLogging(logging.DEBUG)
+	logSetup.initLogging(1)
+	# test_creation()
 	# test()
-	test_delete_cookies()
+	# test_delete_cookies()
 	# test_title()
 	# test_tabs()
-	# test_cycle()
+	test_cycle()
 	# test_rendered_fetch()
 
 	# test_url()
