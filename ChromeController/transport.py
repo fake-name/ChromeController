@@ -247,7 +247,12 @@ class ChromeExecutionManager():
 	def check_process_ded(self):
 		self.cr_proc.poll()
 		if self.cr_proc.returncode != None:
-			stdout, stderr = self.cr_proc.communicate()
+			try:
+				stdout, stderr = self.cr_proc.communicate()
+			except ValueError:
+				# The communcation pipes can go away if the process has exited.
+				# If so, ignore the resulting error.
+				pass
 			raise cr_exceptions.ChromeDiedError("Chromium process died unexpectedly! Don't know how to continue!\n	Chromium stdout: {}\n	Chromium stderr: {}".format(stdout.decode("utf-8"), stderr.decode("utf-8")))
 
 	def _get_tab_idx_for_key(self, tab_key):
