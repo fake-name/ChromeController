@@ -106,8 +106,8 @@ class ChromeInterface():
 		self.transport.check_process_ded()
 		return self.transport.drain(tab_key=self.tab_id)
 
-	def new_tab(self):
-		new = self.__class__(use_execution_manager=(self.transport, uuid.uuid4()))
+	def new_tab(self, *args, **kwargs):
+		new = self.__class__(use_execution_manager=(self.transport, uuid.uuid4()), *args, **kwargs)
 		return new
 
 	def close(self):

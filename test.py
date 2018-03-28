@@ -228,7 +228,7 @@ def test_cycle():
 def test_tabs():
 	for x in range(30):
 
-		with ChromeController.ChromeContext(binary="google-chrome") as cr:
+		with ChromeController.ChromeContext(binary=crbin) as cr:
 			print("Context manager entered")
 			tabl = [cr.new_tab(), cr.new_tab(), cr]
 
@@ -240,6 +240,33 @@ def test_tabs():
 			for idx, tab in enumerate(tabl):
 				print("Fetching using tab %s -> %s" % (idx, tab))
 				tab.blocking_navigate("http://www.google.com", timeout=10)
+			print("Complete")
+
+def test_tabs_conf():
+	for x in range(30):
+
+		with ChromeController.ChromeContext(binary=crbin) as cr:
+			print("Context manager entered")
+			tabl = [
+				cr.new_tab(visible_size=(500,800), disable_page=True,  disable_dom=True,  disable_network=True ),
+				cr.new_tab(visible_size=(501,801), disable_page=True,  disable_dom=True,  disable_network=False),
+				cr.new_tab(visible_size=(502,802), disable_page=True,  disable_dom=False, disable_network=True ),
+				cr.new_tab(visible_size=(503,803), disable_page=True,  disable_dom=False, disable_network=False),
+				cr.new_tab(visible_size=(504,804), disable_page=False, disable_dom=True,  disable_network=True ),
+				cr.new_tab(visible_size=(505,805), disable_page=False, disable_dom=True,  disable_network=False),
+				cr.new_tab(visible_size=(506,806), disable_page=False, disable_dom=False, disable_network=True ),
+				cr.new_tab(visible_size=(507,807), disable_page=False, disable_dom=False, disable_network=False),
+
+				]
+
+			print("Tabs:", tabl)
+			print("Transport:")
+			print(tabl[0].transport)
+			# cr.blocking_navigate("http://www.google.com", timeout=10)
+			print("Loop")
+			for idx, tab in enumerate(tabl):
+				print("Fetching using tab %s -> %s" % (idx, tab))
+				ret = tab.Page_navigate(url = "http://www.google.com")
 			print("Complete")
 
 def test_url():
@@ -274,8 +301,8 @@ if __name__ == '__main__':
 	# test()
 	# test_delete_cookies()
 	# test_title()
-	# test_tabs()
-	test_cycle()
+	test_tabs_conf()
+	# test_cycle()
 	# test_rendered_fetch()
 
 	# test_url()
