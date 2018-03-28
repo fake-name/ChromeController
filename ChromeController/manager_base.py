@@ -17,7 +17,7 @@ class ChromeInterface():
 	"""
 
 
-	def __init__(self, binary=None, dbg_port=None, use_execution_manager=None, *args, **kwargs):
+	def __init__(self, binary, dbg_port, use_execution_manager, *args, **kwargs):
 		"""
 		Base chromium transport initialization.
 
