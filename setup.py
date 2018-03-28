@@ -3,6 +3,7 @@ import setuptools
 from distutils.core import setup
 import sys
 import time
+win_req = ["pywin32"] if sys.platform.startswith("win") else []
 setup(
 	# Application name:
 	name="ChromeController",
@@ -42,5 +43,5 @@ setup(
 		'cachetools',
 		'webrequest',
 	# We need pywin32 on windows for proper process termination.
-	] + ["pywin32"] if sys.platform.startswith("win") else [],
+	] + win_req,
 )
