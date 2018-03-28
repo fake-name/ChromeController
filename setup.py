@@ -3,13 +3,15 @@ import setuptools
 from distutils.core import setup
 import sys
 import time
+
 win_req = ["pywin32"] if sys.platform.startswith("win") else []
+
 setup(
 	# Application name:
 	name="ChromeController",
 
 	# Version number (initial):
-	version="0.1.13",
+	version="0.1.14",
 
 	# Application author details:
 	author="Connor Wolf	",
