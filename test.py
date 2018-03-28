@@ -18,14 +18,14 @@ else:
 
 def test_creation():
 	cr = ChromeController.ChromeRemoteDebugInterface(
-		binary=crbin,
+		crbin,
 		dbg_port=9232,
 		enable_gpu=True)
 
 	return
 
 def test_delete_cookies():
-	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin, dbg_port=9232)
+	cr = ChromeController.ChromeRemoteDebugInterface(crbin, dbg_port=9232)
 
 
 	canClear = cr.Network_canClearBrowserCookies()
@@ -118,7 +118,7 @@ def test():
 	# print(ua)
 
 	crbin = os.path.abspath("./vendored/headless_shell")
-	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin, dbg_port=9232)
+	cr = ChromeController.ChromeRemoteDebugInterface(crbin, dbg_port=9232)
 
 	cooks1 = cr.get_cookies()
 
@@ -218,7 +218,7 @@ def test():
 def test_cycle():
 	for x in range(30):
 		print("Starting loop %s" % x)
-		with ChromeController.ChromeContext(binary=crbin) as cr:
+		with ChromeController.ChromeContext(crbin) as cr:
 			print("Looping:", x)
 			print(cr)
 			cr.blocking_navigate('http://www.google.com')
@@ -228,7 +228,7 @@ def test_cycle():
 def test_tabs():
 	for x in range(30):
 
-		with ChromeController.ChromeContext(binary=crbin) as cr:
+		with ChromeController.ChromeContext(crbin) as cr:
 			print("Context manager entered")
 			tabl = [cr.new_tab(), cr.new_tab(), cr]
 
@@ -245,7 +245,7 @@ def test_tabs():
 def test_tabs_conf():
 	for x in range(30):
 
-		with ChromeController.ChromeContext(binary=crbin) as cr:
+		with ChromeController.ChromeContext(crbin) as cr:
 			print("Context manager entered")
 			tabl = [
 				cr.new_tab(visible_size=(500,800), disable_page=True,  disable_dom=True,  disable_network=True ),
@@ -286,7 +286,7 @@ def test_title():
 
 def test_rendered_fetch():
 
-	cr = ChromeController.ChromeRemoteDebugInterface(binary=crbin)
+	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
 
 	resp = cr.blocking_navigate("https://www.catatopatch.com/appraise-chapter-15", timeout=10)
 	print("Current URL:", cr.get_current_url())

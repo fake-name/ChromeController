@@ -40,13 +40,20 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 	'''
 
 	def __init__(self,
-		visible_size=None,
-		disable_page=False,
-		disable_dom=False,
-		disable_network=False,
+		binary                = None,
+		dbg_port              = None,
+		use_execution_manager = None,
+		visible_size          = None,
+		disable_page          = False,
+		disable_dom           = False,
+		disable_network       = False,
 		*args,
 		**kwargs):
-		super().__init__(*args, **kwargs)
+		super().__init__(
+			binary                = binary,
+			dbg_port              = dbg_port,
+			use_execution_manager = use_execution_manager,
+			*args, **kwargs)
 
 		if disable_page:
 			self.log.debug("Not enabling page debug interface")

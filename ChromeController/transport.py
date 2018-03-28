@@ -393,7 +393,7 @@ class ChromeExecutionManager():
 
 	def close_all(self):
 		self.log.info("Closing all tabs.")
-		for tab_key in self.tab_id_map.keys():
+		for tab_key in list(self.tab_id_map.keys()):
 			self.log.info("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key])
 			self.__close_tab(tab_key)
 
