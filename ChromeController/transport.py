@@ -19,6 +19,10 @@ import subprocess
 import distutils.spawn
 from . import cr_exceptions
 
+if 'win' in sys.platform:
+	import win32con
+	import win32api
+
 ACTIVE_PORTS = set()
 
 class ChromeExecutionManager():
@@ -175,8 +179,6 @@ class ChromeExecutionManager():
 		self.log.debug("Chromium closed!")
 
 	def __close_internal_windows(self):
-		import win32con
-		import win32api
 		self.log.debug("Sending CTRL_C_EVENT to chromium")
 
 		win32api.GenerateConsoleCtrlEvent(win32con.CTRL_C_EVENT, self.cr_proc.pid)
