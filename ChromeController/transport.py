@@ -391,6 +391,16 @@ class ChromeExecutionManager():
 			self.close_websockets()
 			self.close_chromium()
 
+	def close_all(self):
+		self.log.info("Closing all tabs.")
+		for tab_key in self.tab_id_map.keys():
+			self.log.info("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key])
+			self.__close_tab(tab_key)
+
+		self.log.info("All tabs are closed. Closing chromium!")
+		self.close_websockets()
+		self.close_chromium()
+
 	def close_websockets(self):
 		""" Close websocket connection to remote browser."""
 		self.log.info("Websocket Teardown called")

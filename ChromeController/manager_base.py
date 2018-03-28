@@ -16,6 +16,7 @@ class ChromeInterface():
 	Document me, maybe?
 	"""
 
+
 	def __init__(self, binary=None, dbg_port=None, use_execution_manager=None, *args, **kwargs):
 		"""
 		Base chromium transport initialization.
@@ -45,10 +46,12 @@ class ChromeInterface():
 
 		self.log = logging.getLogger("Main.ChromeController.Interface")
 		if use_execution_manager:
+			self.is_root_session = False
 			self.transport, self.tab_id = use_execution_manager
 			# self.transport.connect(tab_key = self.tab_id)
 
 		else:
+			self.is_root_session = True
 			self.log.debug("Binary: %s", binary)
 			self.log.debug("Args: %s", args)
 			self.log.debug("Kwargs: %s", kwargs)
@@ -111,7 +114,11 @@ class ChromeInterface():
 		return new
 
 	def close(self):
-		self.transport.close_tab(tab_key=self.tab_id)
+		if self.is_root_session:
+			self.transport.close_all()
+		else:
+			self.transport.close_tab(tab_key=self.tab_id)
+
 		gc.collect()
 
 
