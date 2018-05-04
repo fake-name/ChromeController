@@ -304,12 +304,13 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		return ret
 
 	def clear_cookies(self):
+		'''
+		At this point, this is just a thin shim around the Network_clearBrowserCookies() operation.
 
-		canClear = self.Network_canClearBrowserCookies()
-		assert canClear['result']['result'] is True
-		for cookie in self.Network_getAllCookies()['result']['cookies']:
-			self.Network_deleteCookie(cookieName=cookie['name'], url=cookie['domain'])
+		That function postdates the clear_cookies() call here.
+		'''
 		self.Network_clearBrowserCookies()
+
 
 
 	def navigate_to(self, url):
