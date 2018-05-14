@@ -4,6 +4,7 @@
 
 
 """
+import os
 import json
 import sys
 import socket
@@ -55,7 +56,9 @@ class ChromeExecutionManager():
 		"""
 
 		if port is None:
-			port = 9222
+			port = 9222 + (os.getpid() & 0x3FFF)
+			if port > 65530:
+				port -= 5000
 			while port in ACTIVE_PORTS:
 				port += 1
 
