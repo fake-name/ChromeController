@@ -76,6 +76,7 @@ class ChromeInterface():
 			err = pprint.pformat(ret)
 			raise cr_exceptions.ChromeError("Error in response: \n{}".format(err))
 
+		self.log.debug("No exception in command response!")
 
 
 	def synchronous_command(self, *args, **kwargs):
@@ -91,9 +92,12 @@ class ChromeInterface():
 		returned.
 
 		'''
+
 		self.transport.check_process_ded()
 		ret = self.transport.synchronous_command(tab_key=self.tab_id, *args, **kwargs)
+		self.transport.check_process_ded()
 		self.__check_ret(ret)
+		self.transport.check_process_ded()
 		return ret
 
 	def drain_transport(self):
@@ -107,13 +111,17 @@ class ChromeInterface():
 
 		'''
 		self.transport.check_process_ded()
-		return self.transport.drain(tab_key=self.tab_id)
+		ret = self.transport.drain(tab_key=self.tab_id)
+		self.transport.check_process_ded()
+		return ret
 
 	def new_tab(self, *args, **kwargs):
 		new = self.__class__(use_execution_manager=(self.transport, uuid.uuid4()), *args, **kwargs)
+		self.transport.check_process_ded()
 		return new
 
 	def close(self):
+		self.transport.check_process_ded()
 		if self.is_root_session:
 			self.transport.close_all()
 		else:
