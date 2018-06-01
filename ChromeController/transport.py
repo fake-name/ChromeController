@@ -98,7 +98,7 @@ class ChromeExecutionManager():
 		# self.connect(base_tab_key)
 
 
-		self.messages = []
+		self.messages = {}
 
 	def _launch_process(self, binary, dbg_port, base_tab_key):
 
@@ -389,7 +389,7 @@ class ChromeExecutionManager():
 		self.__close_tab(tab_key)
 
 		# If we've closed all the chrome tabs, shut down the interface.
-		if len(self.tab_id_map) == 0:
+		if not len(self.tab_id_map):
 			self.log.info("All tabs are closed. Closing chromium!")
 			self.close_websockets()
 			self.close_chromium()
@@ -432,6 +432,8 @@ class ChromeExecutionManager():
 			self.connect(tab_key=tab_key)
 		if self.soclist[tab_key].connected is not True:
 			self.connect(tab_key=tab_key)
+		if not tab_key in self.messages:
+			self.messages[tab_key] = []
 
 
 	def synchronous_command(self, command, tab_key, **params):
@@ -491,8 +493,12 @@ class ChromeExecutionManager():
 		return sent_id
 
 
-	def ___recv(self, tab_key):
+	def ___recv(self, tab_key, timeout=None):
+
 		try:
+			if timeout:
+				self.soclist[tab_key].settimeout(timeout)
+
 			tmp = self.soclist[tab_key].recv()
 			self.log.debug("		Received: '%s'", tmp)
 
@@ -503,6 +509,8 @@ class ChromeExecutionManager():
 		except websocket.WebSocketConnectionClosedException:
 			raise cr_exceptions.ChromeCommunicationsError("Websocket appears to have been closed. Is the"
 				" remote chromium instance dead?")
+		finally:
+			self.soclist[tab_key].settimeout(self.websocket_timeout)
 
 	def recv_filtered(self, keycheck, tab_key, timeout=30):
 		'''
@@ -534,9 +542,9 @@ class ChromeExecutionManager():
 		self.__check_open_socket(tab_key)
 
 		# First, check if the message has already been received.
-		for idx in range(len(self.messages)):
-			if keycheck(self.messages[idx]):
-				return self.messages.pop(idx)
+		for idx in range(len(self.messages[tab_key])):
+			if keycheck(self.messages[tab_key][idx]):
+				return self.messages[tab_key].pop(idx)
 
 		timeout_at = time.time() + timeout
 		while 1:
@@ -544,11 +552,60 @@ class ChromeExecutionManager():
 			if keycheck(tmp):
 				return tmp
 			else:
-				self.messages.append(tmp)
+				self.messages[tab_key].append(tmp)
 
 			if time.time() > timeout_at:
 				return None
 			else:
+				time.sleep(0.005)
+
+	def recv_all_filtered(self, keycheck, tab_key, timeout=0.5):
+		'''
+		Receive a all messages matching a filter, using the callable `keycheck` to filter received messages
+		for content.
+
+		This function will *ALWAY* block for at least `timeout` seconds.
+
+		If chromium is for some reason continuously streaming responses, it may block forever!
+
+		`keycheck` is expected to be a callable that takes a single parameter (the decoded response
+		from chromium), and returns a boolean (true, if the command is the one filtered for, or false
+		if the command is not the one filtered for).
+
+		```
+			def check_func(message):
+				if message_id is None:
+					return True
+				if "id" in message:
+					return message['id'] == message_id
+				return False
+			return self.recv_filtered(check_func, timeout)
+
+		```
+
+		Note that the function is defined dynamically, and `message_id` is captured via closure.
+
+		'''
+
+
+		self.__check_open_socket(tab_key)
+		# First, check if the message has already been received.
+		ret           = [tmp for tmp in self.messages[tab_key] if keycheck(tmp)]
+		self.messages[tab_key] = [tmp for tmp in self.messages[tab_key] if not keycheck(tmp)]
+
+		self.log.debug("Waiting for all messages from the socket")
+		timeout_at = time.time() + timeout
+		while 1:
+			tmp = self.___recv(tab_key, timeout=timeout)
+			if keycheck(tmp):
+				ret.append(tmp)
+			else:
+				self.messages[tab_key].append(tmp)
+
+			if time.time() > timeout_at:
+				return ret
+			else:
+				self.log.debug("Sleeping: %s, %s" % (timeout_at, time.time()))
 				time.sleep(0.005)
 
 	def recv(self, tab_key, message_id=None, timeout=30):
@@ -567,11 +624,11 @@ class ChromeExecutionManager():
 		self.__check_open_socket(tab_key)
 
 		# First, check if the message has already been received.
-		for idx in range(len(self.messages)):
-			if self.messages[idx]:
-				if "id" in self.messages[idx] and message_id:
-					if self.messages[idx]['id'] == message_id:
-						return self.messages.pop(idx)
+		for idx in range(len(self.messages[tab_key])):
+			if self.messages[tab_key][idx]:
+				if "id" in self.messages[tab_key][idx] and message_id:
+					if self.messages[tab_key][idx]['id'] == message_id:
+						return self.messages[tab_key].pop(idx)
 
 		# Then spin untill we either have the message,
 		# or have timed out.
@@ -587,20 +644,31 @@ class ChromeExecutionManager():
 
 		return self.recv_filtered(check_func, tab_key, timeout)
 
+	def flush(self, tab_key):
+		'''
+		Flush the pending RX buffer for a specific tab key.
+		'''
+		self.messages[tab_key] = []
+
+
 
 	def drain(self, tab_key):
 		'''
 		Return all messages in waiting for the websocket connection.
 		'''
-
+		self.log.debug("Draining transport")
 		ret = []
-		while len(self.messages):
-			ret.append(self.messages.pop(0))
+		while len(self.messages[tab_key]):
+			ret.append(self.messages[tab_key].pop(0))
+
+		self.log.debug("Polling socket")
 
 		tmp = self.___recv(tab_key)
 		while tmp is not None:
 			ret.append(tmp)
 			tmp = self.___recv(tab_key)
+
+		self.log.debug("Drained %s messages", len(ret))
 		return ret
 
 	def __del__(self):

@@ -11,6 +11,7 @@ import pprint
 import time
 import http.cookiejar
 import urllib.parse
+import ChromeController.filter_funcs as filter_funcs
 
 from ChromeController.cr_exceptions import ChromeNavigateTimedOut
 from ChromeController.cr_exceptions import ChromeError
@@ -30,6 +31,8 @@ except ImportError:
 			ChromeRemoteDebugInterface_base
 	except ImportError:
 		raise RuntimeError("Generated class wrapper doesn't exist, and couldn't be created!")
+
+
 
 
 DEFAULT_TIMEOUT_SECS = 10
@@ -517,9 +520,41 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 
 
+	def __try_handle_redirect(self, timeout):
+		self.log.debug("We may have redirected. Checking.")
 
 
+		# print("Did we redirect?")
+		messages = self.transport.recv_all_filtered(filter_funcs.capture_loading_events, tab_key=self.tab_id)
+		# print("Filtered messages:")
+		# pprint.pprint(messages)
+		if not messages:
+			raise ChromeError("Couldn't track redirect! No idea what to do!")
 
+		last_message = messages[-1]
+		# print("Last Message")
+		# pprint.pprint(last_message)
+		self.log.info("Probably a redirect! New content url: '%s'", last_message['params']['documentURL'])
+
+		resp = self.transport.recv_filtered(filter_funcs.network_response_recieved_for_url(last_message['params']['documentURL'], last_message['params']['frameId']), tab_key=self.tab_id)
+		resp = resp['params']
+		# print("Resp")
+		# pprint.pprint(resp)
+
+		ctype = 'application/unknown'
+
+		resp_response = resp['response']
+
+		if 'mimeType' in resp_response:
+			ctype = resp_response['mimeType']
+		if 'headers' in resp_response and 'content-type' in resp_response['headers']:
+			ctype = resp_response['headers']['content-type'].split(";")[0]
+
+		# We assume the last document request was the redirect.
+		# This is /probably/ kind of a poor practice, but what the hell.
+		content = self.Network_getResponseBody(last_message['params']['requestId'])
+		return ctype, content
+		# return messages[-1][]
 
 	def blocking_navigate_and_get_source(self, url, timeout=DEFAULT_TIMEOUT_SECS):
 		'''
@@ -544,11 +579,26 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		'''
 
+
 		resp = self.blocking_navigate(url, timeout)
 		assert 'requestId' in resp
-		self.log.debug('blocking_navigate Response %s', resp)
+		assert 'response' in resp
+		# self.log.debug('blocking_navigate Response %s', pprint.pformat(resp))
 
-		content = self.Network_getResponseBody(resp['requestId'])
+		ctype = 'application/unknown'
+
+		resp_response = resp['response']
+
+		if 'mimeType' in resp_response:
+			ctype = resp_response['mimeType']
+		if 'headers' in resp_response and 'content-type' in resp_response['headers']:
+			ctype = resp_response['headers']['content-type'].split(";")[0]
+
+		try:
+			content = self.Network_getResponseBody(resp['requestId'])
+		except ChromeError:
+			ctype, content = self.__try_handle_redirect(timeout)
+
 		assert 'result' in content
 		result = content['result']
 
@@ -556,9 +606,13 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		assert 'body' in result
 
 		if result['base64Encoded']:
-			return {'binary' : True,  'content' : base64.b64decode(result['body'])}
+			content = base64.b64decode(result['body'])
 		else:
-			return {'binary' : False, 'content' : result['body']}
+			content = result['body']
+
+		self.log.info("Navigate complete. Received %s byte response with type %s.", len(content), ctype)
+
+		return {'binary' : result['base64Encoded'],  'mimetype' : ctype, 'content' : content}
 
 
 	def get_rendered_page_source(self):
@@ -625,6 +679,9 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		and then waits for the expected set of response event messages.
 
 		'''
+
+		self.transport.flush(tab_key=self.tab_id)
+
 		ret = self.Page_navigate(url = url)
 
 		assert("result" in ret), "Missing return content"
@@ -632,92 +689,13 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		expected_id = ret['result']['frameId']
 
-		def check_frame_navigated(message):
-			if not message:
-				return False
-			if "method" not in message:
-				return False
-			if message['method'] != "Page.frameNavigated":
-				return False
-			if 'params' not in message:
-				return False
-			params = message['params']
-			if 'frame' not in params:
-				return False
-			frame = params['frame']
-			if 'id' in frame:
-				ret = frame['id'] == expected_id
-				# print('check_frame_navigated', message)
-				return ret
-			return False
+		self.transport.recv_filtered(filter_funcs.check_frame_navigated_command(expected_id), tab_key=self.tab_id)
 
-		def check_frame_load_command(method_name):
-			def frame_loading_tracker(message):
-				if not message:
-					return False
-				if "method" not in message:
-					return False
-				if message['method'] != method_name:
-					return False
-				if 'params' not in message:
-					return False
-				return ret
-
-				# Disabled. See https://bugs.chromium.org/p/chromedriver/issues/detail?id=1387
-				# params = message['params']
-				# if 'frameId' not in params:
-				# 	return False
-				# if 'frameId' in params:
-				# 	ret = params['frameId'] == expected_id
-				# 	# print("frame_loading_tracker", message)
-				# return False
-
-			return frame_loading_tracker
-
-		def check_load_event_fired(message):
-				if not message:
-					return False
-				if "method" not in message:
-					return False
-				if message['method'] == 'Page.loadEventFired':
-					# print("check_load_event_fired", message)
-					return True
-				return False
-
-
-		def network_response_recieved_for_url(url):
-			def network_response_recieved_tracker(message):
-				if not message:
-					return False
-				if "method" not in message:
-					return False
-				if message['method'] != 'Network.responseReceived':
-					return False
-				if 'params' not in message:
-					return False
-				params = message['params']
-				if 'frameId' not in params:
-					return False
-				if 'frameId' in params:
-					if params['frameId'] == expected_id and 'response' in params:
-						return True
-
-						# Checking the url in the response breaks if
-						# the remote issues a 301 or 302.
-						# response = params['response']
-						# if 'url' in response:
-						# 	return url == response['url']
-				return False
-			return network_response_recieved_tracker
-
-
-		self.transport.recv_filtered(check_frame_navigated, tab_key=self.tab_id)
-
-		self.transport.recv_filtered(check_frame_load_command("Page.frameStartedLoading"), tab_key=self.tab_id)
-		self.transport.recv_filtered(check_frame_load_command("Page.frameStoppedLoading"), tab_key=self.tab_id)
+		self.transport.recv_filtered(filter_funcs.check_frame_load_command("Page.frameStartedLoading"), tab_key=self.tab_id)
+		self.transport.recv_filtered(filter_funcs.check_frame_load_command("Page.frameStoppedLoading"), tab_key=self.tab_id)
 		# self.transport.recv_filtered(check_load_event_fired, tab_key=self.tab_id)
 
-		resp = self.transport.recv_filtered(network_response_recieved_for_url(url), tab_key=self.tab_id)
+		resp = self.transport.recv_filtered(filter_funcs.network_response_recieved_for_url(url=None, expected_id=expected_id), tab_key=self.tab_id)
 
 		if resp is None:
 			raise ChromeNavigateTimedOut("Blocking navigate timed out!")

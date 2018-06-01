@@ -316,8 +316,20 @@ def test_tab_cache():
 		print("title, cur_url", title, cur_url)
 		assert at_url == cur_url
 
-
 	# cr.close()
+
+def test_redirect():
+	tp = ChromeController.TabPooledChromium(crbin)
+
+	url = "http://127.0.0.1:8000/redir_from.html"
+	# url = "https://yurikatrans.wordpress.com/feed/"
+
+	print("3rd tab context!")
+	with tp.tab(url=url) as cr:
+		resp = cr.blocking_navigate_and_get_source(url, timeout=10)
+		# print(resp)
+		# title, cur_url = cr.get_page_url_title()
+		# print("title, cur_url", title, cur_url)
 
 
 if __name__ == '__main__':
@@ -328,7 +340,7 @@ if __name__ == '__main__':
 	# test_delete_cookies()
 	# test_title()
 	# test_tabs_conf()
-	test_tab_cache()
+	test_redirect()
 	# test_cycle()
 	# test_rendered_fetch()
 
