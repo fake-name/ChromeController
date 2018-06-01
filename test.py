@@ -294,6 +294,32 @@ def test_rendered_fetch():
 	print("content:", type(rcnt))
 	# cr.close()
 
+def test_tab_cache():
+	tp = ChromeController.TabPooledChromium(crbin)
+
+	url = "https://www.catatopatch.com/appraise-chapter-15"
+
+	with tp.tab(url=url) as cr:
+		resp = cr.blocking_navigate("https://www.catatopatch.com/appraise-chapter-15", timeout=10)
+		print("Current URL:", cr.get_current_url())
+		at_url = cr.get_current_url()
+		rcnt = cr.get_rendered_page_source()
+		print("content:", type(rcnt))
+
+	print("Creating tab again!")
+	with tp.tab(url=url) as cr:
+		assert at_url == cr.get_current_url()
+
+	print("3rd tab context!")
+	with tp.tab(url=url) as cr:
+		title, cur_url = cr.get_page_url_title()
+		print("title, cur_url", title, cur_url)
+		assert at_url == cur_url
+
+
+	# cr.close()
+
+
 if __name__ == '__main__':
 	import logSetup
 	logSetup.initLogging(1)
@@ -301,7 +327,8 @@ if __name__ == '__main__':
 	# test()
 	# test_delete_cookies()
 	# test_title()
-	test_tabs_conf()
+	# test_tabs_conf()
+	test_tab_cache()
 	# test_cycle()
 	# test_rendered_fetch()
 
