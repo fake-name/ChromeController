@@ -1,16 +1,36 @@
 
 import logging
 import urllib.parse
+import contextlib
+
 import cachetools
 
-from ChromeController.cr_exceptions import ChromeNavigateTimedOut
-from ChromeController.cr_exceptions import ChromeError
-from ChromeController.resources import js
+
 from ChromeController.manager import ChromeRemoteDebugInterface
 
 
+class TabStore(cachetools.LRUCache):
+	def __init__(self, chrome_interface, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.chrome_interface = chrome_interface
+		self.log = logging.getLogger("Main.ChromeController.TabPool.Store")
 
-class ChromeTabPool(object):
+	def __getitem__(self, nl):
+
+		key = hash(nl) % self.maxsize
+		return super.__getitem__(key)
+
+	def __missing__(self, key):
+		self[key] = self.chrome_interface.new_tab()
+		return self[key]
+
+
+	def popitem(self):
+		key, value = super().popitem()
+		print('Key "%s" evicted with value "%s"' % (key, value))
+		return key, value
+
+class TabPooledChromium(object):
 
 	def __init__(self, *args, tab_pool_max_size = None, **kwargs):
 
@@ -19,21 +39,13 @@ class ChromeTabPool(object):
 
 		self.log = logging.getLogger("Main.ChromeController.TabPool")
 
-		class TabStore(cachetools.LRUCache):
-
-			def __getitem__(inner_self, url):
-				nl = urllib.parse.urlparse(url).netloc
-				key = hash(nl) % inner_self.maxsize
-				return super.__getitem__(key)
-
-			def __missing__(inner_self, key):
-				inner_self[key] = self.chrome_interface.new_tab()
-				return inner_self[key]
+		self.tab_cache = TabStore(maxsize=tab_pool_max_size, chrome_interface=self.chrome_interface)
 
 
-			def popitem(inner_self):
-				key, value = super().popitem()
-				print('Key "%s" evicted with value "%s"' % (key, value))
-				return key, value
+	@contextlib.contextmanager
+	def tab(self, netloc=None, url=None):
+		assert netloc or url
+		if not netloc:
+			netloc = urllib.parse.urlparse(url).netloc
 
-		self.tab_cache = TabStore(maxsize=tab_pool_max_size)
+		yield self.tab_cache[netloc]

@@ -1,4 +1,5 @@
 
+from .tab_pool import TabPooledChromium
 from .chrome_context import ChromeContext
 
 from .transport import ChromeExecutionManager
