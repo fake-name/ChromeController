@@ -266,7 +266,7 @@ class ChromeExecutionManager():
 		if tab_key not in self.tab_id_map:
 			return None
 
-		cr_tab_id = self.tab_id_map[tab_key]
+		cr_tab_id = self.tab_id_map[tab_key]['id']
 
 		for idx, tab_dat in enumerate(self.tablist):
 			if tab_dat['id'] == cr_tab_id:
@@ -275,12 +275,18 @@ class ChromeExecutionManager():
 		self.log.error("Missing tab %s from tab list!", tab_key)
 		self.log.error("Corresponding cr tab id: %s!", cr_tab_id)
 		for tab_key, cr_tab_id in self.tab_id_map.items():
-			self.log.error("Tab pair %s -> %s", tab_key, cr_tab_id)
+			self.log.error("Tab pair %s -> %s", tab_key, cr_tab_id['id'])
 		self.log.error("Chromium tabs (%s):", len(self.tablist))
 		for tab in self.tablist:
 			self.log.error("	cr tab id: %s", tab['id'])
 
-		raise cr_exceptions.ChromeTabNotFoundError("Tab with ID %s (cr ID: %s) not found!" % (tab_key, cr_tab_id))
+		raise cr_exceptions.ChromeTabNotFoundError("Tab with ID %s (cr ID: %s) not found!" % (tab_key, cr_tab_id['id']))
+
+	def _get_cr_tab_meta_for_key(self, tab_key):
+		if tab_key not in self.tab_id_map:
+			return None
+
+		return self.tab_id_map[tab_key]
 
 	def connect(self, tab_key):
 		"""
@@ -340,8 +346,9 @@ class ChromeExecutionManager():
 			for tab in self.tablist:
 
 				# Glom onto the first tab in the tablist that's not known.
-				if tab['id'] not in known_tabs:
-					self.tab_id_map[tab_key] = tab['id']
+				if tab['id'] not in [tmp['id'] for tmp in known_tabs]:
+					self.log.debug("New tab created with ID: '%s'", tab['id'])
+					self.tab_id_map[tab_key] = tab
 					return
 
 
@@ -351,12 +358,12 @@ class ChromeExecutionManager():
 	def __connect_to_tab(self, tab_key):
 		assert tab_key not in self.soclist
 
-		tab_idx = self._get_tab_idx_for_key(tab_key)
+		cr_tab_meta = self._get_cr_tab_meta_for_key(tab_key)
 
-		if not 'webSocketDebuggerUrl' in self.tablist[-1]:
-			raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)" % (tab_idx, self.tablist))
+		if not 'webSocketDebuggerUrl' in cr_tab_meta:
+			raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)" % (tab_key, self.tablist))
 
-		wsurl = self.tablist[tab_idx]['webSocketDebuggerUrl']
+		wsurl = cr_tab_meta['webSocketDebuggerUrl']
 
 		try:
 			self.log.info("Setting up websocket connection")
@@ -370,7 +377,7 @@ class ChromeExecutionManager():
 
 		# traceback.print_stack()
 
-		cr_tab_id = self.tab_id_map[tab_key]
+		cr_tab_id = self.tab_id_map[tab_key]['id']
 
 		url = "http://%s:%s/json/close/%s" % (self.host, self.port, cr_tab_id)
 		requests.get(url, timeout=timeout)
@@ -385,7 +392,7 @@ class ChromeExecutionManager():
 		return self.tablist
 
 	def close_tab(self, tab_key):
-		self.log.info("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key])
+		self.log.info("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key]['id'])
 		self.__close_tab(tab_key)
 
 		# If we've closed all the chrome tabs, shut down the interface.
@@ -397,7 +404,7 @@ class ChromeExecutionManager():
 	def close_all(self):
 		self.log.info("Closing all tabs.")
 		for tab_key in list(self.tab_id_map.keys()):
-			self.log.info("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key])
+			self.log.info("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key]['id'])
 			self.__close_tab(tab_key)
 
 		self.log.info("All tabs are closed. Closing chromium!")
@@ -442,7 +449,7 @@ class ChromeExecutionManager():
 		remote chrome instance, returning the response from the chrome instance.
 
 		"""
-		self.log.debug("Synchronous_command to tab %s (%s):", tab_key, self._get_tab_idx_for_key(tab_key))
+		self.log.debug("Synchronous_command to tab %s (%s):", tab_key, self._get_cr_tab_meta_for_key(tab_key))
 		self.log.debug("	command: '%s'", command)
 		self.log.debug("	params:  '%s'", params)
 		self.log.debug("	tab_key:  '%s'", tab_key)

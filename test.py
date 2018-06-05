@@ -281,7 +281,7 @@ def test_title():
 	with ChromeController.ChromeContext(crbin) as cr:
 		cr.blocking_navigate("http://www.google.com", timeout=10)
 		print("Current URL:", cr.get_current_url())
-		print(cr.get_page_url_title())
+		print("Response: ", cr.get_page_url_title())
 		# cr.close()
 
 def test_rendered_fetch():
@@ -338,9 +338,9 @@ if __name__ == '__main__':
 	# test_creation()
 	# test()
 	# test_delete_cookies()
-	# test_title()
+	test_title()
 	# test_tabs_conf()
-	test_redirect()
+	# test_redirect()
 	# test_cycle()
 	# test_rendered_fetch()
 

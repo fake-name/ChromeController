@@ -354,24 +354,27 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		'''
 
-		tab_idx = self.transport._get_tab_idx_for_key(self.tab_id)
+		cr_tab_id = self.transport._get_cr_tab_meta_for_key(self.tab_id)['id']
 		targets = self.Target_getTargets()
+
 		assert 'result' in targets
 		assert 'targetInfos' in targets['result']
-		assert len(targets['result']['targetInfos']) > tab_idx
 
-		# {
-		# 	'title': 'Page Title 1',
-		# 	'targetId': '9d2c503c-e39e-42cc-b950-96db073918ee',
-		# 	'attached': True,
-		# 	'url': 'http://localhost:47181/with_title_1',
-		# 	'type': 'page'
-		# }
+		for tgt in targets['result']['targetInfos']:
+			if tgt['targetId'] == cr_tab_id:
+				# {
+				# 	'title': 'Page Title 1',
+				# 	'targetId': '9d2c503c-e39e-42cc-b950-96db073918ee',
+				# 	'attached': True,
+				# 	'url': 'http://localhost:47181/with_title_1',
+				# 	'type': 'page'
+				# }
 
-		meta    = targets['result']['targetInfos'][tab_idx]
-		title   = meta['title']
-		cur_url = meta['url']
-		return title, cur_url
+				title   = tgt['title']
+				cur_url = tgt['url']
+				return title, cur_url
+
+
 
 
 	def click_link_containing_url(self, url):
