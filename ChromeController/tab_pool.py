@@ -4,6 +4,7 @@ import urllib.parse
 import contextlib
 
 import cachetools
+import threading
 
 
 from ChromeController.manager import ChromeRemoteDebugInterface
@@ -16,6 +17,7 @@ class TabStore(cachetools.LRUCache):
 		super().__init__(*args, **kwargs)
 		assert self.maxsize
 
+		self.__lock_cache = {}
 		self.chrome_interface = chrome_interface
 		self.log = logging.getLogger("Main.ChromeController.TabPool.Store")
 
@@ -29,12 +31,13 @@ class TabStore(cachetools.LRUCache):
 		self.log.debug("__missing__: %s", key)
 		assert key is not None, "You have to pass a key to __missing__!"
 		self[key] = self.chrome_interface.new_tab()
-		return self[key]
-
+		self.__lock_cache[key] = threading.Lock()
+		return self.__lock_cache[key], self[key]
 
 	def popitem(self):
 		key, value = super().popitem()
 		print('Key "%s" evicted with value "%s"' % (key, value))
+		self.__lock_cache.pop(key)
 		return key, value
 
 class TabPooledChromium(object):
@@ -48,14 +51,18 @@ class TabPooledChromium(object):
 
 		self.log = logging.getLogger("Main.ChromeController.TabPool")
 
-		self.tab_cache = TabStore(maxsize=tab_pool_max_size, chrome_interface=self.chrome_interface)
-
+		self.__tab_cache = TabStore(maxsize=tab_pool_max_size, chrome_interface=self.chrome_interface)
 
 	@contextlib.contextmanager
-	def tab(self, netloc=None, url=None):
+	def tab(self, netloc=None, url=None, extra_id=None):
 		assert netloc or url
 		if not netloc:
 			netloc = urllib.parse.urlparse(url).netloc
 			self.log.debug("Getting tab for netloc: %s (url: %s)", netloc, url)
+		key = netloc
+		if extra_id:
+			key += " " + str(extra_id)
 
-		yield self.tab_cache[netloc]
+		lock, tab = self.__tab_cache[key]
+		with lock:
+			yield tab
