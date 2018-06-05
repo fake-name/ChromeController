@@ -17,7 +17,6 @@ class TabStore(cachetools.LRUCache):
 		super().__init__(*args, **kwargs)
 		assert self.maxsize
 
-		self.__lock_cache = {}
 		self.chrome_interface = chrome_interface
 		self.log = logging.getLogger("Main.ChromeController.TabPool.Store")
 
@@ -30,14 +29,12 @@ class TabStore(cachetools.LRUCache):
 	def __missing__(self, key):
 		self.log.debug("__missing__: %s", key)
 		assert key is not None, "You have to pass a key to __missing__!"
-		self[key] = self.chrome_interface.new_tab()
-		self.__lock_cache[key] = threading.Lock()
-		return self.__lock_cache[key], self[key]
+		self[key] = (threading.Lock(), self.chrome_interface.new_tab())
+		return self[key]
 
 	def popitem(self):
 		key, value = super().popitem()
 		print('Key "%s" evicted with value "%s"' % (key, value))
-		self.__lock_cache.pop(key)
 		return key, value
 
 class TabPooledChromium(object):

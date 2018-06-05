@@ -11,7 +11,7 @@ setup(
 	name="ChromeController",
 
 	# Version number (initial):
-	version="0.1.19",
+	version="0.2.1",
 
 	# Application author details:
 	author="Connor Wolf	",
@@ -32,6 +32,7 @@ setup(
 	description="Chrome Remote Debugger interface.",
 
 	long_description=open("README.md").read(),
+	long_description_content_type = "text/markdown",
 
 	dependency_links=[
 		'https://github.com/berkerpeksag/astor/tarball/master#egg=astor-0.6',
