@@ -351,3 +351,46 @@ class TestChromium(unittest.TestCase):
 			'Host' : r"www.googlez.com"*50
 		}
 		self.fetch_check_headers(expect_headers)
+
+	def test_setting_random_1(self):
+		expect_headers = {
+			'Pineapple' : r"Banana"
+		}
+		self.fetch_check_headers(expect_headers)
+
+	def test_setting_random_2(self):
+		expect_headers = {
+			'Pineapple'*5 : r"Banana"*5
+		}
+		self.fetch_check_headers(expect_headers)
+
+	def test_setting_random_3(self):
+		expect_headers = {
+			'Pineapple'*500 : r"Banana"*500
+		}
+		self.fetch_check_headers(expect_headers)
+
+	def test_setting_random_4(self):
+		expect_headers = {
+			'Pineapple' : r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
+		}
+		self.fetch_check_headers(expect_headers)
+
+	def test_setting_random_5(self):
+		expect_headers = {
+			'Pineapple;Pineapple' : r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
+		}
+		self.fetch_check_headers(expect_headers)
+
+	def test_setting_random_6(self):
+		expect_headers = {
+			'Pineapple=Pineapple' : r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
+		}
+		self.fetch_check_headers(expect_headers)
+
+	def test_setting_random_7(self):
+		expect_headers = {
+			'Pineapple=Pineapplehtt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com'
+				: r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
+		}
+		self.fetch_check_headers(expect_headers)
