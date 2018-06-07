@@ -1,6 +1,7 @@
 
 import logging
 import urllib.parse
+import os
 import contextlib
 
 import cachetools
@@ -10,7 +11,7 @@ import threading
 from ChromeController.manager import ChromeRemoteDebugInterface
 
 
-class TabStore(cachetools.LRUCache):
+class _TabStore(cachetools.LRUCache):
 	def __init__(self, chrome_interface, *args, **kwargs):
 		assert "maxsize" in kwargs
 		assert kwargs['maxsize']
@@ -20,10 +21,9 @@ class TabStore(cachetools.LRUCache):
 		self.chrome_interface = chrome_interface
 		self.log = logging.getLogger("Main.ChromeController.TabPool.Store")
 
-	def __getitem__(self, nl):
-		self.log.debug("__getitem__: %s", nl)
-		assert nl is not None, "You have to pass a key to __getitem__!"
-		key = hash(nl) % self.maxsize
+	def __getitem__(self, key):
+		self.log.debug("__getitem__: %s", key)
+		assert key is not None, "You have to pass a key to __getitem__!"
 		return super().__getitem__(key)
 
 	def __missing__(self, key):
@@ -34,32 +34,84 @@ class TabStore(cachetools.LRUCache):
 
 	def popitem(self):
 		key, value = super().popitem()
-		print('Key "%s" evicted with value "%s"' % (key, value))
-		return key, value
+		self.log.debug('Key "%s" evicted with value "%s"', key, value)
+		value.close()
+		return None
 
 class TabPooledChromium(object):
 
 	def __init__(self, *args, tab_pool_max_size = None, **kwargs):
+		'''
+		Create a chromium tab pool instance.
+
+		This will start a chromium instance, from which new tabs will be created as
+		needed with the tab() context manager.
+
+		Note that the destruction of the `TabPooledChromium` object will kill the associated chromium
+		execution. This will render any checked-out tabs invalid (though saving the tabs considering
+		they're constructed in a context-manager is pretty obviously wrong anyways).
+		'''
 		if tab_pool_max_size is None:
-			tab_pool_max_size = 5
+			tab_pool_max_size = 10
 
 		self.chrome_interface = ChromeRemoteDebugInterface(*args, **kwargs)
 		self.tab_pool_max_size = tab_pool_max_size
 
 		self.log = logging.getLogger("Main.ChromeController.TabPool")
 
-		self.__tab_cache = TabStore(maxsize=tab_pool_max_size, chrome_interface=self.chrome_interface)
+		# We pass a tab to the tabstore, because otherwise it might wind up evicting the root tab,
+		# which would take the entire chrome instance down with it when it's closed.
+		self.__tab_cache = _TabStore(maxsize=tab_pool_max_size, chrome_interface=self.chrome_interface.new_tab())
+
+		self.__counter_lock = threading.Lock()
+		self.__active_tabs = {}
+
+		self.__started_pid = os.getpid()
+
+	def __del__(self):
+		self.chrome_interface.close()
 
 	@contextlib.contextmanager
-	def tab(self, netloc=None, url=None, extra_id=None):
-		assert netloc or url
-		if not netloc:
+	def tab(self, netloc=None, url=None, extra_id=None, use_tid=False):
+		'''
+		Get a chromium tab from the pool, optionally one that has an association with a specific netloc/URL.
+
+		If no url or netloc is specified, the per-thread identifier will be used.
+		If `extra_id` is specified, it's stringified value will be mixed into the pool key
+		If `use_tid` is true, the per-thread identifier will be mixed into the pool key.
+
+		In all cases, the tab pool is a least-recently-used cache, so the tab that has been accessed the
+		least recently will be automatically closed if a new tab is requested, and there are already
+		`tab_pool_max_size` tabs created.
+
+		'''
+		if not netloc and url:
 			netloc = urllib.parse.urlparse(url).netloc
 			self.log.debug("Getting tab for netloc: %s (url: %s)", netloc, url)
 		key = netloc
 		if extra_id:
 			key += " " + str(extra_id)
+		if use_tid or not key:
+			key += " " + str(threading.get_ident())
 
-		lock, tab = self.__tab_cache[key]
-		with lock:
-			yield tab
+		if self.__started_pid != os.getpid():
+			self.log.error("TabPooledChromium instances are not safe to share across multiple processes.")
+			self.log.error("Please create a new in each separate multiprocesssing process.")
+			raise RuntimeError("TabPooledChromium instances are not safe to share across multiple processes.")
+
+		with self.__counter_lock:
+			self.__active_tabs.setdefault(key, 0)
+			self.__active_tabs[key] += 1
+			if self.__active_tabs[key] > 1:
+				self.log.warning("Tab with key %s checked out more then once simultaneously")
+
+		try:
+			lock, tab = self.__tab_cache[key]
+			with lock:
+				yield tab
+		finally:
+
+			with self.__counter_lock:
+				self.__active_tabs[key] -= 1
+				if self.__active_tabs[key] == 0:
+					self.__active_tabs.pop(key)
