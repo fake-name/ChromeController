@@ -32,9 +32,7 @@ def capture_expected_headers(expected_headers, test_context, is_chromium=False, 
 	log = logging.getLogger("Main.TestServer")
 
 
-	sucuri_reqs_1 = 0
-	sucuri_reqs_2 = 0
-	sucuri_reqs_3 = 0
+	counter = 0
 
 	class MockServerRequestHandler(BaseHTTPRequestHandler):
 
@@ -54,6 +52,8 @@ def capture_expected_headers(expected_headers, test_context, is_chromium=False, 
 
 
 		def _get_handler(self):
+			nonlocal counter
+
 			try:
 				self.validate_headers()
 			except Exception:
@@ -63,22 +63,35 @@ def capture_expected_headers(expected_headers, test_context, is_chromium=False, 
 				self.wfile.write(b"Headers failed validation!")
 				raise
 
-			if self.path == "/":
+			trimmed_path = self.path.split("?")[0]
+
+			if trimmed_path == "/":
 				self.send_response(200)
 				self.send_header('Content-type', "text/html")
 				self.end_headers()
 				self.wfile.write(b"Root OK?")
+			elif trimmed_path == "/counter":
+				self.send_response(200)
+				self.send_header('Content-type', "text/html")
+				self.end_headers()
+				ret = "Counter: %s" % counter
+				self.wfile.write(ret.encode("utf-8"))
+				counter += 1
 
-
+			elif trimmed_path == "/counter_big":
+				self.send_response(200)
+				self.send_header('Content-type', "text/html")
+				self.end_headers()
+				ret = "Counter: %s" % counter
+				ret = ret * 50000
+				self.wfile.write(ret.encode("utf-8"))
+				counter += 1
 
 			##################################################################################################################################
 			# Handle requests for an unknown path
 			##################################################################################################################################
-
 			else:
 				test_context.assertEqual(self.path, "This shouldn't happen!")
-
-
 
 		def do_GET(self):
 			# Process an HTTP GET request and return a response with an HTTP 200 status.

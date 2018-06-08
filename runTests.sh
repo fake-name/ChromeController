@@ -9,8 +9,9 @@ nosetests                            \
 	--with-coverage                  \
 	--exe                            \
 	--cover-package=ChromeController \
-	tests.test_chromium
+	tests
 
+	# tests.test_multithreaded
 	# --nocapture                \
 	# tests.test_waf_bullshit.TestPreemptiveWrapper
 	# tests.test_waf_bullshit

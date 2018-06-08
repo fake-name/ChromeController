@@ -68,8 +68,19 @@ class TabPooledChromium(object):
 
 		self.__started_pid = os.getpid()
 
+		self.alive = True
+
+	def close(self):
+		if self.alive:
+			self.chrome_interface.close()
+			self.alive = False
+
 	def __del__(self):
-		self.chrome_interface.close()
+		self.close()
+		try:
+			self.chrome_interface.close()
+		except Exception:
+			pass
 
 	@contextlib.contextmanager
 	def tab(self, netloc=None, url=None, extra_id=None, use_tid=False):
@@ -85,10 +96,12 @@ class TabPooledChromium(object):
 		`tab_pool_max_size` tabs created.
 
 		'''
+		assert self.alive, "Chrome has been shut down! Cannot continue!"
 		if not netloc and url:
 			netloc = urllib.parse.urlparse(url).netloc
 			self.log.debug("Getting tab for netloc: %s (url: %s)", netloc, url)
-		key = netloc
+		# Coerce to string type so even if it's none, it doesn't hurt anything.
+		key = str(netloc)
 		if extra_id:
 			key += " " + str(extra_id)
 		if use_tid or not key:
