@@ -19,17 +19,18 @@
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="base64.html">base64</a><br>
 <a href="distutils.html">distutils</a><br>
+<a href="ChromeController.filter_funcs.html">ChromeController.filter_funcs</a><br>
 <a href="ChromeController.Generator.gen.html">ChromeController.Generator.gen</a><br>
-<a href="http.html">http</a><br>
-</td><td width="25%" valign=top><a href="ChromeController.resources.js.html">ChromeController.resources.js</a><br>
+</td><td width="25%" valign=top><a href="http.html">http</a><br>
+<a href="ChromeController.resources.js.html">ChromeController.resources.js</a><br>
 <a href="json.html">json</a><br>
 <a href="os.html">os</a><br>
-<a href="pprint.html">pprint</a><br>
-</td><td width="25%" valign=top><a href="signal.html">signal</a><br>
+</td><td width="25%" valign=top><a href="pprint.html">pprint</a><br>
+<a href="signal.html">signal</a><br>
 <a href="subprocess.html">subprocess</a><br>
 <a href="sys.html">sys</a><br>
-<a href="time.html">time</a><br>
-</td><td width="25%" valign=top><a href="urllib.html">urllib</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+<a href="urllib.html">urllib</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -62,7 +63,7 @@
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="ChromeRemoteDebugInterface-__init__"><strong>__init__</strong></a>(self, *args, **kwargs)</dt><dd><tt>Base&nbsp;chromium&nbsp;transport&nbsp;initialization.<br>
+<dl><dt><a name="ChromeRemoteDebugInterface-__init__"><strong>__init__</strong></a>(self, binary=None, dbg_port=None, use_execution_manager=None, visible_size=None, disable_page=False, disable_dom=False, disable_network=False, *args, **kwargs)</dt><dd><tt>Base&nbsp;chromium&nbsp;transport&nbsp;initialization.<br>
 &nbsp;<br>
 The&nbsp;binary&nbsp;to&nbsp;execute&nbsp;is&nbsp;assumed&nbsp;to&nbsp;be&nbsp;named&nbsp;`chromium`,&nbsp;and&nbsp;on&nbsp;$PATH<br>
 if&nbsp;not&nbsp;specified&nbsp;in&nbsp;the&nbsp;`binary`&nbsp;parameter.<br>
@@ -116,7 +117,9 @@ Return&nbsp;value&nbsp;is&nbsp;a&nbsp;dictionary&nbsp;with&nbsp;two&nbsp;keys:<b
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'content'&nbsp;:&nbsp;(string&nbsp;of&nbsp;bytestring,&nbsp;depending&nbsp;on&nbsp;whether&nbsp;`binary`&nbsp;is&nbsp;true&nbsp;or&nbsp;not)<br>
 }</tt></dd></dl>
 
-<dl><dt><a name="ChromeRemoteDebugInterface-clear_cookies"><strong>clear_cookies</strong></a>(self)</dt></dl>
+<dl><dt><a name="ChromeRemoteDebugInterface-clear_cookies"><strong>clear_cookies</strong></a>(self)</dt><dd><tt>At&nbsp;this&nbsp;point,&nbsp;this&nbsp;is&nbsp;just&nbsp;a&nbsp;thin&nbsp;shim&nbsp;around&nbsp;the&nbsp;<a href="#ChromeRemoteDebugInterface-Network_clearBrowserCookies">Network_clearBrowserCookies</a>()&nbsp;operation.<br>
+&nbsp;<br>
+That&nbsp;function&nbsp;postdates&nbsp;the&nbsp;<a href="#ChromeRemoteDebugInterface-clear_cookies">clear_cookies</a>()&nbsp;call&nbsp;here.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-click_element"><strong>click_element</strong></a>(self, contains_url)</dt><dd><tt>TODO<br>
 &nbsp;<br>
@@ -168,6 +171,8 @@ Status&nbsp;ExecuteClickElement(Session*&nbsp;session,<br>
 }</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-click_link_containing_url"><strong>click_link_containing_url</strong></a>(self, url)</dt><dd><tt>TODO</tt></dd></dl>
+
+<dl><dt><a name="ChromeRemoteDebugInterface-execute_javascript"><strong>execute_javascript</strong></a>(self, *args, **kwargs)</dt><dd><tt>Execute&nbsp;a&nbsp;javascript&nbsp;string&nbsp;in&nbsp;the&nbsp;context&nbsp;of&nbsp;the&nbsp;browser&nbsp;tab.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-find_element"><strong>find_element</strong></a>(self, search)</dt><dd><tt><a href="#ChromeRemoteDebugInterface-DOM_performSearch">DOM_performSearch</a>(self,&nbsp;query,&nbsp;includeUserAgentShadowDOM)<br>
 Python&nbsp;Function:&nbsp;DOM_performSearch<br>
@@ -4483,7 +4488,7 @@ instance.&nbsp;This&nbsp;can&nbsp;be&nbsp;useful&nbsp;when&nbsp;waiting&nbsp;for
 from&nbsp;chrome,&nbsp;but&nbsp;higher&nbsp;level&nbsp;calls&nbsp;are&nbsp;better&nbsp;suited&nbsp;for&nbsp;managing&nbsp;wait-for-message<br>
 type&nbsp;needs.</tt></dd></dl>
 
-<dl><dt><a name="ChromeRemoteDebugInterface-new_tab"><strong>new_tab</strong></a>(self)</dt></dl>
+<dl><dt><a name="ChromeRemoteDebugInterface-new_tab"><strong>new_tab</strong></a>(self, *args, **kwargs)</dt></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-synchronous_command"><strong>synchronous_command</strong></a>(self, *args, **kwargs)</dt><dd><tt>Forward&nbsp;a&nbsp;command&nbsp;to&nbsp;the&nbsp;remote&nbsp;chrome&nbsp;instance&nbsp;via&nbsp;the&nbsp;transport<br>
 connection,&nbsp;and&nbsp;check&nbsp;the&nbsp;return&nbsp;for&nbsp;an&nbsp;error.<br>

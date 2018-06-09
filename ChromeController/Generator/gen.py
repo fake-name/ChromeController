@@ -259,7 +259,7 @@ class JsonInterfaceGenerator(object):
 		types = [t.id for t in argtype.elts]
 
 		check_message = ast.BinOp(
-				left         = ast.Str(s='Argument \'{}\' must be of type \'{}\'. Received type: \'%s\''.format(argname, types)),
+				left         = ast.Str(s='Optional argument \'{}\' must be of type \'{}\'. Received type: \'%s\''.format(argname, types)),
 				op           = ast.Mod(),
 				right        = ast.Call(func=ast.Name(id='type', ctx=ast.Load()), args=[target_value], keywords=[]),
 				lineno       = self.__get_line())
@@ -282,20 +282,15 @@ class JsonInterfaceGenerator(object):
 		return new_ret
 
 	def __build_unconditional_arg_check(self, argname, argtype):
-		# checker_str = "assert isinstance({argname}, {typetuple}), \"Argument {argname} must be of type {typetuple}. Received type: %s\" % type({argname})".format(
-		# 		argname = argname,
-		# 		typetuple = argtype,
-		# 	)
-		# checker = ast.parse(checker_str)
-		# old_ret = checker.body.pop()
 
 		presence_check = ast.Call(func = ast.Name(id='isinstance', ctx=ast.Load()),
 				args         = [ast.Name(id=argname, ctx=ast.Load()), argtype],
 				keywords     = [],
 				lineno       = self.__get_line())
 
+		types = [t.id for t in argtype.elts]
 		check_message = ast.BinOp(
-				left         = ast.Str(s='Argument \'{}\' must be of type \'{}\'. Received type: \'%s\''.format(argname, argtype)),
+				left         = ast.Str(s='Argument \'{}\' must be of type \'{}\'. Received type: \'%s\''.format(argname, types)),
 				op           = ast.Mod(),
 				right        = ast.Call(func=ast.Name(id='type', ctx=ast.Load()), args=[ast.Name(id=argname, ctx=ast.Load())], keywords=[]),
 				lineno       = self.__get_line())

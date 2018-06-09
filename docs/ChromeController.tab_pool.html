@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module ChromeController.tab_pool</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="ChromeController.html"><font color="#ffffff">ChromeController</font></a>.tab_pool</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/Storage/Scripts/ChromeController/ChromeController/tab_pool.py">/media/Storage/Scripts/ChromeController/ChromeController/tab_pool.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="cachetools.html">cachetools</a><br>
+<a href="contextlib.html">contextlib</a><br>
+</td><td width="25%" valign=top><a href="logging.html">logging</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="threading.html">threading</a><br>
+<a href="urllib.html">urllib</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="ChromeController.tab_pool.html#TabPooledChromium">TabPooledChromium</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="TabPooledChromium">class <strong>TabPooledChromium</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="TabPooledChromium-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="TabPooledChromium-__init__"><strong>__init__</strong></a>(self, *args, tab_pool_max_size=None, **kwargs)</dt><dd><tt>Create&nbsp;a&nbsp;chromium&nbsp;tab&nbsp;pool&nbsp;instance.<br>
+&nbsp;<br>
+This&nbsp;will&nbsp;start&nbsp;a&nbsp;chromium&nbsp;instance,&nbsp;from&nbsp;which&nbsp;new&nbsp;tabs&nbsp;will&nbsp;be&nbsp;created&nbsp;as<br>
+needed&nbsp;with&nbsp;the&nbsp;<a href="#TabPooledChromium-tab">tab</a>()&nbsp;context&nbsp;manager.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;the&nbsp;destruction&nbsp;of&nbsp;the&nbsp;`<a href="#TabPooledChromium">TabPooledChromium</a>`&nbsp;<a href="builtins.html#object">object</a>&nbsp;will&nbsp;kill&nbsp;the&nbsp;associated&nbsp;chromium<br>
+execution.&nbsp;This&nbsp;will&nbsp;render&nbsp;any&nbsp;checked-out&nbsp;tabs&nbsp;invalid&nbsp;(though&nbsp;saving&nbsp;the&nbsp;tabs&nbsp;considering<br>
+they're&nbsp;constructed&nbsp;in&nbsp;a&nbsp;context-manager&nbsp;is&nbsp;pretty&nbsp;obviously&nbsp;wrong&nbsp;anyways).</tt></dd></dl>
+
+<dl><dt><a name="TabPooledChromium-close"><strong>close</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="TabPooledChromium-tab"><strong>tab</strong></a>(self, netloc=None, url=None, extra_id=None, use_tid=False)</dt><dd><tt>Get&nbsp;a&nbsp;chromium&nbsp;tab&nbsp;from&nbsp;the&nbsp;pool,&nbsp;optionally&nbsp;one&nbsp;that&nbsp;has&nbsp;an&nbsp;association&nbsp;with&nbsp;a&nbsp;specific&nbsp;netloc/URL.<br>
+&nbsp;<br>
+If&nbsp;no&nbsp;url&nbsp;or&nbsp;netloc&nbsp;is&nbsp;specified,&nbsp;the&nbsp;per-thread&nbsp;identifier&nbsp;will&nbsp;be&nbsp;used.<br>
+If&nbsp;`extra_id`&nbsp;is&nbsp;specified,&nbsp;it's&nbsp;stringified&nbsp;value&nbsp;will&nbsp;be&nbsp;mixed&nbsp;into&nbsp;the&nbsp;pool&nbsp;key<br>
+If&nbsp;`use_tid`&nbsp;is&nbsp;true,&nbsp;the&nbsp;per-thread&nbsp;identifier&nbsp;will&nbsp;be&nbsp;mixed&nbsp;into&nbsp;the&nbsp;pool&nbsp;key.<br>
+&nbsp;<br>
+In&nbsp;all&nbsp;cases,&nbsp;the&nbsp;tab&nbsp;pool&nbsp;is&nbsp;a&nbsp;least-recently-used&nbsp;cache,&nbsp;so&nbsp;the&nbsp;tab&nbsp;that&nbsp;has&nbsp;been&nbsp;accessed&nbsp;the<br>
+least&nbsp;recently&nbsp;will&nbsp;be&nbsp;automatically&nbsp;closed&nbsp;if&nbsp;a&nbsp;new&nbsp;tab&nbsp;is&nbsp;requested,&nbsp;and&nbsp;there&nbsp;are&nbsp;already<br>
+`tab_pool_max_size`&nbsp;tabs&nbsp;created.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

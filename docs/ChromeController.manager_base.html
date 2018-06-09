@@ -49,7 +49,7 @@
 <td colspan=2><tt>Document&nbsp;me,&nbsp;maybe?<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="ChromeInterface-__init__"><strong>__init__</strong></a>(self, binary=None, dbg_port=None, use_execution_manager=None, *args, **kwargs)</dt><dd><tt>Base&nbsp;chromium&nbsp;transport&nbsp;initialization.<br>
+<dl><dt><a name="ChromeInterface-__init__"><strong>__init__</strong></a>(self, binary, dbg_port, use_execution_manager, *args, **kwargs)</dt><dd><tt>Base&nbsp;chromium&nbsp;transport&nbsp;initialization.<br>
 &nbsp;<br>
 The&nbsp;binary&nbsp;to&nbsp;execute&nbsp;is&nbsp;assumed&nbsp;to&nbsp;be&nbsp;named&nbsp;`chromium`,&nbsp;and&nbsp;on&nbsp;$PATH<br>
 if&nbsp;not&nbsp;specified&nbsp;in&nbsp;the&nbsp;`binary`&nbsp;parameter.<br>
@@ -73,7 +73,7 @@ instance.&nbsp;This&nbsp;can&nbsp;be&nbsp;useful&nbsp;when&nbsp;waiting&nbsp;for
 from&nbsp;chrome,&nbsp;but&nbsp;higher&nbsp;level&nbsp;calls&nbsp;are&nbsp;better&nbsp;suited&nbsp;for&nbsp;managing&nbsp;wait-for-message<br>
 type&nbsp;needs.</tt></dd></dl>
 
-<dl><dt><a name="ChromeInterface-new_tab"><strong>new_tab</strong></a>(self)</dt></dl>
+<dl><dt><a name="ChromeInterface-new_tab"><strong>new_tab</strong></a>(self, *args, **kwargs)</dt></dl>
 
 <dl><dt><a name="ChromeInterface-synchronous_command"><strong>synchronous_command</strong></a>(self, *args, **kwargs)</dt><dd><tt>Forward&nbsp;a&nbsp;command&nbsp;to&nbsp;the&nbsp;remote&nbsp;chrome&nbsp;instance&nbsp;via&nbsp;the&nbsp;transport<br>
 connection,&nbsp;and&nbsp;check&nbsp;the&nbsp;return&nbsp;for&nbsp;an&nbsp;error.<br>
