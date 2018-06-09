@@ -3,12 +3,12 @@
 import json
 import logging
 import ast
-import os.path
-import astor
+import difflib
 import sys
 import pprint
-
 import os.path
+
+import astor
 
 
 CHECKS = {
@@ -508,7 +508,7 @@ def print_file_ast():
 	print("astor.dump_tree(this_ast)")
 	print(astor.dump_tree(this_ast))
 
-def update_generated_class(force=False):
+def update_generated_class(force=False, output_diff=False):
 	log = logging.getLogger("Main.ChromeController.WrapperGenerator")
 	gen_filename = "Generated.py"
 	cur_file = os.path.abspath(__file__)
@@ -524,21 +524,40 @@ def update_generated_class(force=False):
 		# The class hasn't been generated yet?
 		have = ""
 
-	if have.strip() != cls_def.strip() and not force:
+
+	if have.strip() == cls_def.strip() and not force:
 		log.info("ChromeController wrapper is up to date. Nothing to do")
 	else:
+
 		if not force:
 			log.warning("Generated wrapper appears to be out of date. Regenerating.")
 		else:
 			log.warning("Generated wrapper being force-regenerated")
 		log.warning("Note: If ChromeController is installed as a module, "
 		                 "this may require administrator permissions")
+
+		if output_diff:
+			if have.strip() == cls_def.strip():
+				log.info("No changes!")
+			else:
+				log.info("Calculating changes")
+				d = difflib.Differ()
+				diff = d.compare(have.strip().splitlines(keepends=True), cls_def.strip().splitlines(keepends=True))
+				dstr = ''.join(diff)
+				for line in dstr.split("\n"):
+					if line.startswith(" "):
+						continue
+					log.info("Diff: %s", line)
+
 		try:
 			with open(fname, "w", encoding='utf-8') as fp:
 				fp.write(cls_def)
 		except IOError:
-			raise IOError("Could not update class definition file: {}, and "
-			              "it is out of date!".format(fname))
+			if force:
+				raise IOError("Could not update class definition file: {}, and "
+				              "it is out of date!".format(fname))
+			else:
+				log.error("Failure updating file '%s'!" % fname)
 
 
 def test():
