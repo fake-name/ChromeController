@@ -35,8 +35,13 @@ class _TabStore(cachetools.LRUCache):
 	def popitem(self):
 		key, value = super().popitem()
 		self.log.debug('Key "%s" evicted with value "%s"', key, value)
-		value.close()
+		dummy_lock, tab = value
+		tab.close()
 		return None
+
+	def __del__(self):
+		for dummy_lock, tab in self.values():
+			tab.close()
 
 class TabPooledChromium(object):
 
