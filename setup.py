@@ -34,9 +34,9 @@ setup(
 	long_description=open("README.md").read(),
 	long_description_content_type = "text/markdown",
 
-	dependency_links=[
-		'https://github.com/berkerpeksag/astor/tarball/master#egg=astor-0.6',
-	],
+	# dependency_links=[
+	# 	'https://github.com/berkerpeksag/astor/tarball/master#egg=astor-0.6',
+	# ],
 
 	# Dependent packages (distributions)
 	install_requires=[
