@@ -39,9 +39,6 @@ class _TabStore(cachetools.LRUCache):
 		tab.close()
 		return None
 
-	def __del__(self):
-		for dummy_lock, tab in self.values():
-			tab.close()
 
 class TabPooledChromium(object):
 

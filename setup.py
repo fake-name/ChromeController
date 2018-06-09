@@ -11,10 +11,10 @@ setup(
 	name="ChromeController",
 
 	# Version number (initial):
-	version="0.3.3",
+	version="0.3.4",
 
 	# Application author details:
-	author="Connor Wolf	",
+	author="Connor Wolf",
 	author_email="github@imaginaryindustries.com",
 
 	# Packages
