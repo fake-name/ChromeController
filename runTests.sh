@@ -9,7 +9,8 @@ nosetests                            \
 	--with-coverage                  \
 	--exe                            \
 	--cover-package=ChromeController \
-	tests.test_tab_pool
+	tests.test_simple
+	# tests.test_tab_pool
 
 	# tests.test_multithreaded
 	# --nocapture                \

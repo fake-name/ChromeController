@@ -26,6 +26,9 @@ if 'win' in sys.platform:
 
 ACTIVE_PORTS = set()
 
+
+
+
 class ChromeExecutionManager():
 	"""
 	Class for managing talking to a chromium instance, as well as
@@ -125,11 +128,17 @@ class ChromeExecutionManager():
 		if 'win' in sys.platform:
 			creationflags |= subprocess.CREATE_NEW_PROCESS_GROUP
 
+		preexec_fn = None
+		if 'linux' in sys.platform:
+			from . import exit_handler
+			preexec_fn = exit_handler.on_parent_exit('SIGTERM')
+
 		self.cr_proc = subprocess.Popen(argv,
-										stdin=open(os.path.devnull, "r"),
-										stdout=subprocess.PIPE,
-										stderr=subprocess.PIPE,
-										creationflags=creationflags
+										stdin         = open(os.path.devnull, "r"),
+										stdout        = subprocess.PIPE,
+										stderr        = subprocess.PIPE,
+										creationflags = creationflags,
+										preexec_fn    = preexec_fn,
 									)
 
 		self.log.debug("Spawned process: %s, PID: %s", self.cr_proc, self.cr_proc.pid)
