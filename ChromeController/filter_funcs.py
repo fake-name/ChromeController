@@ -67,6 +67,26 @@ def check_frame_load_command(method_name):
 
 	return frame_loading_tracker
 
+def check_frame_loader_command(method_name, loader_id):
+	def frame_loading_tracker_with_loader(message):
+		if not message:
+			return False
+		if "method" not in message:
+			return False
+		if message['method'] != method_name:
+			return False
+		if 'params' not in message:
+			return False
+		if 'loaderId' not in message['params']:
+			return False
+		if message['params']["loaderId"] == loader_id:
+			return True
+
+		return False
+
+
+	return frame_loading_tracker_with_loader
+
 def check_load_event_fired(message):
 		if not message:
 			return False

@@ -528,7 +528,7 @@ class ChromeExecutionManager():
 		finally:
 			self.soclist[tab_key].settimeout(self.websocket_timeout)
 
-	def recv_filtered(self, keycheck, tab_key, timeout=30):
+	def recv_filtered(self, keycheck, tab_key, timeout=30, message=None):
 		'''
 		Receive a filtered message, using the callable `keycheck` to filter received messages
 		for content.
@@ -571,7 +571,10 @@ class ChromeExecutionManager():
 				self.messages[tab_key].append(tmp)
 
 			if time.time() > timeout_at:
-				return None
+				if message:
+					raise cr_exceptions.ChromeResponseNotReceived("Failed to receive response in recv_filtered() (%s)" % message)
+				else:
+					raise cr_exceptions.ChromeResponseNotReceived("Failed to receive response in recv_filtered()")
 			else:
 				time.sleep(0.005)
 

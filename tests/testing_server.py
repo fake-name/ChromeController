@@ -233,9 +233,11 @@ def capture_expected_headers(test_context, expected_headers):
 
 			elif self.path == "/redirect/to-1":
 				self.send_response(200)
+				self.send_header('Content-type', "text/html")
 				self.end_headers()
 				self.wfile.write(b"Redirect-To-1")
 
+			# I'm not completely sure this is completely a valid way to do redirects?
 			elif self.path == "/redirect/from-2":
 				self.send_response(302)
 				self.send_header('uri', "to-2")
@@ -243,13 +245,40 @@ def capture_expected_headers(test_context, expected_headers):
 
 			elif self.path == "/redirect/to-2":
 				self.send_response(200)
+				self.send_header('Content-type', "text/html")
 				self.end_headers()
 				self.wfile.write(b"Redirect-To-2")
 
 			elif self.path == "/redirect/from-3":
 				self.send_response(302)
-				newurl = "http://{}:{}".format(self.server.server_address[0], self.server.server_address[1])
-				self.send_header('uri', newurl)
+				newurl = "http://{}:{}/redirect/to-3".format(self.server.server_address[0], self.server.server_address[1])
+				self.send_header('location', newurl)
+				self.end_headers()
+
+			elif self.path == "/redirect/to-3":
+				self.send_response(200)
+				self.send_header('Content-type', "text/html")
+				self.end_headers()
+				self.wfile.write(b"Redirect-To-3")
+
+			elif self.path == "/redirect/from-4":
+				self.send_response(302)
+				self.send_header('Content-type', "text/html")
+				self.end_headers()
+				body = "<html><body><script>window.location.href='/redirect/to-4'</script></body></html>"
+				self.wfile.write(body.encode("utf-8"))
+
+			elif self.path == "/redirect/to-4":
+				self.send_response(200)
+				self.send_header('Content-type', "text/html")
+				self.end_headers()
+				self.wfile.write(b"Redirect-To-4")
+
+			# This looks like a cross-domain request
+			elif self.path == "/redirect/from-5":
+				self.send_response(302)
+				newurl = "http://{}:{}/".format(self.server.server_address[0], self.server.server_address[1])
+				self.send_header('location', newurl)
 				self.end_headers()
 
 			elif self.path == "/password/expect":

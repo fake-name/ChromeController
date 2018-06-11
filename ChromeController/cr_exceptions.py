@@ -23,3 +23,5 @@ class ChromeDiedError(ChromeError):
 
 class ChromeNavigateTimedOut(ChromeError):
 	pass
+class ChromeResponseNotReceived(ChromeError):
+	pass
