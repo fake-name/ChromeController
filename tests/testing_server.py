@@ -281,6 +281,57 @@ def capture_expected_headers(test_context, expected_headers):
 				self.send_header('location', newurl)
 				self.end_headers()
 
+			##################################################################################################################################
+			# Multiple redirects
+			##################################################################################################################################
+
+			elif self.path == "/redirect_mult/from-1":
+				self.send_response(302)
+				self.send_header('location', "from-2")
+				self.end_headers()
+
+			elif self.path == "/redirect_mult/from-2":
+				self.send_response(302)
+				self.send_header('location', "from-3")
+				self.end_headers()
+
+			elif self.path == "/redirect_mult/from-3":
+				self.send_response(302)
+				self.send_header('location', "from-4")
+				self.end_headers()
+
+			elif self.path == "/redirect_mult/from-4":
+				self.send_response(302)
+				self.send_header('location', "to-5")
+				self.end_headers()
+
+			elif self.path == "/redirect_mult/to-5":
+				self.send_response(200)
+				self.send_header('Content-type', "text/html")
+				self.end_headers()
+				self.wfile.write(b"Multi-Redirect-end-5")
+
+
+			elif self.path == '/redirect_slow/from-1':
+
+				self.send_response(200)
+				self.send_header('Content-type', "text/html")
+				self.end_headers()
+				self.wfile.write(b'<html><head><title>Still at title?</title></head><body>Slow Redirect</body><script type="text/JavaScript">setTimeout("location.href = \'/redirect_slow/to-1\';", 1500);</script></html>')
+
+			elif self.path == '/redirect_slow/to-1':
+
+				self.send_response(200)
+				self.send_header('Content-type', "text/html")
+				self.end_headers()
+				self.wfile.write(b"Slow-Redirect-end-1")
+
+
+
+			##################################################################################################################################
+			#
+			##################################################################################################################################
+
 			elif self.path == "/password/expect":
 				# print("Password")
 				# print(self.headers)
@@ -323,6 +374,8 @@ def capture_expected_headers(test_context, expected_headers):
 				self.end_headers()
 				self.wfile.write(b"Binary!\x00\x01\x02\x03")
 
+
+
 			##################################################################################################################################
 			# Cookie stuff
 			##################################################################################################################################
@@ -356,6 +409,7 @@ def capture_expected_headers(test_context, expected_headers):
 				self.send_header('Content-type', "text/html")
 				self.end_headers()
 				self.wfile.write(b"<html><body>Cookie is missing</body></html>")
+
 
 
 

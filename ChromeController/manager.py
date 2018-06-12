@@ -524,28 +524,53 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		pass
 
+	def get_unpacked_response_body(self, requestId, mimetype="application/unknown"):
+		'''
+		Return a unpacked, decoded resposne body from Network_getResponseBody()
+		'''
+		content = self.Network_getResponseBody(requestId)
+
+		assert 'result' in content
+		result = content['result']
+
+		assert 'base64Encoded' in result
+		assert 'body' in result
+
+		if result['base64Encoded']:
+			content = base64.b64decode(result['body'])
+		else:
+			content = result['body']
+
+		self.log.info("Navigate complete. Received %s byte response with type %s.", len(content), mimetype)
+
+		return {'binary' : result['base64Encoded'],  'mimetype' : mimetype, 'content' : content}
 
 
-	def __try_handle_redirect(self, timeout):
+	def handle_page_location_changed(self, timeout=None):
+		'''
+		If the chrome tab has internally redirected (generally because jerberscript), this
+		will walk the page navigation responses and attempt to fetch the response body for
+		the tab's latest location.
+		'''
+
+		# In general, this is often called after other mechanisms have confirmed
+		# that the tab has already navigated. As such, we want to not wait a while
+		# to discover something went wrong, so use a timeout that basically just
+		# results in checking the available buffer, and nothing else.
+		if not timeout:
+			timeout = 0.1
+
 		self.log.debug("We may have redirected. Checking.")
 
-
-		# print("Did we redirect?")
 		messages = self.transport.recv_all_filtered(filter_funcs.capture_loading_events, tab_key=self.tab_id)
-		# print("Filtered messages:")
-		# pprint.pprint(messages)
 		if not messages:
 			raise ChromeError("Couldn't track redirect! No idea what to do!")
 
 		last_message = messages[-1]
-		# print("Last Message")
-		# pprint.pprint(last_message)
 		self.log.info("Probably a redirect! New content url: '%s'", last_message['params']['documentURL'])
 
 		resp = self.transport.recv_filtered(filter_funcs.network_response_recieved_for_url(last_message['params']['documentURL'], last_message['params']['frameId']), tab_key=self.tab_id)
 		resp = resp['params']
-		# print("Resp")
-		# pprint.pprint(resp)
 
 		ctype = 'application/unknown'
 
@@ -558,9 +583,8 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		# We assume the last document request was the redirect.
 		# This is /probably/ kind of a poor practice, but what the hell.
-		content = self.Network_getResponseBody(last_message['params']['requestId'])
-		return ctype, content
-		# return messages[-1][]
+		# I have no idea what this would do if there are non-html documents (or if that can even happen.)
+		return self.get_unpacked_response_body(last_message['params']['requestId'], mimetype=ctype)
 
 	def blocking_navigate_and_get_source(self, url, timeout=DEFAULT_TIMEOUT_SECS):
 		'''
@@ -602,24 +626,11 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		self.log.debug("Trying to get response body")
 		try:
-			content = self.Network_getResponseBody(resp['requestId'])
+			ret = self.get_unpacked_response_body(resp['requestId'], mimetype=ctype)
 		except ChromeError:
-			ctype, content = self.__try_handle_redirect(timeout)
+			ret = self.handle_page_location_changed(timeout)
 
-		assert 'result' in content
-		result = content['result']
-
-		assert 'base64Encoded' in result
-		assert 'body' in result
-
-		if result['base64Encoded']:
-			content = base64.b64decode(result['body'])
-		else:
-			content = result['body']
-
-		self.log.info("Navigate complete. Received %s byte response with type %s.", len(content), ctype)
-
-		return {'binary' : result['base64Encoded'],  'mimetype' : ctype, 'content' : content}
+		return ret
 
 
 	def get_rendered_page_source(self):

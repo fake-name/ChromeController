@@ -9,6 +9,12 @@ nosetests                            \
 	--with-coverage                  \
 	--exe                            \
 	--cover-package=ChromeController \
+	tests.test_redirects
+
+nosetests                            \
+	--with-coverage                  \
+	--exe                            \
+	--cover-package=ChromeController \
 	tests.test_tab_pool
 
 nosetests                            \
