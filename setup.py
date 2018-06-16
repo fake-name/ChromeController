@@ -45,6 +45,7 @@ setup(
 		'requests',
 		'cachetools',
 		'webrequest',
+		'docopt',
 	# We need pywin32 on windows for proper process termination.
 	] + win_req,
 )
