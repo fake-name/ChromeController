@@ -99,6 +99,47 @@ python > 3.6 or < 3.4.
 
 Transport layer (originally) from https://github.com/minektur/chrome_remote_shell
 
+The library also has a relatively useful CLI interface, principally useful for 
+doing things like fetching pages which have jerberscript-rendered content:
+
+```
+ python3 -m ChromeController --help
+Usage: __main__.py [OPTIONS] COMMAND [ARGS]...
+
+  ChromeController
+
+  Usage: python3 -m ChromeController [-s | --silent] [-v | --verbose]
+    python3 -m ChromeController fetch <url> [--binary <bin_name>] [--outfile <out_file_name>]
+    python3 -m ChromeController update
+    python3 -m ChromeController (-h | --help)
+    python3 -m ChromeController --version
+
+  Options:
+    -s --silent   Suppress all output aside from the fetched content
+                  This basically makes ChromeController act like a alternative to curl
+    -v --verbose  The opposite of silent. Causes the internal logging to output
+                  all traffic over the chromium control interface. VERY noisy.
+    --version     Show version.
+    fetch         Fetch a specified URL's content, and output it to the console.
+
+
+Options:
+  -v, --verbose  The opposite of silent. Causes the internal logging to output
+                 all traffic over the chromium control interface. VERY noisy.
+  -s, --silent   Suppress all output aside from the fetched content.
+                 This can be used to make ChromeController act like
+                 an alternative to curl with proper JS rendering.
+  --help         Show this message and exit.
+
+Commands:
+  fetch    Fetch a specified URL's content, and output...
+  update   Update the generated class
+  version  Print the ChromeController Version
+
+```
+
+
+
 License:
 BSD
 
