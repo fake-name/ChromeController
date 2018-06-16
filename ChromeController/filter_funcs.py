@@ -67,6 +67,24 @@ def check_frame_load_command(method_name):
 
 	return frame_loading_tracker
 
+
+
+def wait_for_methods(method_list):
+	def wait_for_methods_tracker(message):
+		if not message:
+			return False
+		if "method" not in message:
+			return False
+		if message['method'] not in method_list:
+			return False
+		if 'params' not in message:
+			return False
+		return True
+
+	return wait_for_methods_tracker
+
+
+
 def check_frame_loader_command(method_name, loader_id):
 	def frame_loading_tracker_with_loader(message):
 		if not message:
@@ -88,14 +106,14 @@ def check_frame_loader_command(method_name, loader_id):
 	return frame_loading_tracker_with_loader
 
 def check_load_event_fired(message):
-		if not message:
-			return False
-		if "method" not in message:
-			return False
-		if message['method'] == 'Page.loadEventFired':
-			# print("check_load_event_fired", message)
-			return True
+	if not message:
 		return False
+	if "method" not in message:
+		return False
+	if message['method'] == 'Page.loadEventFired':
+		# print("check_load_event_fired", message)
+		return True
+	return False
 
 
 def network_response_recieved_for_url(url, expected_id):
