@@ -375,7 +375,7 @@ class ChromeExecutionManager():
 		wsurl = cr_tab_meta['webSocketDebuggerUrl']
 
 		try:
-			self.log.info("Setting up websocket connection")
+			self.log.info("Setting up websocket connection for key '%s'", tab_key)
 			self.soclist[tab_key] = websocket.create_connection(wsurl)
 			self.soclist[tab_key].settimeout(self.websocket_timeout)
 
