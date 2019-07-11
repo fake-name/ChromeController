@@ -1,7 +1,14 @@
-### Chrome Remote Debug Protocol interface layer and toolkit.
+### Chrome Remote Control interface and debug protocol and toolkit.
 
-Interface for communicating/controlling a remote chrome instance via the Chrome 
-Remote Debugger protocol.
+The one-stop-shop for using google-chrome and/or chromium from python. With ChromeController you have
+complete access to the entire debugging interface you'd get from javascript, but in a language that 
+doesn't make one want to go become a sheep herder instead.
+
+Process lifecycle management, tab management, plus the complete chrome remote debugging 
+interface is exposed through to python.
+
+Automatically updates via automatic code generation by parsing the remote debugging protocol
+descripion json files. 
 
 #### Quickstart:
 
