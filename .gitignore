@@ -4,3 +4,4 @@ __pycache__
 /screenshot.png
 /build/*
 /ChromeController.egg-info
+dist

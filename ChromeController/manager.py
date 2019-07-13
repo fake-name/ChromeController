@@ -737,6 +737,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		self.transport.flush(tab_key=self.tab_id)
 
+		self.log.debug("Blocking navigate to URL: '%s'", url)
 		ret = self.Page_navigate(url = url)
 
 		assert("result"   in ret),           "Missing return content"

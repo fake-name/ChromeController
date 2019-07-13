@@ -118,7 +118,7 @@ class TabPooledChromium(object):
 			self.__active_tabs.setdefault(key, 0)
 			self.__active_tabs[key] += 1
 			if self.__active_tabs[key] > 1:
-				self.log.warning("Tab with key %s checked out more then once simultaneously")
+				self.log.warning("Tab with key %s checked out more then once simultaneously", key)
 
 		try:
 			lock, tab = self.__tab_cache[key]
