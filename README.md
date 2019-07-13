@@ -1,7 +1,14 @@
-### Chrome Remote Debug Protocol interface layer and toolkit.
+### Chrome Remote Control interface and debug protocol and toolkit.
 
-Interface for communicating/controlling a remote chrome instance via the Chrome 
-Remote Debugger protocol.
+The one-stop-shop for using google-chrome and/or chromium from python. With ChromeController you have
+complete access to the entire debugging interface you'd get from javascript, but in a language that 
+doesn't make one want to go become a sheep herder instead.
+
+Process lifecycle management, tab management, plus the complete chrome remote debugging 
+interface is exposed through to python.
+
+Automatically updates via automatic code generation by parsing the remote debugging protocol
+descripion json files. 
 
 #### Quickstart:
 
@@ -88,14 +95,14 @@ or object) are not validated, due to the complexity of properly constructing
 type validators for their semantics given the architecture (read: writing the
 validator in raw AST broke my brain).
 
-Tested mostly on python 3.5, lightly on 3.4 and 3.6, all on linux. If you are 
+Tested mostly on python 3.5, 3.6, lightly on 3.4 and 3.7, all on linux. If you are 
 using python 2, please stahp. It works with normal chromium and on windows, 
 but that has only been very lightly used. My test-target is the 
 google-provided `chrome` binary.
 
 Note that this tool generates and manipulates the AST directly, so it is 
 EXTREMELY sensitive to implementation details. It is *probably* broken on 
-python > 3.6 or < 3.4.
+python > 3.7 or < 3.4.
 
 Transport layer (originally) from https://github.com/minektur/chrome_remote_shell
 
