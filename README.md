@@ -1,4 +1,4 @@
-### Chrome Remote Control interface and debug protocol and toolkit.
+### Chrome Remote Control interface and debug protocol and toolkit.   [![Build Status](https://travis-ci.org/fake-name/ChromeController.svg?branch=master)](https://travis-ci.org/fake-name/ChromeController)[![Coverage Status](https://img.shields.io/coveralls/fake-name/ChromeController.svg)](https://coveralls.io/r/fake-name/ChromeController)
 
 The one-stop-shop for using google-chrome and/or chromium from python. With ChromeController you have
 complete access to the entire debugging interface you'd get from javascript, but in a language that 
