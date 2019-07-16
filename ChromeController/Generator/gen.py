@@ -396,7 +396,8 @@ class JsonInterfaceGenerator(object):
 
 
 		if (sys.version_info[0], sys.version_info[1]) == (3, 5) or \
-			(sys.version_info[0], sys.version_info[1]) == (3, 6):
+			(sys.version_info[0], sys.version_info[1]) == (3, 6) or \
+			(sys.version_info[0], sys.version_info[1]) == (3, 7):
 
 			# More irritating minor semantic differences in the AST between 3.4 and 3.5
 			if func_kwargs:
@@ -416,7 +417,7 @@ class JsonInterfaceGenerator(object):
 					keywords=message_params)
 		else:
 			print("Version:", sys.version_info)
-			raise RuntimeError("This script only functions on python 3.4, 3.5 or 3.6. Active python version {}.{}".format(*sys.version_info))
+			raise RuntimeError("This script only functions on python 3.4, 3.5, 3.6, or 3.7. Active python version {}.{}".format(*sys.version_info))
 
 
 		do_communicate = ast.Assign(targets=[ast.Name(id='subdom_funcs', ctx=ast.Store())], value=communicate_call)
