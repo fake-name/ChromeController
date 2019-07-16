@@ -4,8 +4,6 @@ import os.path
 import astor
 import pprint
 
-import WebRequest
-
 import ChromeController.manager as mgr
 import ChromeController
 

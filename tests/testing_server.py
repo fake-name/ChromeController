@@ -14,7 +14,6 @@ from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from threading import Thread
 
-import WebRequest
 
 
 def capture_expected_headers(test_context, expected_headers):
@@ -665,13 +664,3 @@ def start_server(assertion_class,
 
 	return mock_server_port, mock_server, mock_server_thread
 
-
-
-if __name__ == '__main__':
-
-	wg = WebRequest.WebGetRobust()
-	srv = start_server(None, wg, skip_header_checks=True)
-
-	print("running server on port: ", srv)
-	while 1:
-		time.sleep(1)
