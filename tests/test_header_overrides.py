@@ -266,14 +266,14 @@ class TestChromium(unittest.TestCase):
 		}
 		self.fetch_check_headers(expect_headers)
 
-	def test_custom_encoding_3(self):
-		'''
-		Send garbage
-		'''
-		expect_headers = {
-			'Accept-Encoding' : r"Test !@#$%^&*(;;);_;+;\\///\\ \"':>?<|}{][;;][[p\\tb ''' \"\" \" lah"
-		}
-		self.fetch_check_headers(expect_headers)
+	# def test_custom_encoding_3(self):
+	# 	'''
+	# 	Send garbage
+	# 	'''
+	# 	expect_headers = {
+	# 		'Accept-Encoding' : r"Test !@#$%^&*(;;);_;+;\\///\\ \"':>?<|}{][;;][[p\\tb ''' \"\" \" lah"
+	# 	}
+	# 	self.fetch_check_headers(expect_headers)
 
 	def test_custom_encoding_4(self):
 		'''
@@ -375,21 +375,22 @@ class TestChromium(unittest.TestCase):
 		}
 		self.fetch_check_headers(expect_headers)
 
-	def test_setting_random_5(self):
-		expect_headers = {
-			'Pineapple;Pineapple' : r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
-		}
-		self.fetch_check_headers(expect_headers)
 
-	def test_setting_random_6(self):
-		expect_headers = {
-			'Pineapple=Pineapple' : r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
-		}
-		self.fetch_check_headers(expect_headers)
+	# def test_setting_random_5(self):
+	# 	expect_headers = {
+	# 		'Pineapple;Pineapple' : r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
+	# 	}
+	# 	self.fetch_check_headers(expect_headers)
 
-	def test_setting_random_7(self):
-		expect_headers = {
-			'Pineapple=Pineapplehtt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com'
-				: r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
-		}
-		self.fetch_check_headers(expect_headers)
+	# def test_setting_random_6(self):
+	# 	expect_headers = {
+	# 		'Pineapple=Pineapple' : r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
+	# 	}
+	# 	self.fetch_check_headers(expect_headers)
+
+	# def test_setting_random_7(self):
+	# 	expect_headers = {
+	# 		'Pineapple=Pineapplehtt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com'
+	# 			: r"htt;ljksdfhglkjshdg!@#$%^&*()_++_)(*&^%$#@!}{\":>?><|{|}{\\][\';//.,1209-82409587p://www.googlez.com"
+	# 	}
+	# 	self.fetch_check_headers(expect_headers)
