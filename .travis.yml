@@ -1,0 +1,21 @@
+language: python
+python:
+    - "3.4"
+    - "3.5"
+    - "3.6"
+    - "3.7"
+    - "2.7"
+
+# command to install dependencies
+install:
+    - "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    - "sudo dpkg -i google-chrome-stable_current_amd64.deb"
+    - "pip install nose"
+    - "pip install coverage"
+    - "pip install coveralls"
+    - "pip install ."
+# command to run tests
+script: python $(which nosetests) --with-coverage --exe --cover-package=ChromeController
+
+after_success:
+    - coveralls
