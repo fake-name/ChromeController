@@ -4,7 +4,6 @@ import json
 import base64
 import zlib
 import gzip
-import bs4
 import ChromeController
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from threading import Thread
