@@ -44,7 +44,6 @@ setup(
 		'astor>=0.6',
 		'requests',
 		'cachetools',
-		'webrequest',
 		'docopt',
 	# We need pywin32 on windows for proper process termination.
 	] + win_req,

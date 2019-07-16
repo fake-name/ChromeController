@@ -5,8 +5,6 @@ import astor
 import pprint
 import logging
 
-import WebRequest
-
 import ChromeController.manager as mgr
 import ChromeController
 
