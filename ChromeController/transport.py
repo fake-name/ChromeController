@@ -117,7 +117,8 @@ class ChromeExecutionManager():
 		argv = [
 				binary,
 				'--headless',
-				'--remote-debugging-port={dbg_port}'.format(dbg_port=dbg_port)
+				'--remote-debugging-port={dbg_port}'.format(dbg_port=dbg_port),
+				'--enable-features=NetworkService',
 			]
 		if self.enable_gpu is False:
 			argv.append('--disable-gpu')
