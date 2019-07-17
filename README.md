@@ -162,7 +162,7 @@ chromium remote debug interface:
 
  - Strange Behaviour is `network.getCookies` (fixed)  
      https://bugs.chromium.org/p/chromium/issues/detail?id=668932
- - `network.clearBrowserCookies` appears to have no effect  
+ - `network.clearBrowserCookies` appears to have no effect (fixed)  
      https://bugs.chromium.org/p/chromium/issues/detail?id=672744
  - Overriding accept header fails  
      https://bugs.chromium.org/p/chromium/issues/detail?id=849972
