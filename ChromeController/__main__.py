@@ -21,7 +21,8 @@ ChromeController
 \b
 Usage: python3 -m ChromeController [-s | --silent] [-v | --verbose]
   python3 -m ChromeController fetch <url> [--binary <bin_name>] [--outfile <out_file_name>]
-  python3 -m ChromeController update
+  python3 -m ChromeController downloadnewprotocol
+  python3 -m ChromeController update --version
   python3 -m ChromeController (-h | --help)
   python3 -m ChromeController --version
 
@@ -44,11 +45,25 @@ Options:
 
 
 @cli.command()
-def update():
+@click.option('--protocolversion', '-e', default='1.2', help='Specify a particular version of the chrome debugging protocol to generate from. '
+	'This requires the appropriate protocol file be available locally. You may need to use `downloadnewprotocol`. '
+	'The stable version of the remote debugging protocol is 1.2')
+def update(protocolversion):
 	'''
 	Update the generated class
 	'''
-	gen.update_generated_class(force=True, output_diff=True)
+	gen.update_generated_class(output_diff=True, protocolversion=protocolversion)
+
+
+@cli.command()
+def downloadnewprotocol():
+	'''
+	Download a new version of the protocol description JSON files from github.
+
+	Depending on how you installed ChromeController, this *may* require administrator privileges, as it
+	writes to the package install directory where the protocol json files are located.
+	'''
+	gen.fetch_new_protocol()
 
 @cli.command()
 def version():

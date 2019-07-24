@@ -19,21 +19,8 @@ from ChromeController.cr_exceptions import ChromeError
 from ChromeController.resources import js
 
 
-try:
-	# Try to import the aparatus for generating the wrapper class, and
-	# import it, if possible.
-	from .Generator import gen
-	gen.update_generated_class()
-	ChromeRemoteDebugInterface_base = gen.get_class_def()
-except ImportError:
-	# If that failed, use the pre-generated version
-	try:
-		from ChromeController.Generator.Generated import ChromeRemoteDebugInterface as \
-			ChromeRemoteDebugInterface_base
-	except ImportError:
-		raise RuntimeError("Generated class wrapper doesn't exist, and couldn't be created!")
-
-
+# We use the generated wrapper. If you want a different version, use the CLI interface to update.
+from ChromeController.Generator.Generated import ChromeRemoteDebugInterface as ChromeRemoteDebugInterface_base
 
 
 DEFAULT_TIMEOUT_SECS = 10
