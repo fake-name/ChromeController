@@ -44,13 +44,25 @@ def capture_expected_headers(test_context, expected_headers):
 			return
 
 		def validate_headers(self):
-			for key, value in expected_headers.items():
-				v1 = value.replace(" ", "")
-				v2 = self.headers[key]
-				if v2 is None:
-					v2 = ""
-				v2 = v2.replace(" ", "")
-				test_context.assertEqual(v1, v2, msg="Mismatch in header parameter '{}' : '{}' -> '{}'".format(key, value, self.headers[key]))
+			try:
+				for key, value in expected_headers.items():
+					v1 = value.replace(" ", "")
+					v2 = self.headers[key]
+					if v2 is None:
+						v2 = ""
+					v2 = v2.replace(" ", "")
+					test_context.assertEqual(v1, v2, msg="Mismatch in header parameter '{}' : '{}' -> '{}'".format(key, value, self.headers[key]))
+
+			except Exception:
+				print("Header mismatch!")
+				print("Received Headers:")
+				for key, value in self.headers.items():
+					print("	{} -> {}".format(key, value))
+				print("Expected Headers:")
+				for key, value in expected_headers.items():
+					print("	{} -> {}".format(key, value))
+
+				raise
 
 
 		def _get_handler(self):
