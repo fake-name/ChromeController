@@ -14,7 +14,7 @@ install:
     - "pip install coveralls"
     - "pip install ."
 # command to run tests
-script: python $(which nosetests) --with-coverage --exe --cover-package=ChromeController
+script: python $(which nosetests) --with-coverage --exe --cover-package=ChromeController tests
 
 after_success:
     - coveralls
