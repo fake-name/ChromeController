@@ -27,7 +27,10 @@ class TestChromium(unittest.TestCase):
 			self.mock_server_port, self.mock_server, self.mock_server_thread = testing_server.start_server(self, expect_headers)
 			tgturl = "http://localhost:{}".format(self.mock_server_port)
 			with ChromeController.ChromeContext(CHROME_BINARY_NAME) as cr:
-				cr.update_headers(expect_headers)
+				ret = cr.update_headers(expect_headers)
+				# print("update_headers return:")
+				# print(ret)
+				# print("")
 				resp = cr.blocking_navigate_and_get_source(tgturl)
 
 			self.assertEqual(resp['content'], 'Root OK?')
