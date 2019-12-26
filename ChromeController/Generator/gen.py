@@ -121,7 +121,8 @@ class JsonInterfaceGenerator(object):
 		super_func_call = ast.Call(func=ast.Name(id='super', ctx=ast.Load()), args=[], keywords=[])
 		if (sys.version_info[0], sys.version_info[1]) == (3, 5) or \
 			(sys.version_info[0], sys.version_info[1]) == (3, 6) or \
-			(sys.version_info[0], sys.version_info[1]) == (3, 7):
+			(sys.version_info[0], sys.version_info[1]) == (3, 7) or \
+			(sys.version_info[0], sys.version_info[1]) == (3, 8):
 			super_func = ast.Call(
 									func=ast.Attribute(value=super_func_call, attr='__init__', ctx=ast.Load()),
 									args=[ast.Starred(value=ast.Name(id='args', ctx=ast.Load()), ctx=ast.Load())],
@@ -153,6 +154,7 @@ class JsonInterfaceGenerator(object):
 					vararg=ast.arg(arg='args', annotation=None),
 					kwarg=ast.arg(arg='kwargs', annotation=None),
 					varargannotation=None,
+					posonlyargs=[],
 					kwonlyargs=[],
 					kwargannotation=None,
 					defaults=[],
@@ -395,7 +397,8 @@ class JsonInterfaceGenerator(object):
 
 		if (sys.version_info[0], sys.version_info[1]) == (3, 5) or \
 			(sys.version_info[0], sys.version_info[1]) == (3, 6) or \
-			(sys.version_info[0], sys.version_info[1]) == (3, 7):
+			(sys.version_info[0], sys.version_info[1]) == (3, 7) or \
+			(sys.version_info[0], sys.version_info[1]) == (3, 8):
 
 			# More irritating minor semantic differences in the AST between 3.4 and 3.5
 			if func_kwargs:
@@ -438,6 +441,7 @@ class JsonInterfaceGenerator(object):
 					args=args,
 					vararg=None,
 					varargannotation=None,
+					posonlyargs=[],
 					kwonlyargs=[],
 					kwarg=kwarg,
 					kwargannotation=None,
@@ -463,7 +467,10 @@ class JsonInterfaceGenerator(object):
 			self.interface_class,
 		]
 
-		mod = ast.Module(module_components, lineno=self.__get_line(), col_offset=1)
+		if sys.version_info >= (3, 8):
+			mod = ast.Module(module_components, [], lineno=self.__get_line(), col_offset=1)
+		else:
+			mod = ast.Module(module_components, lineno=self.__get_line(), col_offset=1)
 
 		mod = ast.fix_missing_locations(mod)
 
