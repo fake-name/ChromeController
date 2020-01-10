@@ -17,7 +17,8 @@ descripion json files.
 ```python
 import ChromeController
 
-with ChromeController.ChromeContext(binary="google-chrome") as cr:
+additional_options = ['--user-data-dir=/tmp/x']
+with ChromeController.ChromeContext(binary="google-chrome", additional_options=additional_options) as cr:
     
     # Do a blocking navigate to a URL, and get the page content as served by the remote
     # server, with no modification by local javascript (if applicable)
