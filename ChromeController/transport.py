@@ -39,10 +39,11 @@ class ChromeExecutionManager():
 	def __init__(self,
 			binary,
 			base_tab_key,
-			host              = 'localhost',
-			port              = None,
-			websocket_timeout = 10,
-			enable_gpu        = False,
+			host               = 'localhost',
+			port               = None,
+			websocket_timeout  = 10,
+			enable_gpu         = False,
+			additional_options = [],
 			):
 		"""
 
@@ -70,12 +71,13 @@ class ChromeExecutionManager():
 
 		ACTIVE_PORTS.add(port)
 
-		self.binary            = binary
-		self.host              = host
-		self.port              = port
-		self.enable_gpu        = enable_gpu
-		self.msg_id            = 0
-		self.websocket_timeout = websocket_timeout
+		self.binary             = binary
+		self.host               = host
+		self.port               = port
+		self.enable_gpu         = enable_gpu
+		self.msg_id             = 0
+		self.websocket_timeout  = websocket_timeout
+		self.additional_options = additional_options
 
 		self.tablist = None
 		self.soclist = {}
@@ -91,7 +93,7 @@ class ChromeExecutionManager():
 		# Not sure which.
 		for x in range(999):
 			try:
-				self._launch_process(self.binary, self.port, base_tab_key)
+				self._launch_process(self.binary, self.port, base_tab_key, additional_options)
 				break
 			except cr_exceptions.ChromeConnectFailure:
 				if x > 3:
@@ -103,7 +105,7 @@ class ChromeExecutionManager():
 
 		self.messages = {}
 
-	def _launch_process(self, binary, dbg_port, base_tab_key):
+	def _launch_process(self, binary, dbg_port, base_tab_key, additional_options):
 
 		if binary is None:
 			binary = "chromium"
@@ -120,6 +122,7 @@ class ChromeExecutionManager():
 				'--remote-debugging-port={dbg_port}'.format(dbg_port=dbg_port),
 				'--enable-features=NetworkService',
 			]
+		argv += additional_options
 		if self.enable_gpu is False:
 			argv.append('--disable-gpu')
 

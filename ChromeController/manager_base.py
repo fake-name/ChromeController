@@ -17,7 +17,7 @@ class ChromeInterface():
 	"""
 
 
-	def __init__(self, binary, dbg_port, use_execution_manager, *args, **kwargs):
+	def __init__(self, binary, dbg_port, use_execution_manager, additional_options, *args, **kwargs):
 		"""
 		Base chromium transport initialization.
 
@@ -59,9 +59,10 @@ class ChromeInterface():
 			self.tab_id = uuid.uuid4()
 
 			self.transport = ChromeExecutionManager(
-					binary       = binary,
-					port         = dbg_port,
-					base_tab_key = self.tab_id,
+					binary             = binary,
+					port               = dbg_port,
+					base_tab_key       = self.tab_id,
+					additional_options = additional_options,
 					*args,
 					**kwargs
 				)
