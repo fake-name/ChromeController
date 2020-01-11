@@ -34,6 +34,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		binary                = None,
 		dbg_port              = None,
 		use_execution_manager = None,
+		additional_options    = [],
 		visible_size          = None,
 		disable_page          = False,
 		disable_dom           = False,
@@ -44,6 +45,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 			binary                = binary,
 			dbg_port              = dbg_port,
 			use_execution_manager = use_execution_manager,
+			additional_options    = additional_options,
 			*args, **kwargs)
 
 		if disable_page:
