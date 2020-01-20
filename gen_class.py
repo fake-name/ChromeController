@@ -5,18 +5,19 @@ import astor
 import pprint
 import logging
 
-import ChromeController.manager as mgr
+from ChromeController import manager as mgr
+from ChromeController.Generator import gen
 import ChromeController
 
 
-def gen():
+def gen_new_class():
 	print("__file__", __file__)
-	# print("Manager: ", mgr)
+	print("Generator: ", gen)
 	print("Updating generated class")
-	cls_def = mgr.gen.update_generated_class(force=True)
+	_ = gen.update_generated_class(output_diff=True)
 	print("Class Updated")
 
 
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG)
-	gen()
+	gen_new_class()

@@ -6,14 +6,14 @@
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><strong>ChromeController.ChromeRemoteDebugInterface</strong> = <a name="ChromeController.ChromeRemoteDebugInterface">class ChromeRemoteDebugInterface</a>(ChromeController.Generator.gen.ChromeRemoteDebugInterface)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><strong>ChromeController.ChromeRemoteDebugInterface</strong> = <a name="ChromeController.ChromeRemoteDebugInterface">class ChromeRemoteDebugInterface</a>(<a href="ChromeController.Generator.Generated.html#ChromeRemoteDebugInterface">ChromeController.Generator.Generated.ChromeRemoteDebugInterface</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>Remote&nbsp;control&nbsp;class&nbsp;for&nbsp;Chromium.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.manager.html#ChromeRemoteDebugInterface">ChromeRemoteDebugInterface</a></dd>
-<dd>ChromeController.Generator.gen.ChromeRemoteDebugInterface</dd>
+<dd><a href="ChromeController.Generator.Generated.html#ChromeRemoteDebugInterface">ChromeController.Generator.Generated.ChromeRemoteDebugInterface</a></dd>
 <dd><a href="ChromeController.manager_base.html#ChromeInterface">ChromeController.manager_base.ChromeInterface</a></dd>
 <dd><a href="builtins.html#object">builtins.object</a></dd>
 </dl>
@@ -186,13 +186,23 @@ or&nbsp;circumvent&nbsp;outbound&nbsp;url&nbsp;wrappers.</tt></dd></dl>
 &nbsp;<br>
 Return&nbsp;is&nbsp;a&nbsp;2-tuple:&nbsp;(page_title,&nbsp;page_url).</tt></dd></dl>
 
-<dl><dt><a name="ChromeRemoteDebugInterface-get_rendered_page_source"><strong>get_rendered_page_source</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;HTML&nbsp;markup&nbsp;for&nbsp;the&nbsp;current&nbsp;page.<br>
+<dl><dt><a name="ChromeRemoteDebugInterface-get_rendered_page_source"><strong>get_rendered_page_source</strong></a>(self, dom_idle_requirement_secs=3, max_wait_timeout=30)</dt><dd><tt>Get&nbsp;the&nbsp;HTML&nbsp;markup&nbsp;for&nbsp;the&nbsp;current&nbsp;page.<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;done&nbsp;by&nbsp;looking&nbsp;up&nbsp;the&nbsp;root&nbsp;DOM&nbsp;node,&nbsp;and&nbsp;then&nbsp;requesting&nbsp;the&nbsp;outer&nbsp;HTML<br>
 for&nbsp;that&nbsp;node&nbsp;ID.<br>
 &nbsp;<br>
 This&nbsp;calls&nbsp;return&nbsp;will&nbsp;reflect&nbsp;any&nbsp;modifications&nbsp;made&nbsp;by&nbsp;javascript&nbsp;to&nbsp;the<br>
-page.&nbsp;For&nbsp;unmodified&nbsp;content,&nbsp;use&nbsp;`<a href="#ChromeController.ChromeRemoteDebugInterface-blocking_navigate_and_get_source">blocking_navigate_and_get_source</a>()`</tt></dd></dl>
+page.&nbsp;For&nbsp;unmodified&nbsp;content,&nbsp;use&nbsp;`<a href="#ChromeController.ChromeRemoteDebugInterface-blocking_navigate_and_get_source">blocking_navigate_and_get_source</a>()`<br>
+&nbsp;<br>
+dom_idle_requirement_secs&nbsp;specifies&nbsp;the&nbsp;period&nbsp;of&nbsp;time&nbsp;for&nbsp;which&nbsp;there&nbsp;must&nbsp;have&nbsp;been&nbsp;no<br>
+DOM&nbsp;modifications&nbsp;before&nbsp;treating&nbsp;the&nbsp;rendered&nbsp;output&nbsp;as&nbsp;"final".&nbsp;This&nbsp;call&nbsp;will&nbsp;therefore&nbsp;block&nbsp;for<br>
+at&nbsp;least&nbsp;dom_idle_requirement_secs&nbsp;seconds.</tt></dd></dl>
+
+<dl><dt><a name="ChromeRemoteDebugInterface-get_unpacked_response_body"><strong>get_unpacked_response_body</strong></a>(self, requestId, mimetype='application/unknown')</dt><dd><tt>Return&nbsp;a&nbsp;unpacked,&nbsp;decoded&nbsp;resposne&nbsp;body&nbsp;from&nbsp;<a href="#ChromeController.ChromeRemoteDebugInterface-Network_getResponseBody">Network_getResponseBody</a>()</tt></dd></dl>
+
+<dl><dt><a name="ChromeRemoteDebugInterface-handle_page_location_changed"><strong>handle_page_location_changed</strong></a>(self, timeout=None)</dt><dd><tt>If&nbsp;the&nbsp;chrome&nbsp;tab&nbsp;has&nbsp;internally&nbsp;redirected&nbsp;(generally&nbsp;because&nbsp;jerberscript),&nbsp;this<br>
+will&nbsp;walk&nbsp;the&nbsp;page&nbsp;navigation&nbsp;responses&nbsp;and&nbsp;attempt&nbsp;to&nbsp;fetch&nbsp;the&nbsp;response&nbsp;body&nbsp;for<br>
+the&nbsp;tab's&nbsp;latest&nbsp;location.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-navigate_to"><strong>navigate_to</strong></a>(self, url)</dt><dd><tt>Trigger&nbsp;a&nbsp;page&nbsp;navigation&nbsp;to&nbsp;url&nbsp;`url`.<br>
 &nbsp;<br>
@@ -222,7 +232,7 @@ If&nbsp;no&nbsp;'User-Agent'&nbsp;key&nbsp;is&nbsp;present&nbsp;in&nbsp;the&nbsp
 the&nbsp;first&nbsp;item&nbsp;in&nbsp;the&nbsp;tuple&nbsp;will&nbsp;be&nbsp;None</tt></dd></dl>
 
 <hr>
-Methods inherited from ChromeController.Generator.gen.ChromeRemoteDebugInterface:<br>
+Methods inherited from <a href="ChromeController.Generator.Generated.html#ChromeRemoteDebugInterface">ChromeController.Generator.Generated.ChromeRemoteDebugInterface</a>:<br>
 <dl><dt><a name="ChromeRemoteDebugInterface-Accessibility_getPartialAXTree"><strong>Accessibility_getPartialAXTree</strong></a>(self, nodeId, **kwargs)</dt><dd><tt>Function&nbsp;path:&nbsp;Accessibility.getPartialAXTree<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Accessibility<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;name:&nbsp;getPartialAXTree<br>

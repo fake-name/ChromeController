@@ -34,7 +34,6 @@ class TestChromium(unittest.TestCase):
 		self.assertEqual(resp['binary'], False)
 		self.assertEqual(resp['mimetype'], "text/html")
 
-
 	def test_tab_repeatability_1(self):
 		tgturl = "http://localhost:{}/".format(self.mock_server_port)
 		with self.cr.tab(url=tgturl) as tab:
@@ -72,8 +71,6 @@ class TestChromium(unittest.TestCase):
 				title, cur_url = tab.get_page_url_title()
 				print("title, cur_url", title, cur_url)
 
-
-
 		print("3rd tab context!")
 		with self.cr.tab(url=tgturl) as tab:
 			title, cur_url = tab.get_page_url_title()
@@ -95,6 +92,31 @@ class TestChromium(unittest.TestCase):
 				title, cur_url = tab.get_page_url_title()
 				print("title, cur_url", title, cur_url)
 
+		# At this point, we should have fewer then 100 tabs, if nothing is broken.
+		print("3rd tab context!")
+		with self.cr.tab(url=tgturl) as tab:
+			targets = tab.Target_getTargets()
+			assert 'result' in targets
+			assert 'targetInfos' in targets['result']
+
+			self.assertLess(len(targets['result']['targetInfos']), 20)
+
+	def test_tab_size(self):
+		tgturl = "http://localhost:{}/".format(self.mock_server_port)
+		with self.cr.tab(url=tgturl) as tab:
+			resp = tab.blocking_navigate_and_get_source(tgturl)
+
+		self.assertEqual(resp['content'], 'Root OK?')
+		self.assertEqual(resp['binary'], False)
+		self.assertEqual(resp['mimetype'], "text/html")
+
+		for x in range(25):
+			print("Creating tab again!")
+			with self.cr.tab(url=tgturl, extra_id=x) as tab:
+				title, cur_url = tab.get_page_url_title()
+				print("title, cur_url", title, cur_url)
+
+		tab_pool_tabs = self.cr.active_tabs()
 
 
 		# At this point, we should have fewer then 100 tabs, if nothing is broken.
@@ -104,4 +126,68 @@ class TestChromium(unittest.TestCase):
 			assert 'result' in targets
 			assert 'targetInfos' in targets['result']
 
+			print("Active tabs:", len(targets['result']['targetInfos']))
+			print("Active tabs from manager:", tab_pool_tabs)
 			self.assertLess(len(targets['result']['targetInfos']), 20)
+			self.assertLess(tab_pool_tabs, 20)
+
+	def test_tab_closing_1(self):
+		tgturl = "http://localhost:{}/".format(self.mock_server_port)
+		with self.cr.tab(url=tgturl) as tab:
+			resp = tab.blocking_navigate_and_get_source(tgturl)
+
+		self.assertEqual(resp['content'], 'Root OK?')
+		self.assertEqual(resp['binary'], False)
+		self.assertEqual(resp['mimetype'], "text/html")
+
+		for x in range(15):
+			print("Creating tab again!")
+			with self.cr.tab(url=tgturl, extra_id=x) as tab:
+				title, cur_url = tab.get_page_url_title()
+				print("title, cur_url", title, cur_url)
+
+
+
+		# At this point, we should have fewer then 100 tabs, if nothing is broken.
+		print("3rd tab context!")
+		with self.cr.tab(url=tgturl) as tab:
+			targets = tab.Target_getTargets()
+			assert 'result' in targets
+			assert 'targetInfos' in targets['result']
+			tab_pool_tabs_1 = self.cr.active_tabs()
+
+			print("Active tabs:", len(targets['result']['targetInfos']))
+			print("Active tabs from manager:", tab_pool_tabs_1)
+			self.assertLess(len(targets['result']['targetInfos']), 15)
+			self.assertLess(tab_pool_tabs_1, 15)
+
+	def test_tab_closing_2(self):
+		tgturl = "http://localhost:{}/".format(self.mock_server_port)
+		with self.cr.tab(url=tgturl) as tab:
+			resp = tab.blocking_navigate_and_get_source(tgturl)
+
+		self.assertEqual(resp['content'], 'Root OK?')
+		self.assertEqual(resp['binary'], False)
+		self.assertEqual(resp['mimetype'], "text/html")
+
+		for x in range(15):
+			print("Creating tab again!")
+			with self.cr.tab(url=tgturl, extra_id=x) as tab:
+				title, cur_url = tab.get_page_url_title()
+				print("title, cur_url", title, cur_url)
+
+		self.cr.close_tabs()
+
+
+		# At this point, we should have fewer then 100 tabs, if nothing is broken.
+		print("3rd tab context!")
+		with self.cr.tab(url=tgturl) as tab:
+			targets = tab.Target_getTargets()
+			assert 'result' in targets
+			assert 'targetInfos' in targets['result']
+			tab_pool_tabs_1 = self.cr.active_tabs()
+
+			print("Active tabs:", len(targets['result']['targetInfos']))
+			print("Active tabs from manager:", tab_pool_tabs_1)
+			self.assertLess(len(targets['result']['targetInfos']), 4)
+			self.assertLess(tab_pool_tabs_1, 1)

@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="ChromeController.html"><font color="#ffffff">ChromeController</font></a>.transport</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/Storage/Scripts/ChromeController/ChromeController/transport.py">/media/Storage/Scripts/ChromeController/ChromeController/transport.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/Scripts/ChromeController/ChromeController/transport.py">/media/Scripts/ChromeController/ChromeController/transport.py</a></font></td></tr></table>
     <p><tt>Client&nbsp;for&nbsp;the&nbsp;Google&nbsp;Chrome&nbsp;browser's&nbsp;remote&nbsp;debugging&nbsp;api.<br>
 &nbsp;<br>
 &gt;&nbsp;a&nbsp;=&nbsp;Shell(host='localhost',&nbsp;port=92222)</tt></p>
@@ -61,7 +61,7 @@ managing&nbsp;the&nbsp;chromium&nbsp;instance's&nbsp;execution&nbsp;lifetime.<br
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="ChromeExecutionManager-__del__"><strong>__del__</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="ChromeExecutionManager-__init__"><strong>__init__</strong></a>(self, binary, base_tab_key, host='localhost', port=None, websocket_timeout=10, enable_gpu=False)</dt><dd><tt>Start&nbsp;up&nbsp;a&nbsp;chromium&nbsp;instance&nbsp;binary&nbsp;`binary`,&nbsp;with&nbsp;the&nbsp;base&nbsp;debug&nbsp;port&nbsp;`port`,<br>
+<dl><dt><a name="ChromeExecutionManager-__init__"><strong>__init__</strong></a>(self, binary, base_tab_key, host='localhost', port=None, websocket_timeout=10, enable_gpu=False, additional_options=[])</dt><dd><tt>Start&nbsp;up&nbsp;a&nbsp;chromium&nbsp;instance&nbsp;binary&nbsp;`binary`,&nbsp;with&nbsp;the&nbsp;base&nbsp;debug&nbsp;port&nbsp;`port`,<br>
 on&nbsp;host&nbsp;`localhost`.<br>
 &nbsp;<br>
 Note:&nbsp;If&nbsp;the&nbsp;port&nbsp;is&nbsp;set&nbsp;to&nbsp;None&nbsp;(the&nbsp;default),&nbsp;the&nbsp;port&nbsp;will&nbsp;be&nbsp;the&nbsp;next&nbsp;availble&nbsp;port&nbsp;accounting&nbsp;for&nbsp;other<br>
@@ -136,7 +136,7 @@ if&nbsp;the&nbsp;command&nbsp;is&nbsp;not&nbsp;the&nbsp;one&nbsp;filtered&nbsp;f
 &nbsp;<br>
 Note&nbsp;that&nbsp;the&nbsp;function&nbsp;is&nbsp;defined&nbsp;dynamically,&nbsp;and&nbsp;`message_id`&nbsp;is&nbsp;captured&nbsp;via&nbsp;closure.</tt></dd></dl>
 
-<dl><dt><a name="ChromeExecutionManager-recv_filtered"><strong>recv_filtered</strong></a>(self, keycheck, tab_key, timeout=30)</dt><dd><tt>Receive&nbsp;a&nbsp;filtered&nbsp;message,&nbsp;using&nbsp;the&nbsp;callable&nbsp;`keycheck`&nbsp;to&nbsp;filter&nbsp;received&nbsp;messages<br>
+<dl><dt><a name="ChromeExecutionManager-recv_filtered"><strong>recv_filtered</strong></a>(self, keycheck, tab_key, timeout=30, message=None)</dt><dd><tt>Receive&nbsp;a&nbsp;filtered&nbsp;message,&nbsp;using&nbsp;the&nbsp;callable&nbsp;`keycheck`&nbsp;to&nbsp;filter&nbsp;received&nbsp;messages<br>
 for&nbsp;content.<br>
 &nbsp;<br>
 `keycheck`&nbsp;is&nbsp;expected&nbsp;to&nbsp;be&nbsp;a&nbsp;callable&nbsp;that&nbsp;takes&nbsp;a&nbsp;single&nbsp;parameter&nbsp;(the&nbsp;decoded&nbsp;response<br>

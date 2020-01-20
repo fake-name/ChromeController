@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="ChromeController.html"><font color="#ffffff">ChromeController</font></a>.<a href="ChromeController.Generator.html"><font color="#ffffff">Generator</font></a>.gen</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/Storage/Scripts/ChromeController/ChromeController/Generator/gen.py">/media/Storage/Scripts/ChromeController/ChromeController/Generator/gen.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/Scripts/ChromeController/ChromeController/Generator/gen.py">/media/Scripts/ChromeController/ChromeController/Generator/gen.py</a></font></td></tr></table>
     <p></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -19,10 +19,10 @@
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="ast.html">ast</a><br>
 <a href="astor.html">astor</a><br>
-</td><td width="25%" valign=top><a href="json.html">json</a><br>
-<a href="logging.html">logging</a><br>
-</td><td width="25%" valign=top><a href="os.html">os</a><br>
-<a href="pprint.html">pprint</a><br>
+</td><td width="25%" valign=top><a href="difflib.html">difflib</a><br>
+<a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="logging.html">logging</a><br>
+<a href="os.html">os</a><br>
 </td><td width="25%" valign=top><a href="sys.html">sys</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -47,7 +47,7 @@
     
 <tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="JsonInterfaceGenerator-__init__"><strong>__init__</strong></a>(self, protocol_major=1, protocol_minor=2, debug_prints=False, *args, **kwargs)</dt><dd><tt>init</tt></dd></dl>
+<dl><dt><a name="JsonInterfaceGenerator-__init__"><strong>__init__</strong></a>(self, protocol_version='1.2', debug_prints=False, *args, **kwargs)</dt><dd><tt>init</tt></dd></dl>
 
 <dl><dt><a name="JsonInterfaceGenerator-compile_class"><strong>compile_class</strong></a>(self)</dt></dl>
 
@@ -70,12 +70,13 @@ Data descriptors defined here:<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-get_class_def"><strong>get_class_def</strong></a>()</dt></dl>
- <dl><dt><a name="-get_printed_ast"><strong>get_printed_ast</strong></a>()</dt></dl>
- <dl><dt><a name="-get_source"><strong>get_source</strong></a>()</dt></dl>
+<td width="100%"><dl><dt><a name="-fetch_new_protocol"><strong>fetch_new_protocol</strong></a>()</dt></dl>
+ <dl><dt><a name="-get_class_def"><strong>get_class_def</strong></a>(protocol_version=None)</dt></dl>
+ <dl><dt><a name="-get_printed_ast"><strong>get_printed_ast</strong></a>(protocol_version=None)</dt></dl>
+ <dl><dt><a name="-get_source"><strong>get_source</strong></a>(protocol_version=None)</dt></dl>
  <dl><dt><a name="-print_file_ast"><strong>print_file_ast</strong></a>()</dt></dl>
  <dl><dt><a name="-test"><strong>test</strong></a>()</dt></dl>
- <dl><dt><a name="-update_generated_class"><strong>update_generated_class</strong></a>(force=False)</dt></dl>
+ <dl><dt><a name="-update_generated_class"><strong>update_generated_class</strong></a>(output_diff, protocolversion='1.2')</dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">

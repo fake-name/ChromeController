@@ -22,7 +22,6 @@ from ChromeController.resources import js
 # We use the generated wrapper. If you want a different version, use the CLI interface to update.
 from ChromeController.Generator.Generated import ChromeRemoteDebugInterface as ChromeRemoteDebugInterface_base
 
-
 DEFAULT_TIMEOUT_SECS = 10
 
 class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):

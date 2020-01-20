@@ -39,6 +39,9 @@ class _TabStore(cachetools.LRUCache):
 		tab.close()
 		return None
 
+	def tab_count(self):
+		return len(self)
+
 
 class TabPooledChromium(object):
 
@@ -63,7 +66,7 @@ class TabPooledChromium(object):
 
 		# We pass a tab to the tabstore, because otherwise it might wind up evicting the root tab,
 		# which would take the entire chrome instance down with it when it's closed.
-		self.__tab_cache = _TabStore(maxsize=tab_pool_max_size, chrome_interface=self.chrome_interface.new_tab())
+		self.__tab_cache = _TabStore(maxsize=tab_pool_max_size, chrome_interface=self.chrome_interface)
 
 		self.__counter_lock = threading.Lock()
 		self.__active_tabs = {}
@@ -83,6 +86,25 @@ class TabPooledChromium(object):
 			self.chrome_interface.close()
 		except Exception:
 			pass
+
+	def close_tabs(self):
+		'''
+		Close all open tabs (but the management tab).
+
+		If some of the tabs are being used, this may cause errors
+		'''
+		with self.__counter_lock:
+			while self.__tab_cache.tab_count():
+				self.__tab_cache.popitem()
+
+	def active_tabs(self):
+		'''
+		Return the number of currently active tabs.
+		'''
+
+		return self.__tab_cache.tab_count()
+
+
 
 	@contextlib.contextmanager
 	def tab(self, netloc=None, url=None, extra_id=None, use_tid=False):
