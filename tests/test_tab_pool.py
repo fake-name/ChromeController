@@ -188,6 +188,7 @@ class TestChromium(unittest.TestCase):
 			tab_pool_tabs_1 = self.cr.active_tabs()
 
 			print("Active tabs:", len(targets['result']['targetInfos']))
+			print("Active tabs:", targets['result']['targetInfos'])
 			print("Active tabs from manager:", tab_pool_tabs_1)
-			self.assertLess(len(targets['result']['targetInfos']), 4)
-			self.assertLess(tab_pool_tabs_1, 1)
+			self.assertLess(len(targets['result']['targetInfos']), 5)
+			self.assertLess(tab_pool_tabs_1, 2)

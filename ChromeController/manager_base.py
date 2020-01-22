@@ -122,7 +122,9 @@ class ChromeInterface():
 		return new
 
 	def close(self):
+		# The process shouldn't be dead before we explicitly kill it.
 		self.transport.check_process_ded()
+
 		if self.is_root_session:
 			self.transport.close_all()
 		else:

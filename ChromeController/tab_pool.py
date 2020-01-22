@@ -59,7 +59,14 @@ class TabPooledChromium(object):
 		if tab_pool_max_size is None:
 			tab_pool_max_size = 10
 
+		self.alive = True
+
 		self.chrome_interface = ChromeRemoteDebugInterface(*args, **kwargs)
+
+		# We hold a tab open to prevent chrome from closing
+		# when all user tabs are closed.
+		self.root_tab = self.chrome_interface.new_tab()
+
 		self.tab_pool_max_size = tab_pool_max_size
 
 		self.log = logging.getLogger("Main.ChromeController.TabPool")
@@ -73,10 +80,10 @@ class TabPooledChromium(object):
 
 		self.__started_pid = os.getpid()
 
-		self.alive = True
 
 	def close(self):
 		if self.alive:
+			self.root_tab.close()
 			self.chrome_interface.close()
 			self.alive = False
 
@@ -103,7 +110,6 @@ class TabPooledChromium(object):
 		'''
 
 		return self.__tab_cache.tab_count()
-
 
 
 	@contextlib.contextmanager
