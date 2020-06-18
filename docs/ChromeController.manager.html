@@ -171,7 +171,17 @@ Status&nbsp;ExecuteClickElement(Session*&nbsp;session,<br>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-click_link_containing_url"><strong>click_link_containing_url</strong></a>(self, url)</dt><dd><tt>TODO</tt></dd></dl>
 
-<dl><dt><a name="ChromeRemoteDebugInterface-execute_javascript"><strong>execute_javascript</strong></a>(self, *args, **kwargs)</dt><dd><tt>Execute&nbsp;a&nbsp;javascript&nbsp;string&nbsp;in&nbsp;the&nbsp;context&nbsp;of&nbsp;the&nbsp;browser&nbsp;tab.</tt></dd></dl>
+<dl><dt><a name="ChromeRemoteDebugInterface-execute_javascript_function"><strong>execute_javascript_function</strong></a>(self, script, *args)</dt><dd><tt>Execute&nbsp;a&nbsp;javascript&nbsp;function&nbsp;in&nbsp;the&nbsp;context&nbsp;of&nbsp;the&nbsp;browser&nbsp;tab.<br>
+&nbsp;<br>
+The&nbsp;passed&nbsp;script&nbsp;must&nbsp;be&nbsp;a&nbsp;single&nbsp;function&nbsp;definition,&nbsp;which&nbsp;will<br>
+be&nbsp;called&nbsp;via&nbsp;({script}).apply(null,&nbsp;{args}).</tt></dd></dl>
+
+<dl><dt><a name="ChromeRemoteDebugInterface-execute_javascript_statement"><strong>execute_javascript_statement</strong></a>(self, script)</dt><dd><tt>Execute&nbsp;a&nbsp;javascript&nbsp;string&nbsp;in&nbsp;the&nbsp;context&nbsp;of&nbsp;the&nbsp;browser&nbsp;tab.<br>
+This&nbsp;only&nbsp;works&nbsp;for&nbsp;simple&nbsp;JS&nbsp;statements.&nbsp;More&nbsp;complex&nbsp;usage&nbsp;should<br>
+be&nbsp;via&nbsp;<a href="#ChromeRemoteDebugInterface-execute_javascript_function">execute_javascript_function</a>().<br>
+&nbsp;<br>
+This&nbsp;can&nbsp;also&nbsp;be&nbsp;used&nbsp;to&nbsp;interrogate&nbsp;the&nbsp;JS&nbsp;interpreter,&nbsp;as&nbsp;simply&nbsp;passing<br>
+variable&nbsp;names&nbsp;of&nbsp;interest&nbsp;will&nbsp;return&nbsp;the&nbsp;variable&nbsp;value.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-find_element"><strong>find_element</strong></a>(self, search)</dt><dd><tt><a href="#ChromeRemoteDebugInterface-DOM_performSearch">DOM_performSearch</a>(self,&nbsp;query,&nbsp;includeUserAgentShadowDOM)<br>
 Python&nbsp;Function:&nbsp;DOM_performSearch<br>

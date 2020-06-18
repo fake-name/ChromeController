@@ -109,17 +109,77 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		return (ret_1, ret_2)
 
 
-	def __exec_js(self, script, args=None, **extra_params):
+	def __remove_default_members(self, js_object):
+
+		ret = []
+
+		for item in js_object:
+			if 'name' in item:
+				if item['name'] == '__defineGetter__':
+					continue
+				if item['name'] == '__defineSetter__':
+					continue
+				if item['name'] == '__lookupGetter__':
+					continue
+				if item['name'] == '__lookupSetter__':
+					continue
+				if item['name'] == '__proto__':
+					continue
+				if item['name'] == 'constructor':
+					continue
+				if item['name'] == 'hasOwnProperty':
+					continue
+				if item['name'] == 'isPrototypeOf':
+					continue
+				if item['name'] == 'propertyIsEnumerable':
+					continue
+				if item['name'] == 'toLocaleString':
+					continue
+				if item['name'] == 'toString':
+					continue
+				if item['name'] == 'valueOf':
+					continue
+
+			ret.append(item)
+
+		return ret
+
+
+	def __unwrap_object_return(self, ret):
+		if "result" in ret and 'result' in ret['result']:
+			res = ret['result']['result']
+			if 'objectId' in res:
+				resp4 = self.Runtime_getProperties(res['objectId'])
+
+				if "result" in resp4 and 'result' in resp4['result']:
+					res_full = resp4['result']['result']
+
+					return self.__remove_default_members(res_full)
+
+			# Direct POD type return, just use it directly.
+			if "type" in res and "value" in res:
+				return res
+
+		self.log.error("Failed fetching results from call!")
+		return ret
+
+	def __exec_js(self, script, should_call=False, args=None, **extra_params):
 		'''
 
-		Execute the passed javascript statement, optionally with passed
+		Execute the passed javascript function/statement, optionally with passed
 		arguments.
+
+		Note that if args is not False, or should_call is True the passed script
+		will be treated as a function definition and called via
+		`(script).apply(null, args)`. Otherwise, the passed script will simply
+		be evaluated.
 
 		Note that if `script` is not a function, it must be a single statement.
 		The presence of semicolons not enclosed in a bracket scope will produce
 		an error.
 
 		'''
+
 
 		if args is None:
 			args = {}
@@ -136,15 +196,23 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		#       function.c_str(),
 		#       json.c_str());
 
-		expression = "({}).apply(null, [null, {}, {}])".format(
-				js.kCallFunctionScript,
-				script,
-				json.dumps(args)
-			)
+		if args or should_call:
+			expression = "({script}).apply(null, {args})".format(
+					script=script,
+					args=json.dumps(args)
+				)
+		else:
+			expression = "({script})".format(
+					script=script,
+				)
 
 		resp3 = self.Runtime_evaluate(expression=expression, **extra_params)
 
-		return resp3
+		resp4 = self.__unwrap_object_return(resp3)
+
+		return resp4
+
+
 
 
 
@@ -385,12 +453,27 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		# elem = self.find_element("//a".format(url))
 		# print(elem)
 
-	def execute_javascript(self, *args, **kwargs):
+	def execute_javascript_statement(self, script):
 		'''
 		Execute a javascript string in the context of the browser tab.
+		This only works for simple JS statements. More complex usage should
+		be via execute_javascript_function().
+
+		This can also be used to interrogate the JS interpreter, as simply passing
+		variable names of interest will return the variable value.
 		'''
 
-		ret = self.__exec_js(*args, **kwargs)
+		ret = self.__exec_js(script=script)
+		return ret
+	def execute_javascript_function(self, script, *args):
+		'''
+		Execute a javascript function in the context of the browser tab.
+
+		The passed script must be a single function definition, which will
+		be called via ({script}).apply(null, {args}).
+		'''
+
+		ret = self.__exec_js(script=script, should_call=True, *args)
 		return ret
 
 	def find_element(self, search):

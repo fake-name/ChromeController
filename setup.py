@@ -11,7 +11,7 @@ setup(
 	name="ChromeController",
 
 	# Version number (initial):
-	version="0.3.12",
+	version="0.3.14",
 
 	# Application author details:
 	author="Connor Wolf",
@@ -47,4 +47,12 @@ setup(
 		'docopt',
 	# We need pywin32 on windows for proper process termination.
 	] + win_req,
+
+	classifiers                   = [
+		"Programming Language :: Python :: 3",
+		"Development Status :: 4 - Beta",
+		"Intended Audience :: Developers",
+		"Operating System :: POSIX :: Linux",
+	],
+
 )
