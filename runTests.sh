@@ -30,8 +30,9 @@ nosetests                            \
 	--exe                            \
 	--cover-package=ChromeController \
 	--nocapture                      \
-	--stop                      \
-	tests.test_tab_pool
+	tests
+	# --stop                      \
+	# tests.test_tab_pool
 
 # nosetests                            \
 # 	--with-coverage                  \

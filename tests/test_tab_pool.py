@@ -43,16 +43,16 @@ class TestChromium(unittest.TestCase):
 		self.assertEqual(resp['binary'], False)
 		self.assertEqual(resp['mimetype'], "text/html")
 
-		print("Creating tab again!")
+		# print("Creating tab again!")
 		with self.cr.tab(url=tgturl) as tab:
 			at_url = tab.get_current_url()
 			self.assertEqual(at_url, tgturl)
 
 
-		print("3rd tab context!")
+		# print("3rd tab context!")
 		with self.cr.tab(url=tgturl) as tab:
 			title, cur_url = tab.get_page_url_title()
-			print("title, cur_url", title, cur_url)
+			# print("title, cur_url", title, cur_url)
 			self.assertEqual(cur_url, tgturl)
 
 
@@ -66,15 +66,15 @@ class TestChromium(unittest.TestCase):
 		self.assertEqual(resp['mimetype'], "text/html")
 
 		for x in range(20):
-			print("Creating tab again!")
+			# print("Creating tab again!")
 			with self.cr.tab(url=tgturl, extra_id=x) as tab:
 				title, cur_url = tab.get_page_url_title()
-				print("title, cur_url", title, cur_url)
+				# print("title, cur_url", title, cur_url)
 
-		print("3rd tab context!")
+		# print("3rd tab context!")
 		with self.cr.tab(url=tgturl) as tab:
 			title, cur_url = tab.get_page_url_title()
-			print("title, cur_url", title, cur_url)
+			# print("title, cur_url", title, cur_url)
 			self.assertNotEqual(cur_url, tgturl)
 
 	def test_tab_flushing_2(self):
@@ -87,13 +87,13 @@ class TestChromium(unittest.TestCase):
 		self.assertEqual(resp['mimetype'], "text/html")
 
 		for x in range(100):
-			print("Creating tab again!")
+			# print("Creating tab again!")
 			with self.cr.tab(url=tgturl, extra_id=x) as tab:
 				title, cur_url = tab.get_page_url_title()
-				print("title, cur_url", title, cur_url)
+				# print("title, cur_url", title, cur_url)
 
 		# At this point, we should have fewer then 100 tabs, if nothing is broken.
-		print("3rd tab context!")
+		# print("3rd tab context!")
 		with self.cr.tab(url=tgturl) as tab:
 			targets = tab.Target_getTargets()
 			assert 'result' in targets
@@ -111,23 +111,23 @@ class TestChromium(unittest.TestCase):
 		self.assertEqual(resp['mimetype'], "text/html")
 
 		for x in range(25):
-			print("Creating tab again!")
+			# print("Creating tab again!")
 			with self.cr.tab(url=tgturl, extra_id=x) as tab:
 				title, cur_url = tab.get_page_url_title()
-				print("title, cur_url", title, cur_url)
+				# print("title, cur_url", title, cur_url)
 
 		tab_pool_tabs = self.cr.active_tabs()
 
 
 		# At this point, we should have fewer then 100 tabs, if nothing is broken.
-		print("3rd tab context!")
+		# print("3rd tab context!")
 		with self.cr.tab(url=tgturl) as tab:
 			targets = tab.Target_getTargets()
 			assert 'result' in targets
 			assert 'targetInfos' in targets['result']
 
-			print("Active tabs:", len(targets['result']['targetInfos']))
-			print("Active tabs from manager:", tab_pool_tabs)
+			# print("Active tabs:", len(targets['result']['targetInfos']))
+			# print("Active tabs from manager:", tab_pool_tabs)
 			self.assertLess(len(targets['result']['targetInfos']), 20)
 			self.assertLess(tab_pool_tabs, 20)
 
@@ -141,23 +141,23 @@ class TestChromium(unittest.TestCase):
 		self.assertEqual(resp['mimetype'], "text/html")
 
 		for x in range(15):
-			print("Creating tab again!")
+			# print("Creating tab again!")
 			with self.cr.tab(url=tgturl, extra_id=x) as tab:
 				title, cur_url = tab.get_page_url_title()
-				print("title, cur_url", title, cur_url)
+				# print("title, cur_url", title, cur_url)
 
 
 
 		# At this point, we should have fewer then 100 tabs, if nothing is broken.
-		print("3rd tab context!")
+		# print("3rd tab context!")
 		with self.cr.tab(url=tgturl) as tab:
 			targets = tab.Target_getTargets()
 			assert 'result' in targets
 			assert 'targetInfos' in targets['result']
 			tab_pool_tabs_1 = self.cr.active_tabs()
 
-			print("Active tabs:", len(targets['result']['targetInfos']))
-			print("Active tabs from manager:", tab_pool_tabs_1)
+			# print("Active tabs:", len(targets['result']['targetInfos']))
+			# print("Active tabs from manager:", tab_pool_tabs_1)
 			self.assertLess(len(targets['result']['targetInfos']), 15)
 			self.assertLess(tab_pool_tabs_1, 15)
 
@@ -171,24 +171,24 @@ class TestChromium(unittest.TestCase):
 		self.assertEqual(resp['mimetype'], "text/html")
 
 		for x in range(15):
-			print("Creating tab again!")
+			# print("Creating tab again!")
 			with self.cr.tab(url=tgturl, extra_id=x) as tab:
 				title, cur_url = tab.get_page_url_title()
-				print("title, cur_url", title, cur_url)
+				# print("title, cur_url", title, cur_url)
 
 		self.cr.close_tabs()
 
 
 		# At this point, we should have fewer then 100 tabs, if nothing is broken.
-		print("3rd tab context!")
+		# print("3rd tab context!")
 		with self.cr.tab(url=tgturl) as tab:
 			targets = tab.Target_getTargets()
 			assert 'result' in targets
 			assert 'targetInfos' in targets['result']
 			tab_pool_tabs_1 = self.cr.active_tabs()
 
-			print("Active tabs:", len(targets['result']['targetInfos']))
-			print("Active tabs:", targets['result']['targetInfos'])
-			print("Active tabs from manager:", tab_pool_tabs_1)
+			# print("Active tabs:", len(targets['result']['targetInfos']))
+			# print("Active tabs:", targets['result']['targetInfos'])
+			# print("Active tabs from manager:", tab_pool_tabs_1)
 			self.assertLess(len(targets['result']['targetInfos']), 5)
 			self.assertLess(tab_pool_tabs_1, 2)

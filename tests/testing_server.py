@@ -21,6 +21,9 @@ def capture_expected_headers(test_context, expected_headers):
 	# print("Capturing expected headers:")
 	# print(expected_headers)
 
+	if isinstance(expected_headers, list):
+		expected_headers = dict(expected_headers)
+
 	assert isinstance(expected_headers, dict), "expected_headers must be a dict. Passed a %s" % type(expected_headers)
 
 	for key, val in expected_headers.items():

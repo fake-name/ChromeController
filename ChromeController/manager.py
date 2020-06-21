@@ -145,6 +145,64 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		return ret
 
 
+	def _unpack_xhr_resp(self, values):
+		pass
+
+	def xhr_fetch(self, url, headers=None, postdata=None):
+		'''
+		Execute a XMLHttpRequest() for content at `url`. If
+		`headers` are specified, they must be a dict of string:string
+		keader:values. postdata must also be pre-encoded.
+
+		Note that this will be affected by the same-origin policy of the current
+		page, so it can fail if you are requesting content from another domain and
+		the current site has restrictive same-origin policies (which is very common).
+		'''
+
+		js = '''
+		function (url, headers, post_data){
+
+			var req = new XMLHttpRequest();
+
+			// We use sync calls, since we want to wait until the call completes
+			// This will probably be depreciated at some point.
+			if (post_data)
+				req.open("POST", url, false);
+			else
+				req.open("GET", url, false);
+
+			if (headers)
+			{
+				let entries = Object.entries(headers);
+				for (let idx = 0; idx < entries.length; idx += 1)
+				{
+					req.setRequestHeader(entries[idx][0], entries[idx][1]);
+
+				}
+			}
+
+			if (post_data)
+				req.send(post_data);
+			else
+				req.send();
+
+			return {
+					url      : url,
+					headers  : headers,
+					post     : post_data,
+					response : req.responseText,
+					code     : req.status
+				};
+		}
+
+		'''
+
+
+		ret = self.cr.execute_javascript_function(js, [url, headers, postData])
+
+		# if
+
+
 	def __unwrap_object_return(self, ret):
 		if "result" in ret and 'result' in ret['result']:
 			res = ret['result']['result']
@@ -163,7 +221,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		self.log.error("Failed fetching results from call!")
 		return ret
 
-	def __exec_js(self, script, should_call=False, args=None, **extra_params):
+	def __exec_js(self, script, should_call=False, args=None):
 		'''
 
 		Execute the passed javascript function/statement, optionally with passed
@@ -197,23 +255,22 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		#       json.c_str());
 
 		if args or should_call:
-			expression = "({script}).apply(null, {args})".format(
+			expression = "({script}).apply(null, JSON.parse({args}))".format(
 					script=script,
-					args=json.dumps(args)
+					args=repr(json.dumps(args))
 				)
 		else:
 			expression = "({script})".format(
 					script=script,
 				)
+		print("executing:")
+		print(expression)
 
-		resp3 = self.Runtime_evaluate(expression=expression, **extra_params)
+		resp3 = self.Runtime_evaluate(expression=expression)
 
 		resp4 = self.__unwrap_object_return(resp3)
 
 		return resp4
-
-
-
 
 
 
@@ -465,7 +522,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		ret = self.__exec_js(script=script)
 		return ret
-	def execute_javascript_function(self, script, *args):
+	def execute_javascript_function(self, script, args=None):
 		'''
 		Execute a javascript function in the context of the browser tab.
 
@@ -473,7 +530,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		be called via ({script}).apply(null, {args}).
 		'''
 
-		ret = self.__exec_js(script=script, should_call=True, *args)
+		ret = self.__exec_js(script=script, should_call=True, args=args)
 		return ret
 
 	def find_element(self, search):
@@ -791,7 +848,6 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		Roughly, this corresponds to the javascript `DOMContentLoaded` event,
 		meaning the dom for the page is ready.
-
 
 		Internals:
 
