@@ -55,7 +55,7 @@ def capture_expected_headers(test_context, expected_headers):
 						v2 = ""
 					v2 = v2.replace(" ", "")
 					test_context.assertEqual(v1, v2, msg="Mismatch in header parameter '{}' : '{}' -> '{}'".format(key, value, self.headers[key]))
-
+					# print("Header match: ", key, v1, v2)
 			except Exception:
 				print("Header mismatch!")
 				print("Received Headers:")
@@ -76,18 +76,25 @@ def capture_expected_headers(test_context, expected_headers):
 			nonlocal sucuri_reqs_3
 
 
-
-			try:
-				self.validate_headers()
-			except Exception:
-				self.send_response(500)
-				self.send_header('Content-type', "text/html")
-				self.end_headers()
-				self.wfile.write(b"Headers failed validation!")
-				raise
+			if self.path != "/ignore-headers":
+				try:
+					self.validate_headers()
+				except Exception:
+					self.send_response(500)
+					self.send_header('Content-type', "text/html")
+					self.end_headers()
+					self.wfile.write(b"Headers failed validation!")
+					raise
 
 
 			if self.path == "/":
+				self.send_response(200)
+				self.send_header('Content-type', "text/html")
+				self.end_headers()
+				self.wfile.write(b"Root OK?")
+
+
+			elif self.path == "/ignore-headers":
 				self.send_response(200)
 				self.send_header('Content-type', "text/html")
 				self.end_headers()

@@ -4,6 +4,7 @@ import json
 import base64
 import zlib
 import gzip
+import pprint
 import ChromeController
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from threading import Thread
@@ -14,33 +15,44 @@ from . import testing_server
 CHROME_BINARY_NAME = "google-chrome"
 
 class TestChromium(unittest.TestCase):
-	# def setUp(self):
-	# 	self.cr = ChromeController.TabPooledChromium("google-chrome")
+	def setUp(self):
+		self.cr = ChromeController.TabPooledChromium("google-chrome")
+		# self.mock_server_port, self.mock_server, self.mock_server_thread = testing_server.start_server(self, {})
 
-	# def tearDown(self):
-	# 	del self.cr
+	def tearDown(self):
+		self.mock_server.shutdown()
+		del self.cr
 
 	def fetch_check_headers(self, expect_headers):
-
 		try:
 			# Configure mock server.
 			self.mock_server_port, self.mock_server, self.mock_server_thread = testing_server.start_server(self, expect_headers)
-			tgturl = "http://localhost:{}".format(self.mock_server_port)
+			intermediate_url = "http://localhost:{}/ignore-headers".format(self.mock_server_port)
+			target_url       = "http://localhost:{}/json/valid".format(self.mock_server_port)
 			with ChromeController.ChromeContext(CHROME_BINARY_NAME) as cr:
 				ret = cr.update_headers(expect_headers)
 				# print("update_headers return:")
 				# print(ret)
 				# print("")
-				resp = cr.blocking_navigate_and_get_source(tgturl)
+				first_nav = cr.blocking_navigate_and_get_source(intermediate_url)
+				# print("First nav to '%s'" % intermediate_url)
+				# print(first_nav)
 
-			self.assertEqual(resp['content'], 'Root OK?')
-			self.assertEqual(resp['binary'], False)
-			self.assertEqual(resp['mimetype'], "text/html")
+				# print("Doing XHR to '%s'" % target_url)
+				ret = cr.xhr_fetch(target_url)
+
+				# pprint.pprint(ret)
+
+
+			self.assertEqual(ret['response'], '{"oh" : "hai"}')
+			self.assertEqual(ret['code'], 200)
+			self.assertEqual(ret['mimetype'], "application/json")
 		finally:
 			self.mock_server.shutdown()
 
 
 	def test_basic_fetch_1(self):
+
 		self.fetch_check_headers({})
 
 
@@ -158,7 +170,6 @@ class TestChromium(unittest.TestCase):
 		}
 		self.fetch_check_headers(expect_headers)
 
-	@unittest.expectedFailure
 	def test_custom_accept_2_1(self):
 		'''
 		Normal accept
@@ -168,21 +179,18 @@ class TestChromium(unittest.TestCase):
 		}
 		self.fetch_check_headers(expect_headers)
 
-	@unittest.expectedFailure
 	def test_custom_accept_2_2(self):
 		expect_headers = {
 			'Accept' : r"text/html, application/xml;q=0.9,application/xhtml+xml,image/png,image/webp,image/jpeg, image/gif, image/x-xbitmap, */*;q=0.8"
 		}
 		self.fetch_check_headers(expect_headers)
 
-	@unittest.expectedFailure
 	def test_custom_accept_2_3(self):
 		expect_headers = {
 			'Accept' : r"text/html, application/xml;q=0.9,application/xhtml+xml, image/png,image/webp,image/jpeg, image/gif, image/x-xbitmap,   */*;q=0.8"
 		}
 		self.fetch_check_headers(expect_headers)
 
-	@unittest.expectedFailure
 	def test_custom_accept_3(self):
 		'''
 		Send garbage
@@ -192,7 +200,6 @@ class TestChromium(unittest.TestCase):
 		}
 		self.fetch_check_headers(expect_headers)
 
-	@unittest.expectedFailure
 	def test_custom_accept_4(self):
 		'''
 		What if it's empty?
@@ -202,7 +209,6 @@ class TestChromium(unittest.TestCase):
 		}
 		self.fetch_check_headers(expect_headers)
 
-	@unittest.expectedFailure
 	def test_custom_accept_5(self):
 		'''
 		Or ridiculously long/repeated
@@ -212,7 +218,6 @@ class TestChromium(unittest.TestCase):
 		}
 		self.fetch_check_headers(expect_headers)
 
-	@unittest.expectedFailure
 	def test_custom_accept_6(self):
 		'''
 		I was sending this as a bug at one point
@@ -335,6 +340,7 @@ class TestChromium(unittest.TestCase):
 		}
 		self.fetch_check_headers(expect_headers)
 
+	# we can't set the host from a XHR, since it's a security issue.
 	@unittest.expectedFailure
 	def test_setting_host_1(self):
 		expect_headers = {
@@ -369,6 +375,7 @@ class TestChromium(unittest.TestCase):
 			'Host' : r"www.googlez.com"*50
 		}
 		self.fetch_check_headers(expect_headers)
+
 
 	def test_setting_random_1(self):
 		expect_headers = {

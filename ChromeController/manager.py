@@ -105,7 +105,6 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 
 		ret_2 = self.Network_setExtraHTTPHeaders(headers = header_args)
-
 		return (ret_1, ret_2)
 
 
@@ -113,6 +112,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		ret = []
 
+		# This is kind of horrible
 		for item in js_object:
 			if 'name' in item:
 				if item['name'] == '__defineGetter__':
@@ -139,14 +139,104 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 					continue
 				if item['name'] == 'valueOf':
 					continue
+				if item['name'] == 'ABORT_ERR':
+					continue
+				if item['name'] == 'DATA_CLONE_ERR':
+					continue
+				if item['name'] == 'INUSE_ATTRIBUTE_ERR':
+					continue
+				if item['name'] == 'INVALID_ACCESS_ERR':
+					continue
+				if item['name'] == 'INVALID_CHARACTER_ERR':
+					continue
+				if item['name'] == 'INVALID_MODIFICATION_ERR':
+					continue
+				if item['name'] == 'INVALID_NODE_TYPE_ERR':
+					continue
+				if item['name'] == 'INVALID_STATE_ERR':
+					continue
+				if item['name'] == 'NAMESPACE_ERR':
+					continue
+				if item['name'] == 'NETWORK_ERR':
+					continue
+				if item['name'] == 'NO_DATA_ALLOWED_ERR':
+					continue
+				if item['name'] == 'NO_MODIFICATION_ALLOWED_ERR':
+					continue
+				if item['name'] == 'NOT_FOUND_ERR':
+					continue
+				if item['name'] == 'NOT_SUPPORTED_ERR':
+					continue
+				if item['name'] == 'QUOTA_EXCEEDED_ERR':
+					continue
+				if item['name'] == 'SECURITY_ERR':
+					continue
+				if item['name'] == 'SYNTAX_ERR':
+					continue
+				if item['name'] == 'TIMEOUT_ERR':
+					continue
+				if item['name'] == 'TYPE_MISMATCH_ERR':
+					continue
+				if item['name'] == 'URL_MISMATCH_ERR':
+					continue
+				if item['name'] == 'VALIDATION_ERR':
+					continue
+				if item['name'] == 'WRONG_DOCUMENT_ERR':
+					continue
+				if item['name'] ==  'DOMSTRING_SIZE_ERR':
+					continue
+				if item['name'] ==  'HIERARCHY_REQUEST_ERR':
+					continue
+				if item['name'] ==  'INDEX_SIZE_ERR':
+					continue
 
 			ret.append(item)
 
 		return ret
 
+	def __decode_serialized_value(self, value):
+		assert 'type' in value
+		assert 'value' in value
+
+		if value['type'] == 'number':
+			return float(value['value'])
+		if value['type'] == 'string':
+			return value['value']
+
+		# Special case for null/none objects
+		if (
+				    'subtype' in value
+				and
+				    value['subtype'] == 'null'
+				and
+				    value['type'] == 'object'
+				and
+				    value['value'] is None):
+			return None
+
+		self.log.warning("Unknown serialized javascript value of type %s", value['type'])
+		self.log.warning("Complete value: %s", value)
+
+		return value
 
 	def _unpack_xhr_resp(self, values):
-		pass
+		ret = {}
+
+		for entry in values:
+			assert 'configurable' in entry, "'configurable' missing from entry (%s)" % entry
+			assert 'enumerable'   in entry, "'enumerable' missing from entry (%s)"   % entry
+			assert 'isOwn'        in entry, "'isOwn' missing from entry (%s)"        % entry
+			assert 'name'         in entry, "'name' missing from entry (%s)"         % entry
+			assert 'value'        in entry, "'value' missing from entry (%s)"        % entry
+			assert 'writable'     in entry, "'writable' missing from entry (%s)"     % entry
+
+			if entry['isOwn'] is False:
+				continue
+
+			assert entry['name'] not in ret
+			ret[entry['name']] = self.__decode_serialized_value(entry['value'])
+
+		return ret
 
 	def xhr_fetch(self, url, headers=None, postdata=None):
 		'''
@@ -159,7 +249,13 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		the current site has restrictive same-origin policies (which is very common).
 		'''
 
-		js = '''
+		'''
+		If you're thinking this is kind of a hack, well, it is.
+
+		We also cheat a bunch and use synchronous XMLHttpRequest()s, because it
+		SO much easier.
+		'''
+		js_script = '''
 		function (url, headers, post_data){
 
 			var req = new XMLHttpRequest();
@@ -187,19 +283,22 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 				req.send();
 
 			return {
-					url      : url,
-					headers  : headers,
-					post     : post_data,
-					response : req.responseText,
-					code     : req.status
+					url          : url,
+					headers      : headers,
+					resp_headers : req.getAllResponseHeaders(),
+					post         : post_data,
+					response     : req.responseText,
+					mimetype     : req.getResponseHeader("Content-Type"),
+					code         : req.status
 				};
 		}
 
 		'''
 
 
-		ret = self.cr.execute_javascript_function(js, [url, headers, postData])
-
+		ret = self.execute_javascript_function(js_script, [url, headers, postdata])
+		ret = self._unpack_xhr_resp(ret)
+		return ret
 		# if
 
 
@@ -263,8 +362,6 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 			expression = "({script})".format(
 					script=script,
 				)
-		print("executing:")
-		print(expression)
 
 		resp3 = self.Runtime_evaluate(expression=expression)
 
@@ -522,6 +619,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		ret = self.__exec_js(script=script)
 		return ret
+
 	def execute_javascript_function(self, script, args=None):
 		'''
 		Execute a javascript function in the context of the browser tab.
