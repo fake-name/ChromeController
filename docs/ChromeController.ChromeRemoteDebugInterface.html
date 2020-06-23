@@ -42,7 +42,6 @@ to&nbsp;claim&nbsp;the&nbsp;page&nbsp;has&nbsp;finished&nbsp;loading.<br>
 Roughly,&nbsp;this&nbsp;corresponds&nbsp;to&nbsp;the&nbsp;javascript&nbsp;`DOMContentLoaded`&nbsp;event,<br>
 meaning&nbsp;the&nbsp;dom&nbsp;for&nbsp;the&nbsp;page&nbsp;is&nbsp;ready.<br>
 &nbsp;<br>
-&nbsp;<br>
 Internals:<br>
 &nbsp;<br>
 A&nbsp;navigation&nbsp;command&nbsp;results&nbsp;in&nbsp;a&nbsp;sequence&nbsp;of&nbsp;events:<br>
@@ -128,7 +127,7 @@ Status&nbsp;ExecuteClickElement(Session*&nbsp;session,<br>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-click_link_containing_url"><strong>click_link_containing_url</strong></a>(self, url)</dt><dd><tt>TODO</tt></dd></dl>
 
-<dl><dt><a name="ChromeRemoteDebugInterface-execute_javascript_function"><strong>execute_javascript_function</strong></a>(self, script, *args)</dt><dd><tt>Execute&nbsp;a&nbsp;javascript&nbsp;function&nbsp;in&nbsp;the&nbsp;context&nbsp;of&nbsp;the&nbsp;browser&nbsp;tab.<br>
+<dl><dt><a name="ChromeRemoteDebugInterface-execute_javascript_function"><strong>execute_javascript_function</strong></a>(self, script, args=None)</dt><dd><tt>Execute&nbsp;a&nbsp;javascript&nbsp;function&nbsp;in&nbsp;the&nbsp;context&nbsp;of&nbsp;the&nbsp;browser&nbsp;tab.<br>
 &nbsp;<br>
 The&nbsp;passed&nbsp;script&nbsp;must&nbsp;be&nbsp;a&nbsp;single&nbsp;function&nbsp;definition,&nbsp;which&nbsp;will<br>
 be&nbsp;called&nbsp;via&nbsp;({script}).apply(null,&nbsp;{args}).</tt></dd></dl>
@@ -240,6 +239,14 @@ return&nbsp;value&nbsp;is&nbsp;a&nbsp;2-tuple&nbsp;of&nbsp;the&nbsp;results&nbsp
 update,&nbsp;as&nbsp;well&nbsp;as&nbsp;the&nbsp;extra&nbsp;headers&nbsp;update.<br>
 If&nbsp;no&nbsp;'User-Agent'&nbsp;key&nbsp;is&nbsp;present&nbsp;in&nbsp;the&nbsp;new&nbsp;headers,<br>
 the&nbsp;first&nbsp;item&nbsp;in&nbsp;the&nbsp;tuple&nbsp;will&nbsp;be&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="ChromeRemoteDebugInterface-xhr_fetch"><strong>xhr_fetch</strong></a>(self, url, headers=None, post_data=None, post_type=None)</dt><dd><tt>Execute&nbsp;a&nbsp;XMLHttpRequest()&nbsp;for&nbsp;content&nbsp;at&nbsp;`url`.&nbsp;If<br>
+`headers`&nbsp;are&nbsp;specified,&nbsp;they&nbsp;must&nbsp;be&nbsp;a&nbsp;dict&nbsp;of&nbsp;string:string<br>
+keader:values.&nbsp;post_data&nbsp;must&nbsp;also&nbsp;be&nbsp;pre-encoded.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;this&nbsp;will&nbsp;be&nbsp;affected&nbsp;by&nbsp;the&nbsp;same-origin&nbsp;policy&nbsp;of&nbsp;the&nbsp;current<br>
+page,&nbsp;so&nbsp;it&nbsp;can&nbsp;fail&nbsp;if&nbsp;you&nbsp;are&nbsp;requesting&nbsp;content&nbsp;from&nbsp;another&nbsp;domain&nbsp;and<br>
+the&nbsp;current&nbsp;site&nbsp;has&nbsp;restrictive&nbsp;same-origin&nbsp;policies&nbsp;(which&nbsp;is&nbsp;very&nbsp;common).</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="ChromeController.Generator.Generated.html#ChromeRemoteDebugInterface">ChromeController.Generator.Generated.ChromeRemoteDebugInterface</a>:<br>
