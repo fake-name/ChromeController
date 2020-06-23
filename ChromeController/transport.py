@@ -43,6 +43,7 @@ class ChromeExecutionManager():
 			port               = None,
 			websocket_timeout  = 10,
 			enable_gpu         = False,
+			headless           = True,
 			additional_options = [],
 			):
 		"""
@@ -74,6 +75,7 @@ class ChromeExecutionManager():
 		self.binary             = binary
 		self.host               = host
 		self.port               = port
+		self.headless           = headless
 		self.enable_gpu         = enable_gpu
 		self.msg_id             = 0
 		self.websocket_timeout  = websocket_timeout
@@ -118,13 +120,16 @@ class ChromeExecutionManager():
 
 		argv = [
 				binary,
-				'--headless',
 				'--remote-debugging-port={dbg_port}'.format(dbg_port=dbg_port),
 				'--enable-features=NetworkService',
 			]
-		argv += additional_options
+		if self.headless:
+			argv.append('--headless')
+
 		if self.enable_gpu is False:
 			argv.append('--disable-gpu')
+		argv += additional_options
+
 
 		# We need a separate process group on windows,
 		# to make ctrl+c work properly.

@@ -238,11 +238,11 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		return ret
 
-	def xhr_fetch(self, url, headers=None, postdata=None):
+	def xhr_fetch(self, url, headers=None, post_data=None, post_type=None):
 		'''
 		Execute a XMLHttpRequest() for content at `url`. If
 		`headers` are specified, they must be a dict of string:string
-		keader:values. postdata must also be pre-encoded.
+		keader:values. post_data must also be pre-encoded.
 
 		Note that this will be affected by the same-origin policy of the current
 		page, so it can fail if you are requesting content from another domain and
@@ -256,14 +256,18 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		SO much easier.
 		'''
 		js_script = '''
-		function (url, headers, post_data){
+		function (url, headers, post_data, post_type){
 
 			var req = new XMLHttpRequest();
 
 			// We use sync calls, since we want to wait until the call completes
 			// This will probably be depreciated at some point.
 			if (post_data)
+			{
 				req.open("POST", url, false);
+				if (post_type)
+					req.setRequestHeader("Content-Type", post_type);
+			}
 			else
 				req.open("GET", url, false);
 
@@ -296,7 +300,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		'''
 
 
-		ret = self.execute_javascript_function(js_script, [url, headers, postdata])
+		ret = self.execute_javascript_function(js_script, [url, headers, post_data, post_type])
 		ret = self._unpack_xhr_resp(ret)
 		return ret
 		# if
@@ -898,8 +902,11 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 			while 1:
 				if time.time() - start_time > max_wait_timeout:
 					self.log.debug("Page was not idle after waiting %s seconds. Giving up and extracting content now.", max_wait_timeout)
-				self.transport.recv_filtered(filter_funcs.wait_for_methods(target_events),
-					tab_key=self.tab_id, timeout=dom_idle_requirement_secs)
+				self.transport.recv_filtered(
+						filter_funcs.wait_for_methods(target_events),
+						tab_key = self.tab_id,
+						timeout = dom_idle_requirement_secs
+					)
 
 		except ChromeResponseNotReceived:
 			# We timed out, the DOM is probably idle.

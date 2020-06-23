@@ -9,6 +9,7 @@ import zlib
 import gzip
 import time
 import datetime
+import urllib.parse
 from http import cookies
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
@@ -301,6 +302,7 @@ def capture_expected_headers(test_context, expected_headers):
 				newurl = "http://{}:{}/".format(self.server.server_address[0], self.server.server_address[1])
 				self.send_header('location', newurl)
 				self.end_headers()
+
 
 			##################################################################################################################################
 			# Multiple redirects
@@ -625,11 +627,98 @@ def capture_expected_headers(test_context, expected_headers):
 			else:
 				test_context.assertEqual(self.path, "This shouldn't happen!")
 
+		def _post_handler(self):
+
+			nonlocal counter
+			nonlocal sucuri_reqs_1
+			nonlocal sucuri_reqs_2
+			nonlocal sucuri_reqs_3
+
+
+			if self.path != "/ignore-headers":
+				try:
+					self.validate_headers()
+				except Exception:
+					self.send_response(500)
+					self.send_header('Content-type', "text/html")
+					self.end_headers()
+					self.wfile.write(b"Headers failed validation!")
+					raise
+
+			# print("Headers:", self.headers)
+			# print("Dir:", dir(self.headers))
+
+			ctype = self.headers.get_content_type()
+			if ctype == 'multipart/form-data':
+				postvars = urllib.parse.parse_qsl(self.rfile)
+			elif ctype == 'application/x-www-form-urlencoded':
+				length = int(self.headers.get('content-length'))
+				in_str = self.rfile.read(length)
+				postvars = urllib.parse.parse_qsl(in_str, keep_blank_values=1)
+			else:
+
+				length = int(self.headers.get('content-length', 0))
+				if length:
+					postvars = self.rfile.read(length)
+
+			# print("Post type: ", ctype)
+			# print("PostData: ", postvars)
+
+			##################################################################################################################################
+			# POSTing data
+			##################################################################################################################################
+
+
+			if self.path == "/post/json_resp":
+				if postvars == b'test_post_1' and ctype == 'application/json':
+					self.send_response(200)
+					self.send_header('Content-type', "application/json")
+					self.end_headers()
+					self.wfile.write(b'{"oh" : "hai"}')
+				else:
+					self.send_response(200)
+					self.send_header('Content-type', "application/json")
+					self.end_headers()
+					self.wfile.write(b'{"not" : "a post?"}')
+
+			elif self.path == "/post/form_urlencoded":
+				if postvars == [(b'test', b'1'), (b'moar', b'two')] and ctype == 'application/x-www-form-urlencoded':
+					self.send_response(200)
+					self.send_header('Content-type', "application/json")
+					self.end_headers()
+					self.wfile.write(b'{"oh" : "hai"}')
+				else:
+					self.send_response(200)
+					self.send_header('Content-type', "application/json")
+					self.end_headers()
+					self.wfile.write(b'{"not" : "a post?"}')
+
+
+
+			##################################################################################################################################
+			# Handle requests for an unknown path
+			##################################################################################################################################
+
+			else:
+				test_context.assertEqual(self.path, "This shouldn't happen!")
+
+
+
+		def do_POST(self):
+			log.info("POST for URL path: '%s'", self.path)
+
+			try:
+				return self._post_handler()
+			except Exception as e:
+				log.error("Exception in handler!")
+				for line in traceback.format_exc().split("\n"):
+					log.error(line)
+				raise e
 
 
 		def do_GET(self):
 			# Process an HTTP GET request and return a response with an HTTP 200 status.
-			log.info("Request for URL path: '%s'", self.path)
+			log.info("GET for URL path: '%s'", self.path)
 			# print("Headers: ", self.headers)
 			# print("Cookie(s): ", self.headers.get_all('Cookie', failobj=[]))
 

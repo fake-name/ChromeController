@@ -31,6 +31,8 @@ nosetests                            \
 	--cover-package=ChromeController \
 	--nocapture                      \
 	tests
+	# tests.test_xhr_get
+	# tests.test_post
 	# --stop                      \
 	# tests.test_tab_pool
 
@@ -48,7 +50,7 @@ nosetests                            \
 	# tests.test_simple
 	# tests.test_selenium
 
-# coverage report --show-missing
+coverage report --show-missing
 
-# coverage erase
+coverage erase
 
