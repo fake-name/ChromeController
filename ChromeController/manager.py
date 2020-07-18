@@ -4,6 +4,7 @@ import os.path
 import sys
 import subprocess
 import pprint
+import types
 import json
 import base64
 import signal
@@ -23,6 +24,14 @@ from ChromeController.resources import js
 from ChromeController.Generator.Generated import ChromeRemoteDebugInterface as ChromeRemoteDebugInterface_base
 
 DEFAULT_TIMEOUT_SECS = 10
+
+class RemoteObject():
+	def __init__(self, object_meta):
+		self.object_meta = object_meta
+
+		# TODO: Allow retreiving/interacting with these.
+	def __repr__(self):
+		return "<(Unimplemented) RemoteObject for JS object: '%s'>" % (self.object_meta, )
 
 class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 	'''
@@ -70,6 +79,8 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 			self.Emulation_setVisibleSize(*visible_size)
 		else:
 			self.Emulation_setVisibleSize(1024, 1366)
+
+		self.__new_tab_scripts = []
 
 		# cr_ver = self.Browser_getVersion()
 		# self.log.debug("Remote browser version info:")
@@ -194,14 +205,50 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 		return ret
 
+	def __unpack_object(self, object):
+		assert isinstance(object, dict), "Object values must be a dict! Passed %s (%s)" % (type(object), object)
+		ret = {}
+		for key, value in object.items():
+			assert isinstance(key, str)
+
+			if isinstance(value, str):
+				ret[key] = value
+			elif isinstance(value, int):
+				ret[key] = value
+			elif isinstance(value, float):
+				ret[key] = value
+			elif value is None:   # Dammit, NoneType isn't exposed
+				ret[key] = value
+			elif value in (True, False):
+				ret[key] = value
+			elif isinstance(value, dict):
+				ret[key] = self.__unpack_object(value)
+			else:
+				raise ValueError("Unknown type in object: %s (%s)" % (type(value), value))
+
+		return ret
+
 	def __decode_serialized_value(self, value):
-		assert 'type' in value
-		assert 'value' in value
+		assert 'type' in value,  "Missing 'type' key from value: '%s'" % (value, )
+
+		if 'get' in value and 'set' in value:
+			self.log.debug("Unserializable remote script object")
+			return RemoteObject(value['objectId'])
+
+		if value['type'] == 'object' and 'objectId' in value:
+			self.log.debug("Unserializable remote script object")
+			return RemoteObject(value['objectId'])
+
+		assert 'value' in value, "Missing 'value' key from value: '%s'" % (value, )
 
 		if value['type'] == 'number':
 			return float(value['value'])
 		if value['type'] == 'string':
 			return value['value']
+
+
+		if value['type'] == 'object':
+			return self.__unpack_object(value['value'])
 
 		# Special case for null/none objects
 		if (
@@ -222,15 +269,21 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 	def _unpack_xhr_resp(self, values):
 		ret = {}
 
-		for entry in values:
-			assert 'configurable' in entry, "'configurable' missing from entry (%s)" % entry
-			assert 'enumerable'   in entry, "'enumerable' missing from entry (%s)"   % entry
-			assert 'isOwn'        in entry, "'isOwn' missing from entry (%s)"        % entry
-			assert 'name'         in entry, "'name' missing from entry (%s)"         % entry
-			assert 'value'        in entry, "'value' missing from entry (%s)"        % entry
-			assert 'writable'     in entry, "'writable' missing from entry (%s)"     % entry
+		# Handle single objects without all the XHR stuff.
+		# This seems to be a chrome 84 change.
+		if set(values.keys()) == set(['type', 'value']):
+			if values['type'] == 'object':
+				return self.__decode_serialized_value(values)
 
-			if entry['isOwn'] is False:
+		for entry in values:
+			# assert 'configurable' in entry, "'configurable' missing from entry (%s, %s)" % (entry, values)
+			# assert 'enumerable'   in entry, "'enumerable' missing from entry (%s, %s)"   % (entry, values)
+			# assert 'isOwn'        in entry, "'isOwn' missing from entry (%s, %s)"        % (entry, values)
+			assert 'name'         in entry, "'name' missing from entry (%s, %s)"         % (entry, values)
+			assert 'value'        in entry, "'value' missing from entry (%s, %s)"        % (entry, values)
+			# assert 'writable'     in entry, "'writable' missing from entry (%s, %s)"     % (entry, values)
+
+			if 'isOwn' in entry and entry['isOwn'] is False:
 				continue
 
 			assert entry['name'] not in ret
@@ -301,6 +354,14 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 
 		ret = self.execute_javascript_function(js_script, [url, headers, post_data, post_type])
+
+		# print()
+		# print()
+		# print("XHR Response")
+		# pprint.pprint(ret)
+		# print()
+		# print()
+
 		ret = self._unpack_xhr_resp(ret)
 		return ret
 		# if
@@ -367,7 +428,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 					script=script,
 				)
 
-		resp3 = self.Runtime_evaluate(expression=expression)
+		resp3 = self.Runtime_evaluate(expression=expression, returnByValue=True)
 
 		resp4 = self.__unwrap_object_return(resp3)
 
@@ -1011,6 +1072,41 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 				timeout  = timeout)
 
 			return resp['params']
+
+	def new_tab(self, *args, **kwargs):
+
+		tab = super().new_tab(*args, **kwargs)
+
+		for script in self.__new_tab_scripts:
+			tab.Page_addScriptToEvaluateOnNewDocument(script)
+		return tab
+
+
+	def install_evasions(self):
+		'''
+		Load headless detection evasions from the puppeteer-extra repository (
+		https://github.com/berstend/puppeteer-extra/tree/master/packages/puppeteer-extra-plugin-stealth/evasions).
+
+		'''
+		from ChromeController.resources import evasions
+
+		scripts = evasions.load_evasions()
+
+
+		self.__new_tab_scripts.extend(scripts.values())
+
+		for script, contents in scripts.items():
+
+			print("Loading '%s'" % script)
+			ret = self.Page_addScriptToEvaluateOnNewDocument(contents)
+			pprint.pprint(ret)
+
+			ret2 = self.execute_javascript_function("function()" + contents)
+			pprint.pprint(ret2)
+
+			# ret3 = self.execute_javascript_statement(contents)
+			# pprint.pprint(ret3)
+
 
 
 

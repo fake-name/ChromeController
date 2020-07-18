@@ -15,9 +15,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Inspector.enable
 			Domain: Inspector
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables inspector domain notifications.
 		"""
 		subdom_funcs = self.synchronous_command('Inspector.enable')
@@ -28,9 +28,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Inspector.disable
 			Domain: Inspector
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables inspector domain notifications.
 		"""
 		subdom_funcs = self.synchronous_command('Inspector.disable')
@@ -41,12 +41,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Memory.getDOMCounters
 			Domain: Memory
 			Method name: getDOMCounters
-		
+
 			Returns:
 				'documents' (type: integer) -> No description
 				'nodes' (type: integer) -> No description
 				'jsEventListeners' (type: integer) -> No description
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Memory.getDOMCounters')
 		return subdom_funcs
@@ -56,9 +56,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Memory.prepareForLeakDetection
 			Domain: Memory
 			Method name: prepareForLeakDetection
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Memory.prepareForLeakDetection')
 		return subdom_funcs
@@ -68,12 +68,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Memory.setPressureNotificationsSuppressed
 			Domain: Memory
 			Method name: setPressureNotificationsSuppressed
-		
+
 			Parameters:
 				Required arguments:
 					'suppressed' (type: boolean) -> If true, memory pressure notifications will be suppressed.
 			No return value.
-		
+
 			Description: Enable/disable suppressing memory pressure notifications in all processes.
 		"""
 		assert isinstance(suppressed, (bool,)
@@ -88,12 +88,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Memory.simulatePressureNotification
 			Domain: Memory
 			Method name: simulatePressureNotification
-		
+
 			Parameters:
 				Required arguments:
 					'level' (type: PressureLevel) -> Memory pressure level of the notification.
 			No return value.
-		
+
 			Description: Simulate a memory pressure notification in all processes.
 		"""
 		subdom_funcs = self.synchronous_command('Memory.simulatePressureNotification'
@@ -105,9 +105,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Performance.enable
 			Domain: Performance
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enable collecting and reporting metrics.
 		"""
 		subdom_funcs = self.synchronous_command('Performance.enable')
@@ -118,9 +118,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Performance.disable
 			Domain: Performance
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disable collecting and reporting metrics.
 		"""
 		subdom_funcs = self.synchronous_command('Performance.disable')
@@ -131,10 +131,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Performance.getMetrics
 			Domain: Performance
 			Method name: getMetrics
-		
+
 			Returns:
 				'metrics' (type: array) -> Current values for run-time metrics.
-		
+
 			Description: Retrieve current values of run-time metrics.
 		"""
 		subdom_funcs = self.synchronous_command('Performance.getMetrics')
@@ -145,9 +145,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.enable
 			Domain: Page
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables page domain notifications.
 		"""
 		subdom_funcs = self.synchronous_command('Page.enable')
@@ -158,9 +158,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.disable
 			Domain: Page
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables page domain notifications.
 		"""
 		subdom_funcs = self.synchronous_command('Page.disable')
@@ -171,15 +171,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.addScriptToEvaluateOnLoad
 			Domain: Page
 			Method name: addScriptToEvaluateOnLoad
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'scriptSource' (type: string) -> No description
 			Returns:
 				'identifier' (type: ScriptIdentifier) -> Identifier of the added script.
-		
+
 			Description: Deprecated, please use addScriptToEvaluateOnNewDocument instead.
 		"""
 		assert isinstance(scriptSource, (str,)
@@ -194,14 +194,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.removeScriptToEvaluateOnLoad
 			Domain: Page
 			Method name: removeScriptToEvaluateOnLoad
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'identifier' (type: ScriptIdentifier) -> No description
 			No return value.
-		
+
 			Description: Deprecated, please use removeScriptToEvaluateOnNewDocument instead.
 		"""
 		subdom_funcs = self.synchronous_command('Page.removeScriptToEvaluateOnLoad',
@@ -213,15 +213,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.addScriptToEvaluateOnNewDocument
 			Domain: Page
 			Method name: addScriptToEvaluateOnNewDocument
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'source' (type: string) -> No description
 			Returns:
 				'identifier' (type: ScriptIdentifier) -> Identifier of the added script.
-		
+
 			Description: Evaluates given script in every frame upon creation (before loading frame's scripts).
 		"""
 		assert isinstance(source, (str,)
@@ -236,14 +236,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.removeScriptToEvaluateOnNewDocument
 			Domain: Page
 			Method name: removeScriptToEvaluateOnNewDocument
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'identifier' (type: ScriptIdentifier) -> No description
 			No return value.
-		
+
 			Description: Removes given script from the list.
 		"""
 		subdom_funcs = self.synchronous_command(
@@ -255,14 +255,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.setAutoAttachToCreatedPages
 			Domain: Page
 			Method name: setAutoAttachToCreatedPages
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'autoAttach' (type: boolean) -> If true, browser will open a new inspector window for every page created from this one.
 			No return value.
-		
+
 			Description: Controls whether browser will open a new inspector window for connected pages.
 		"""
 		assert isinstance(autoAttach, (bool,)
@@ -277,13 +277,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.reload
 			Domain: Page
 			Method name: reload
-		
+
 			Parameters:
 				Optional arguments:
 					'ignoreCache' (type: boolean) -> If true, browser cache is ignored (as if the user pressed Shift+refresh).
 					'scriptToEvaluateOnLoad' (type: string) -> If set, the script will be injected into all frames of the inspected page after reload.
 			No return value.
-		
+
 			Description: Reloads given page optionally ignoring the cache.
 		"""
 		if 'ignoreCache' in kwargs:
@@ -306,14 +306,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.setAdBlockingEnabled
 			Domain: Page
 			Method name: setAdBlockingEnabled
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'enabled' (type: boolean) -> Whether to block ads.
 			No return value.
-		
+
 			Description: Enable Chrome's experimental ad filter on all sites.
 		"""
 		assert isinstance(enabled, (bool,)
@@ -328,7 +328,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.navigate
 			Domain: Page
 			Method name: navigate
-		
+
 			Parameters:
 				Required arguments:
 					'url' (type: string) -> URL to navigate the page to.
@@ -337,7 +337,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'transitionType' (type: TransitionType) -> Intended transition type.
 			Returns:
 				'frameId' (type: FrameId) -> Frame id that will be navigated.
-		
+
 			Description: Navigates current page to the given URL.
 		"""
 		assert isinstance(url, (str,)
@@ -359,11 +359,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.stopLoading
 			Domain: Page
 			Method name: stopLoading
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Force the page stop all navigations and pending resource fetches.
 		"""
 		subdom_funcs = self.synchronous_command('Page.stopLoading')
@@ -374,13 +374,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.getNavigationHistory
 			Domain: Page
 			Method name: getNavigationHistory
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'currentIndex' (type: integer) -> Index of the current navigation history entry.
 				'entries' (type: array) -> Array of navigation history entries.
-		
+
 			Description: Returns navigation history for the current page.
 		"""
 		subdom_funcs = self.synchronous_command('Page.getNavigationHistory')
@@ -391,14 +391,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.navigateToHistoryEntry
 			Domain: Page
 			Method name: navigateToHistoryEntry
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'entryId' (type: integer) -> Unique id of the entry to navigate to.
 			No return value.
-		
+
 			Description: Navigates current page to the given history entry.
 		"""
 		assert isinstance(entryId, (int,)
@@ -413,12 +413,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.getCookies
 			Domain: Page
 			Method name: getCookies
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'cookies' (type: array) -> Array of cookie objects.
-		
+
 			Description: Returns all browser cookies. Depending on the backend support, will return detailed cookie information in the <code>cookies</code> field.
 		"""
 		subdom_funcs = self.synchronous_command('Page.getCookies')
@@ -429,15 +429,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.deleteCookie
 			Domain: Page
 			Method name: deleteCookie
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'cookieName' (type: string) -> Name of the cookie to remove.
 					'url' (type: string) -> URL to match cooke domain and path.
 			No return value.
-		
+
 			Description: Deletes browser cookie with given name, domain and path.
 		"""
 		assert isinstance(cookieName, (str,)
@@ -455,12 +455,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.getResourceTree
 			Domain: Page
 			Method name: getResourceTree
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'frameTree' (type: FrameResourceTree) -> Present frame / resource tree structure.
-		
+
 			Description: Returns present frame / resource tree structure.
 		"""
 		subdom_funcs = self.synchronous_command('Page.getResourceTree')
@@ -471,9 +471,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.getResourceContent
 			Domain: Page
 			Method name: getResourceContent
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'frameId' (type: FrameId) -> Frame id to get resource for.
@@ -481,7 +481,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'content' (type: string) -> Resource content.
 				'base64Encoded' (type: boolean) -> True, if content was served as base64.
-		
+
 			Description: Returns content of the given resource.
 		"""
 		assert isinstance(url, (str,)
@@ -496,9 +496,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.searchInResource
 			Domain: Page
 			Method name: searchInResource
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'frameId' (type: FrameId) -> Frame id for resource to search in.
@@ -509,7 +509,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'isRegex' (type: boolean) -> If true, treats string parameter as regex.
 			Returns:
 				'result' (type: array) -> List of search matches.
-		
+
 			Description: Searches for given string in resource content.
 		"""
 		assert isinstance(url, (str,)
@@ -539,15 +539,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.setDocumentContent
 			Domain: Page
 			Method name: setDocumentContent
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'frameId' (type: FrameId) -> Frame id to set HTML for.
 					'html' (type: string) -> HTML content to set.
 			No return value.
-		
+
 			Description: Sets given markup as the document's HTML.
 		"""
 		assert isinstance(html, (str,)
@@ -563,9 +563,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.setDeviceMetricsOverride
 			Domain: Page
 			Method name: setDeviceMetricsOverride
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'width' (type: integer) -> Overriding width value in pixels (minimum 0, maximum 10000000). 0 disables the override.
@@ -581,7 +581,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'dontSetVisibleSize' (type: boolean) -> Do not set visible view size, rely upon explicit setVisibleSize call.
 					'screenOrientation' (type: Emulation.ScreenOrientation) -> Screen orientation override.
 			No return value.
-		
+
 			Description: Overrides the values of device screen dimensions (window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media query results).
 		"""
 		assert isinstance(width, (int,)
@@ -635,11 +635,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.clearDeviceMetricsOverride
 			Domain: Page
 			Method name: clearDeviceMetricsOverride
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Clears the overriden device metrics.
 		"""
 		subdom_funcs = self.synchronous_command('Page.clearDeviceMetricsOverride')
@@ -650,14 +650,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.setGeolocationOverride
 			Domain: Page
 			Method name: setGeolocationOverride
-		
+
 			Parameters:
 				Optional arguments:
 					'latitude' (type: number) -> Mock latitude
 					'longitude' (type: number) -> Mock longitude
 					'accuracy' (type: number) -> Mock accuracy
 			No return value.
-		
+
 			Description: Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position unavailable.
 		"""
 		if 'latitude' in kwargs:
@@ -685,9 +685,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.clearGeolocationOverride
 			Domain: Page
 			Method name: clearGeolocationOverride
-		
+
 			No return value.
-		
+
 			Description: Clears the overriden Geolocation Position and Error.
 		"""
 		subdom_funcs = self.synchronous_command('Page.clearGeolocationOverride')
@@ -698,16 +698,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.setDeviceOrientationOverride
 			Domain: Page
 			Method name: setDeviceOrientationOverride
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'alpha' (type: number) -> Mock alpha
 					'beta' (type: number) -> Mock beta
 					'gamma' (type: number) -> Mock gamma
 			No return value.
-		
+
 			Description: Overrides the Device Orientation.
 		"""
 		assert isinstance(alpha, (float, int)
@@ -728,11 +728,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.clearDeviceOrientationOverride
 			Domain: Page
 			Method name: clearDeviceOrientationOverride
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Clears the overridden Device Orientation.
 		"""
 		subdom_funcs = self.synchronous_command('Page.clearDeviceOrientationOverride'
@@ -744,16 +744,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.setTouchEmulationEnabled
 			Domain: Page
 			Method name: setTouchEmulationEnabled
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'enabled' (type: boolean) -> Whether the touch event emulation should be enabled.
 				Optional arguments:
 					'configuration' (type: string) -> Touch/gesture events configuration. Default: current platform.
 			No return value.
-		
+
 			Description: Toggles mouse event-based touch event emulation.
 		"""
 		assert isinstance(enabled, (bool,)
@@ -776,9 +776,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.captureScreenshot
 			Domain: Page
 			Method name: captureScreenshot
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Optional arguments:
 					'format' (type: string) -> Image compression format (defaults to png).
@@ -787,7 +787,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'fromSurface' (type: boolean) -> Capture the screenshot from the surface, rather than the view. Defaults to true.
 			Returns:
 				'data' (type: string) -> Base64-encoded image data.
-		
+
 			Description: Capture page screenshot.
 		"""
 		if 'format' in kwargs:
@@ -814,9 +814,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.printToPDF
 			Domain: Page
 			Method name: printToPDF
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Optional arguments:
 					'landscape' (type: boolean) -> Paper orientation. Defaults to false.
@@ -833,7 +833,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'ignoreInvalidPageRanges' (type: boolean) -> Whether to silently ignore invalid but successfully parsed page ranges, such as '3-2'. Defaults to false.
 			Returns:
 				'data' (type: string) -> Base64-encoded pdf data.
-		
+
 			Description: Print page as PDF.
 		"""
 		if 'landscape' in kwargs:
@@ -898,9 +898,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.startScreencast
 			Domain: Page
 			Method name: startScreencast
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Optional arguments:
 					'format' (type: string) -> Image compression format.
@@ -909,7 +909,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'maxHeight' (type: integer) -> Maximum screenshot height.
 					'everyNthFrame' (type: integer) -> Send every n-th frame.
 			No return value.
-		
+
 			Description: Starts sending each frame using the <code>screencastFrame</code> event.
 		"""
 		if 'format' in kwargs:
@@ -944,11 +944,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.stopScreencast
 			Domain: Page
 			Method name: stopScreencast
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Stops sending each frame in the <code>screencastFrame</code>.
 		"""
 		subdom_funcs = self.synchronous_command('Page.stopScreencast')
@@ -959,14 +959,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.screencastFrameAck
 			Domain: Page
 			Method name: screencastFrameAck
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'sessionId' (type: integer) -> Frame number.
 			No return value.
-		
+
 			Description: Acknowledges that a screencast frame has been received by the frontend.
 		"""
 		assert isinstance(sessionId, (int,)
@@ -981,14 +981,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.handleJavaScriptDialog
 			Domain: Page
 			Method name: handleJavaScriptDialog
-		
+
 			Parameters:
 				Required arguments:
 					'accept' (type: boolean) -> Whether to accept or dismiss the dialog.
 				Optional arguments:
 					'promptText' (type: string) -> The text to enter into the dialog prompt before accepting. Used only if this is a prompt dialog.
 			No return value.
-		
+
 			Description: Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
 		"""
 		assert isinstance(accept, (bool,)
@@ -1011,14 +1011,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.getAppManifest
 			Domain: Page
 			Method name: getAppManifest
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'url' (type: string) -> Manifest location.
 				'errors' (type: array) -> No description
 				'data' (type: string) -> Manifest content.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Page.getAppManifest')
 		return subdom_funcs
@@ -1028,11 +1028,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.requestAppBanner
 			Domain: Page
 			Method name: requestAppBanner
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Page.requestAppBanner')
 		return subdom_funcs
@@ -1042,14 +1042,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.getLayoutMetrics
 			Domain: Page
 			Method name: getLayoutMetrics
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'layoutViewport' (type: LayoutViewport) -> Metrics relating to the layout viewport.
 				'visualViewport' (type: VisualViewport) -> Metrics relating to the visual viewport.
 				'contentSize' (type: DOM.Rect) -> Size of scrollable area.
-		
+
 			Description: Returns metrics relating to the layouting of the page, such as viewport bounds/scale.
 		"""
 		subdom_funcs = self.synchronous_command('Page.getLayoutMetrics')
@@ -1060,9 +1060,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.createIsolatedWorld
 			Domain: Page
 			Method name: createIsolatedWorld
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'frameId' (type: FrameId) -> Id of the frame in which the isolated world should be created.
@@ -1071,7 +1071,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'grantUniveralAccess' (type: boolean) -> Whether or not universal access should be granted to the isolated world. This is a powerful option, use with caution.
 			Returns:
 				'executionContextId' (type: Runtime.ExecutionContextId) -> Execution context of the isolated world.
-		
+
 			Description: Creates an isolated world for the given frame.
 		"""
 		if 'worldName' in kwargs:
@@ -1095,9 +1095,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.bringToFront
 			Domain: Page
 			Method name: bringToFront
-		
+
 			No return value.
-		
+
 			Description: Brings page to front (activates tab).
 		"""
 		subdom_funcs = self.synchronous_command('Page.bringToFront')
@@ -1108,16 +1108,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Page.setDownloadBehavior
 			Domain: Page
 			Method name: setDownloadBehavior
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'behavior' (type: string) -> Whether to allow all or deny all download requests, or use default Chrome behavior if available (otherwise deny).
 				Optional arguments:
 					'downloadPath' (type: string) -> The default path to save downloaded files to. This is requred if behavior is set to 'allow'
 			No return value.
-		
+
 			Description: Set the behavior when downloading a file.
 		"""
 		assert isinstance(behavior, (str,)
@@ -1140,9 +1140,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.enable
 			Domain: Overlay
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables domain notifications.
 		"""
 		subdom_funcs = self.synchronous_command('Overlay.enable')
@@ -1153,9 +1153,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.disable
 			Domain: Overlay
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables domain notifications.
 		"""
 		subdom_funcs = self.synchronous_command('Overlay.disable')
@@ -1166,12 +1166,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.setShowPaintRects
 			Domain: Overlay
 			Method name: setShowPaintRects
-		
+
 			Parameters:
 				Required arguments:
 					'result' (type: boolean) -> True for showing paint rectangles
 			No return value.
-		
+
 			Description: Requests that backend shows paint rectangles
 		"""
 		assert isinstance(result, (bool,)
@@ -1186,12 +1186,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.setShowDebugBorders
 			Domain: Overlay
 			Method name: setShowDebugBorders
-		
+
 			Parameters:
 				Required arguments:
 					'show' (type: boolean) -> True for showing debug borders
 			No return value.
-		
+
 			Description: Requests that backend shows debug borders on layers
 		"""
 		assert isinstance(show, (bool,)
@@ -1206,12 +1206,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.setShowFPSCounter
 			Domain: Overlay
 			Method name: setShowFPSCounter
-		
+
 			Parameters:
 				Required arguments:
 					'show' (type: boolean) -> True for showing the FPS counter
 			No return value.
-		
+
 			Description: Requests that backend shows the FPS counter
 		"""
 		assert isinstance(show, (bool,)
@@ -1226,12 +1226,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.setShowScrollBottleneckRects
 			Domain: Overlay
 			Method name: setShowScrollBottleneckRects
-		
+
 			Parameters:
 				Required arguments:
 					'show' (type: boolean) -> True for showing scroll bottleneck rects
 			No return value.
-		
+
 			Description: Requests that backend shows scroll bottleneck rects
 		"""
 		assert isinstance(show, (bool,)
@@ -1246,12 +1246,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.setShowViewportSizeOnResize
 			Domain: Overlay
 			Method name: setShowViewportSizeOnResize
-		
+
 			Parameters:
 				Required arguments:
 					'show' (type: boolean) -> Whether to paint size or not.
 			No return value.
-		
+
 			Description: Paints viewport size upon main frame resize.
 		"""
 		assert isinstance(show, (bool,)
@@ -1266,12 +1266,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.setPausedInDebuggerMessage
 			Domain: Overlay
 			Method name: setPausedInDebuggerMessage
-		
+
 			Parameters:
 				Optional arguments:
 					'message' (type: string) -> The message to display, also triggers resume and step over controls.
 			No return value.
-		
+
 		"""
 		if 'message' in kwargs:
 			assert isinstance(kwargs['message'], (str,)
@@ -1290,12 +1290,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.setSuspended
 			Domain: Overlay
 			Method name: setSuspended
-		
+
 			Parameters:
 				Required arguments:
 					'suspended' (type: boolean) -> Whether overlay should be suspended and not consume any resources until resumed.
 			No return value.
-		
+
 		"""
 		assert isinstance(suspended, (bool,)
 		    ), "Argument 'suspended' must be of type '['bool']'. Received type: '%s'" % type(
@@ -1309,14 +1309,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.setInspectMode
 			Domain: Overlay
 			Method name: setInspectMode
-		
+
 			Parameters:
 				Required arguments:
 					'mode' (type: InspectMode) -> Set an inspection mode.
 				Optional arguments:
 					'highlightConfig' (type: HighlightConfig) -> A descriptor for the highlight appearance of hovered-over nodes. May be omitted if <code>enabled == false</code>.
 			No return value.
-		
+
 			Description: Enters the 'inspect' mode. In this mode, elements that user is hovering over are highlighted. Backend then generates 'inspectNodeRequested' event upon element selection.
 		"""
 		expected = ['highlightConfig']
@@ -1332,7 +1332,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.highlightRect
 			Domain: Overlay
 			Method name: highlightRect
-		
+
 			Parameters:
 				Required arguments:
 					'x' (type: integer) -> X coordinate
@@ -1343,7 +1343,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'color' (type: DOM.RGBA) -> The highlight fill color (default: transparent).
 					'outlineColor' (type: DOM.RGBA) -> The highlight outline color (default: transparent).
 			No return value.
-		
+
 			Description: Highlights given rectangle. Coordinates are absolute with respect to the main frame viewport.
 		"""
 		assert isinstance(x, (int,)
@@ -1371,7 +1371,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.highlightQuad
 			Domain: Overlay
 			Method name: highlightQuad
-		
+
 			Parameters:
 				Required arguments:
 					'quad' (type: DOM.Quad) -> Quad to highlight
@@ -1379,7 +1379,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'color' (type: DOM.RGBA) -> The highlight fill color (default: transparent).
 					'outlineColor' (type: DOM.RGBA) -> The highlight outline color (default: transparent).
 			No return value.
-		
+
 			Description: Highlights given quad. Coordinates are absolute with respect to the main frame viewport.
 		"""
 		expected = ['color', 'outlineColor']
@@ -1395,7 +1395,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.highlightNode
 			Domain: Overlay
 			Method name: highlightNode
-		
+
 			Parameters:
 				Required arguments:
 					'highlightConfig' (type: HighlightConfig) -> A descriptor for the highlight appearance.
@@ -1404,7 +1404,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'backendNodeId' (type: DOM.BackendNodeId) -> Identifier of the backend node to highlight.
 					'objectId' (type: Runtime.RemoteObjectId) -> JavaScript object id of the node to be highlighted.
 			No return value.
-		
+
 			Description: Highlights DOM node with given id or with the given JavaScript object wrapper. Either nodeId or objectId must be specified.
 		"""
 		expected = ['nodeId', 'backendNodeId', 'objectId']
@@ -1420,7 +1420,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.highlightFrame
 			Domain: Overlay
 			Method name: highlightFrame
-		
+
 			Parameters:
 				Required arguments:
 					'frameId' (type: Page.FrameId) -> Identifier of the frame to highlight.
@@ -1428,7 +1428,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'contentColor' (type: DOM.RGBA) -> The content box highlight fill color (default: transparent).
 					'contentOutlineColor' (type: DOM.RGBA) -> The content box highlight outline color (default: transparent).
 			No return value.
-		
+
 			Description: Highlights owner element of the frame with given id.
 		"""
 		expected = ['contentColor', 'contentOutlineColor']
@@ -1444,9 +1444,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.hideHighlight
 			Domain: Overlay
 			Method name: hideHighlight
-		
+
 			No return value.
-		
+
 			Description: Hides any highlight.
 		"""
 		subdom_funcs = self.synchronous_command('Overlay.hideHighlight')
@@ -1457,13 +1457,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Overlay.getHighlightObjectForTest
 			Domain: Overlay
 			Method name: getHighlightObjectForTest
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> Id of the node to get highlight object for.
 			Returns:
 				'highlight' (type: object) -> Highlight data for the node.
-		
+
 			Description: For testing.
 		"""
 		subdom_funcs = self.synchronous_command('Overlay.getHighlightObjectForTest',
@@ -1476,7 +1476,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setDeviceMetricsOverride
 			Domain: Emulation
 			Method name: setDeviceMetricsOverride
-		
+
 			Parameters:
 				Required arguments:
 					'width' (type: integer) -> Overriding width value in pixels (minimum 0, maximum 10000000). 0 disables the override.
@@ -1492,7 +1492,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'dontSetVisibleSize' (type: boolean) -> Do not set visible view size, rely upon explicit setVisibleSize call.
 					'screenOrientation' (type: ScreenOrientation) -> Screen orientation override.
 			No return value.
-		
+
 			Description: Overrides the values of device screen dimensions (window.screen.width, window.screen.height, window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media query results).
 		"""
 		assert isinstance(width, (int,)
@@ -1546,9 +1546,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.clearDeviceMetricsOverride
 			Domain: Emulation
 			Method name: clearDeviceMetricsOverride
-		
+
 			No return value.
-		
+
 			Description: Clears the overriden device metrics.
 		"""
 		subdom_funcs = self.synchronous_command(
@@ -1560,11 +1560,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.resetPageScaleFactor
 			Domain: Emulation
 			Method name: resetPageScaleFactor
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Requests that page scale factor is reset to initial values.
 		"""
 		subdom_funcs = self.synchronous_command('Emulation.resetPageScaleFactor')
@@ -1575,14 +1575,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setPageScaleFactor
 			Domain: Emulation
 			Method name: setPageScaleFactor
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'pageScaleFactor' (type: number) -> Page scale factor.
 			No return value.
-		
+
 			Description: Sets a specified page scale factor.
 		"""
 		assert isinstance(pageScaleFactor, (float, int)
@@ -1597,15 +1597,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setVisibleSize
 			Domain: Emulation
 			Method name: setVisibleSize
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'width' (type: integer) -> Frame width (DIP).
 					'height' (type: integer) -> Frame height (DIP).
 			No return value.
-		
+
 			Description: Resizes the frame/viewport of the page. Note that this does not affect the frame's container (e.g. browser window). Can be used to produce screenshots of the specified size. Not supported on Android.
 		"""
 		assert isinstance(width, (int,)
@@ -1623,14 +1623,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setScriptExecutionDisabled
 			Domain: Emulation
 			Method name: setScriptExecutionDisabled
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'value' (type: boolean) -> Whether script execution should be disabled in the page.
 			No return value.
-		
+
 			Description: Switches script execution in the page.
 		"""
 		assert isinstance(value, (bool,)
@@ -1645,16 +1645,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setGeolocationOverride
 			Domain: Emulation
 			Method name: setGeolocationOverride
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Optional arguments:
 					'latitude' (type: number) -> Mock latitude
 					'longitude' (type: number) -> Mock longitude
 					'accuracy' (type: number) -> Mock accuracy
 			No return value.
-		
+
 			Description: Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position unavailable.
 		"""
 		if 'latitude' in kwargs:
@@ -1682,11 +1682,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.clearGeolocationOverride
 			Domain: Emulation
 			Method name: clearGeolocationOverride
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Clears the overriden Geolocation Position and Error.
 		"""
 		subdom_funcs = self.synchronous_command('Emulation.clearGeolocationOverride')
@@ -1697,14 +1697,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setTouchEmulationEnabled
 			Domain: Emulation
 			Method name: setTouchEmulationEnabled
-		
+
 			Parameters:
 				Required arguments:
 					'enabled' (type: boolean) -> Whether the touch event emulation should be enabled.
 				Optional arguments:
 					'maxTouchPoints' (type: integer) -> Maximum touch points supported. Defaults to one.
 			No return value.
-		
+
 			Description: Enables touch on platforms which do not support them.
 		"""
 		assert isinstance(enabled, (bool,)
@@ -1727,16 +1727,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setEmitTouchEventsForMouse
 			Domain: Emulation
 			Method name: setEmitTouchEventsForMouse
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'enabled' (type: boolean) -> Whether touch emulation based on mouse input should be enabled.
 				Optional arguments:
 					'configuration' (type: string) -> Touch/gesture events configuration. Default: current platform.
 			No return value.
-		
+
 		"""
 		assert isinstance(enabled, (bool,)
 		    ), "Argument 'enabled' must be of type '['bool']'. Received type: '%s'" % type(
@@ -1758,12 +1758,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setEmulatedMedia
 			Domain: Emulation
 			Method name: setEmulatedMedia
-		
+
 			Parameters:
 				Required arguments:
 					'media' (type: string) -> Media type to emulate. Empty string disables the override.
 			No return value.
-		
+
 			Description: Emulates the given media for CSS media queries.
 		"""
 		assert isinstance(media, (str,)
@@ -1778,14 +1778,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setCPUThrottlingRate
 			Domain: Emulation
 			Method name: setCPUThrottlingRate
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'rate' (type: number) -> Throttling rate as a slowdown factor (1 is no throttle, 2 is 2x slowdown, etc).
 			No return value.
-		
+
 			Description: Enables CPU throttling to emulate slow CPUs.
 		"""
 		assert isinstance(rate, (float, int)
@@ -1800,12 +1800,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.canEmulate
 			Domain: Emulation
 			Method name: canEmulate
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'result' (type: boolean) -> True if emulation is supported.
-		
+
 			Description: Tells whether emulation is supported.
 		"""
 		subdom_funcs = self.synchronous_command('Emulation.canEmulate')
@@ -1816,16 +1816,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setVirtualTimePolicy
 			Domain: Emulation
 			Method name: setVirtualTimePolicy
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'policy' (type: VirtualTimePolicy) -> No description
 				Optional arguments:
 					'budget' (type: integer) -> If set, after this many virtual milliseconds have elapsed virtual time will be paused and a virtualTimeBudgetExpired event is sent.
 			No return value.
-		
+
 			Description: Turns on virtual time for all frames (replacing real-time with a synthetic time source) and sets the current virtual time policy.  Note this supersedes any previous time budget.
 		"""
 		if 'budget' in kwargs:
@@ -1845,14 +1845,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setNavigatorOverrides
 			Domain: Emulation
 			Method name: setNavigatorOverrides
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'platform' (type: string) -> The platform navigator.platform should return.
 			No return value.
-		
+
 			Description: Overrides value returned by the javascript navigator object.
 		"""
 		assert isinstance(platform, (str,)
@@ -1867,14 +1867,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Emulation.setDefaultBackgroundColorOverride
 			Domain: Emulation
 			Method name: setDefaultBackgroundColorOverride
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Optional arguments:
 					'color' (type: DOM.RGBA) -> RGBA of the default background color. If not specified, any existing override will be cleared.
 			No return value.
-		
+
 			Description: Sets or clears an override of the default background color of the frame. This override is used if the content does not specify one.
 		"""
 		expected = ['color']
@@ -1890,9 +1890,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Security.enable
 			Domain: Security
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables tracking security state changes.
 		"""
 		subdom_funcs = self.synchronous_command('Security.enable')
@@ -1903,9 +1903,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Security.disable
 			Domain: Security
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables tracking security state changes.
 		"""
 		subdom_funcs = self.synchronous_command('Security.disable')
@@ -1916,13 +1916,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Security.handleCertificateError
 			Domain: Security
 			Method name: handleCertificateError
-		
+
 			Parameters:
 				Required arguments:
 					'eventId' (type: integer) -> The ID of the event.
 					'action' (type: CertificateErrorAction) -> The action to take on the certificate error.
 			No return value.
-		
+
 			Description: Handles a certificate error that fired a certificateError event.
 		"""
 		assert isinstance(eventId, (int,)
@@ -1937,12 +1937,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Security.setOverrideCertificateErrors
 			Domain: Security
 			Method name: setOverrideCertificateErrors
-		
+
 			Parameters:
 				Required arguments:
 					'override' (type: boolean) -> If true, certificate errors will be overridden.
 			No return value.
-		
+
 			Description: Enable/disable overriding certificate errors. If enabled, all certificate error events need to be handled by the DevTools client and should be answered with handleCertificateError commands.
 		"""
 		assert isinstance(override, (bool,)
@@ -1957,7 +1957,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Audits.getEncodedResponse
 			Domain: Audits
 			Method name: getEncodedResponse
-		
+
 			Parameters:
 				Required arguments:
 					'requestId' (type: Network.RequestId) -> Identifier of the network request to get content for.
@@ -1969,7 +1969,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				'body' (type: string) -> The encoded body as a base64 string. Omitted if sizeOnly is true.
 				'originalSize' (type: integer) -> Size before re-encoding.
 				'encodedSize' (type: integer) -> Size after re-encoding.
-		
+
 			Description: Returns the response body and size if it were re-encoded with the specified settings. Only applies to images.
 		"""
 		assert isinstance(encoding, (str,)
@@ -1996,13 +1996,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.enable
 			Domain: Network
 			Method name: enable
-		
+
 			Parameters:
 				Optional arguments:
 					'maxTotalBufferSize' (type: integer) -> Buffer size in bytes to use when preserving network payloads (XHRs, etc).
 					'maxResourceBufferSize' (type: integer) -> Per-resource buffer size in bytes to use when preserving network payloads (XHRs, etc).
 			No return value.
-		
+
 			Description: Enables network tracking, network events will now be delivered to the client.
 		"""
 		if 'maxTotalBufferSize' in kwargs:
@@ -2025,9 +2025,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.disable
 			Domain: Network
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables network tracking, prevents network events from being sent to the client.
 		"""
 		subdom_funcs = self.synchronous_command('Network.disable')
@@ -2038,12 +2038,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.setUserAgentOverride
 			Domain: Network
 			Method name: setUserAgentOverride
-		
+
 			Parameters:
 				Required arguments:
 					'userAgent' (type: string) -> User agent to use.
 			No return value.
-		
+
 			Description: Allows overriding user agent with the given string.
 		"""
 		assert isinstance(userAgent, (str,)
@@ -2058,12 +2058,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.setExtraHTTPHeaders
 			Domain: Network
 			Method name: setExtraHTTPHeaders
-		
+
 			Parameters:
 				Required arguments:
 					'headers' (type: Headers) -> Map with extra HTTP headers.
 			No return value.
-		
+
 			Description: Specifies whether to always send extra HTTP headers with the requests from this page.
 		"""
 		subdom_funcs = self.synchronous_command('Network.setExtraHTTPHeaders',
@@ -2075,14 +2075,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.getResponseBody
 			Domain: Network
 			Method name: getResponseBody
-		
+
 			Parameters:
 				Required arguments:
 					'requestId' (type: RequestId) -> Identifier of the network request to get content for.
 			Returns:
 				'body' (type: string) -> Response body.
 				'base64Encoded' (type: boolean) -> True, if content was sent as base64.
-		
+
 			Description: Returns content served for the given request.
 		"""
 		subdom_funcs = self.synchronous_command('Network.getResponseBody',
@@ -2094,14 +2094,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.setBlockedURLs
 			Domain: Network
 			Method name: setBlockedURLs
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'urls' (type: array) -> URL patterns to block. Wildcards ('*') are allowed.
 			No return value.
-		
+
 			Description: Blocks URLs from loading.
 		"""
 		assert isinstance(urls, (list, tuple)
@@ -2115,14 +2115,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.replayXHR
 			Domain: Network
 			Method name: replayXHR
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'requestId' (type: RequestId) -> Identifier of XHR to replay.
 			No return value.
-		
+
 			Description: This method sends a new XMLHttpRequest which is identical to the original one. The following parameters should be identical: method, url, async, request body, extra headers, withCredentials attribute, user, password.
 		"""
 		subdom_funcs = self.synchronous_command('Network.replayXHR', requestId=
@@ -2134,10 +2134,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.canClearBrowserCache
 			Domain: Network
 			Method name: canClearBrowserCache
-		
+
 			Returns:
 				'result' (type: boolean) -> True if browser cache can be cleared.
-		
+
 			Description: Tells whether clearing browser cache is supported.
 		"""
 		subdom_funcs = self.synchronous_command('Network.canClearBrowserCache')
@@ -2148,9 +2148,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.clearBrowserCache
 			Domain: Network
 			Method name: clearBrowserCache
-		
+
 			No return value.
-		
+
 			Description: Clears browser cache.
 		"""
 		subdom_funcs = self.synchronous_command('Network.clearBrowserCache')
@@ -2161,10 +2161,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.canClearBrowserCookies
 			Domain: Network
 			Method name: canClearBrowserCookies
-		
+
 			Returns:
 				'result' (type: boolean) -> True if browser cookies can be cleared.
-		
+
 			Description: Tells whether clearing browser cookies is supported.
 		"""
 		subdom_funcs = self.synchronous_command('Network.canClearBrowserCookies')
@@ -2175,9 +2175,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.clearBrowserCookies
 			Domain: Network
 			Method name: clearBrowserCookies
-		
+
 			No return value.
-		
+
 			Description: Clears browser cookies.
 		"""
 		subdom_funcs = self.synchronous_command('Network.clearBrowserCookies')
@@ -2188,15 +2188,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.getCookies
 			Domain: Network
 			Method name: getCookies
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Optional arguments:
 					'urls' (type: array) -> The list of URLs for which applicable cookies will be fetched
 			Returns:
 				'cookies' (type: array) -> Array of cookie objects.
-		
+
 			Description: Returns all browser cookies for the current URL. Depending on the backend support, will return detailed cookie information in the <code>cookies</code> field.
 		"""
 		if 'urls' in kwargs:
@@ -2215,12 +2215,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.getAllCookies
 			Domain: Network
 			Method name: getAllCookies
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'cookies' (type: array) -> Array of cookie objects.
-		
+
 			Description: Returns all browser cookies. Depending on the backend support, will return detailed cookie information in the <code>cookies</code> field.
 		"""
 		subdom_funcs = self.synchronous_command('Network.getAllCookies')
@@ -2231,9 +2231,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.deleteCookies
 			Domain: Network
 			Method name: deleteCookies
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'name' (type: string) -> Name of the cookies to remove.
@@ -2242,7 +2242,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'domain' (type: string) -> If specified, deletes only cookies with the exact domain.
 					'path' (type: string) -> If specified, deletes only cookies with the exact path.
 			No return value.
-		
+
 			Description: Deletes browser cookies with matching name and url or domain/path pair.
 		"""
 		assert isinstance(name, (str,)
@@ -2273,9 +2273,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.setCookie
 			Domain: Network
 			Method name: setCookie
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'name' (type: string) -> Cookie name.
@@ -2290,7 +2290,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'expires' (type: TimeSinceEpoch) -> Cookie expiration date, session cookie if not set
 			Returns:
 				'success' (type: boolean) -> True if successfully set cookie.
-		
+
 			Description: Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
 		"""
 		assert isinstance(name, (str,)
@@ -2333,14 +2333,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.setCookies
 			Domain: Network
 			Method name: setCookies
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'cookies' (type: array) -> Cookies to be set.
 			No return value.
-		
+
 			Description: Sets given cookies.
 		"""
 		assert isinstance(cookies, (list, tuple)
@@ -2355,12 +2355,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.canEmulateNetworkConditions
 			Domain: Network
 			Method name: canEmulateNetworkConditions
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'result' (type: boolean) -> True if emulation of network conditions is supported.
-		
+
 			Description: Tells whether emulation of network conditions is supported.
 		"""
 		subdom_funcs = self.synchronous_command('Network.canEmulateNetworkConditions'
@@ -2373,7 +2373,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.emulateNetworkConditions
 			Domain: Network
 			Method name: emulateNetworkConditions
-		
+
 			Parameters:
 				Required arguments:
 					'offline' (type: boolean) -> True to emulate internet disconnection.
@@ -2383,7 +2383,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				Optional arguments:
 					'connectionType' (type: ConnectionType) -> Connection type if known.
 			No return value.
-		
+
 			Description: Activates emulation of network conditions.
 		"""
 		assert isinstance(offline, (bool,)
@@ -2412,12 +2412,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.setCacheDisabled
 			Domain: Network
 			Method name: setCacheDisabled
-		
+
 			Parameters:
 				Required arguments:
 					'cacheDisabled' (type: boolean) -> Cache disabled state.
 			No return value.
-		
+
 			Description: Toggles ignoring cache for each request. If <code>true</code>, cache will not be used.
 		"""
 		assert isinstance(cacheDisabled, (bool,)
@@ -2432,14 +2432,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.setBypassServiceWorker
 			Domain: Network
 			Method name: setBypassServiceWorker
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'bypass' (type: boolean) -> Bypass service worker and load from network.
 			No return value.
-		
+
 			Description: Toggles ignoring of service worker for each request.
 		"""
 		assert isinstance(bypass, (bool,)
@@ -2454,15 +2454,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.setDataSizeLimitsForTest
 			Domain: Network
 			Method name: setDataSizeLimitsForTest
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'maxTotalSize' (type: integer) -> Maximum total buffer size.
 					'maxResourceSize' (type: integer) -> Maximum per-resource size.
 			No return value.
-		
+
 			Description: For testing.
 		"""
 		assert isinstance(maxTotalSize, (int,)
@@ -2480,15 +2480,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.getCertificate
 			Domain: Network
 			Method name: getCertificate
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'origin' (type: string) -> Origin to get certificate for.
 			Returns:
 				'tableNames' (type: array) -> No description
-		
+
 			Description: Returns the DER-encoded certificate.
 		"""
 		assert isinstance(origin, (str,)
@@ -2503,16 +2503,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.setRequestInterceptionEnabled
 			Domain: Network
 			Method name: setRequestInterceptionEnabled
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'enabled' (type: boolean) -> Whether requests should be intercepted. If patterns is not set, matches all and resets any previously set patterns. Other parameters are ignored if false.
 				Optional arguments:
 					'patterns' (type: array) -> URLs matching any of these patterns will be forwarded and wait for the corresponding continueInterceptedRequest call. Wildcards ('*' -> zero or more, '?' -> exactly one) are allowed. Escape character is backslash. If omitted equivalent to ['*'] (intercept all).
 			No return value.
-		
+
 			Description: Sets the requests to intercept that match a the provided patterns.
 		"""
 		assert isinstance(enabled, (bool,)
@@ -2535,9 +2535,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Network.continueInterceptedRequest
 			Domain: Network
 			Method name: continueInterceptedRequest
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'interceptionId' (type: InterceptionId) -> No description
@@ -2550,7 +2550,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'headers' (type: Headers) -> If set this allows the request headers to be changed. Must not be set in response to an authChallenge.
 					'authChallengeResponse' (type: AuthChallengeResponse) -> Response to a requestIntercepted with an authChallenge. Must not be set otherwise.
 			No return value.
-		
+
 			Description: Response to Network.requestIntercepted which either modifies the request to continue with any modifications, or blocks it, or completes it with the provided response bytes. If a network fetch occurs as a result which encounters a redirect an additional Network.requestIntercepted event will be sent with the same InterceptionId.
 		"""
 		if 'rawResponse' in kwargs:
@@ -2583,9 +2583,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Database.enable
 			Domain: Database
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables database tracking, database events will now be delivered to the client.
 		"""
 		subdom_funcs = self.synchronous_command('Database.enable')
@@ -2596,9 +2596,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Database.disable
 			Domain: Database
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables database tracking, prevents database events from being sent to the client.
 		"""
 		subdom_funcs = self.synchronous_command('Database.disable')
@@ -2609,13 +2609,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Database.getDatabaseTableNames
 			Domain: Database
 			Method name: getDatabaseTableNames
-		
+
 			Parameters:
 				Required arguments:
 					'databaseId' (type: DatabaseId) -> No description
 			Returns:
 				'tableNames' (type: array) -> No description
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Database.getDatabaseTableNames',
 		    databaseId=databaseId)
@@ -2626,7 +2626,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Database.executeSQL
 			Domain: Database
 			Method name: executeSQL
-		
+
 			Parameters:
 				Required arguments:
 					'databaseId' (type: DatabaseId) -> No description
@@ -2635,7 +2635,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				'columnNames' (type: array) -> No description
 				'values' (type: array) -> No description
 				'sqlError' (type: Error) -> No description
-		
+
 		"""
 		assert isinstance(query, (str,)
 		    ), "Argument 'query' must be of type '['str']'. Received type: '%s'" % type(
@@ -2649,9 +2649,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IndexedDB.enable
 			Domain: IndexedDB
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables events from backend.
 		"""
 		subdom_funcs = self.synchronous_command('IndexedDB.enable')
@@ -2662,9 +2662,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IndexedDB.disable
 			Domain: IndexedDB
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables events from backend.
 		"""
 		subdom_funcs = self.synchronous_command('IndexedDB.disable')
@@ -2675,13 +2675,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IndexedDB.requestDatabaseNames
 			Domain: IndexedDB
 			Method name: requestDatabaseNames
-		
+
 			Parameters:
 				Required arguments:
 					'securityOrigin' (type: string) -> Security origin.
 			Returns:
 				'databaseNames' (type: array) -> Database names for origin.
-		
+
 			Description: Requests database names for given security origin.
 		"""
 		assert isinstance(securityOrigin, (str,)
@@ -2696,14 +2696,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IndexedDB.requestDatabase
 			Domain: IndexedDB
 			Method name: requestDatabase
-		
+
 			Parameters:
 				Required arguments:
 					'securityOrigin' (type: string) -> Security origin.
 					'databaseName' (type: string) -> Database name.
 			Returns:
 				'databaseWithObjectStores' (type: DatabaseWithObjectStores) -> Database with an array of object stores.
-		
+
 			Description: Requests database with given name in given frame.
 		"""
 		assert isinstance(securityOrigin, (str,)
@@ -2722,7 +2722,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IndexedDB.requestData
 			Domain: IndexedDB
 			Method name: requestData
-		
+
 			Parameters:
 				Required arguments:
 					'securityOrigin' (type: string) -> Security origin.
@@ -2736,7 +2736,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'objectStoreDataEntries' (type: array) -> Array of object store data entries.
 				'hasMore' (type: boolean) -> If true, there are more entries to fetch in the given range.
-		
+
 			Description: Requests data from object store or index.
 		"""
 		assert isinstance(securityOrigin, (str,)
@@ -2773,14 +2773,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IndexedDB.clearObjectStore
 			Domain: IndexedDB
 			Method name: clearObjectStore
-		
+
 			Parameters:
 				Required arguments:
 					'securityOrigin' (type: string) -> Security origin.
 					'databaseName' (type: string) -> Database name.
 					'objectStoreName' (type: string) -> Object store name.
 			Returns:
-		
+
 			Description: Clears all entries from an object store.
 		"""
 		assert isinstance(securityOrigin, (str,)
@@ -2802,13 +2802,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IndexedDB.deleteDatabase
 			Domain: IndexedDB
 			Method name: deleteDatabase
-		
+
 			Parameters:
 				Required arguments:
 					'securityOrigin' (type: string) -> Security origin.
 					'databaseName' (type: string) -> Database name.
 			Returns:
-		
+
 			Description: Deletes a database.
 		"""
 		assert isinstance(securityOrigin, (str,)
@@ -2826,13 +2826,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CacheStorage.requestCacheNames
 			Domain: CacheStorage
 			Method name: requestCacheNames
-		
+
 			Parameters:
 				Required arguments:
 					'securityOrigin' (type: string) -> Security origin.
 			Returns:
 				'caches' (type: array) -> Caches for the security origin.
-		
+
 			Description: Requests cache names.
 		"""
 		assert isinstance(securityOrigin, (str,)
@@ -2847,7 +2847,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CacheStorage.requestEntries
 			Domain: CacheStorage
 			Method name: requestEntries
-		
+
 			Parameters:
 				Required arguments:
 					'cacheId' (type: CacheId) -> ID of cache to get entries from.
@@ -2856,7 +2856,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'cacheDataEntries' (type: array) -> Array of object store data entries.
 				'hasMore' (type: boolean) -> If true, there are more entries to fetch in the given range.
-		
+
 			Description: Requests data from cache.
 		"""
 		assert isinstance(skipCount, (int,)
@@ -2874,12 +2874,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CacheStorage.deleteCache
 			Domain: CacheStorage
 			Method name: deleteCache
-		
+
 			Parameters:
 				Required arguments:
 					'cacheId' (type: CacheId) -> Id of cache for deletion.
 			No return value.
-		
+
 			Description: Deletes a cache.
 		"""
 		subdom_funcs = self.synchronous_command('CacheStorage.deleteCache',
@@ -2891,13 +2891,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CacheStorage.deleteEntry
 			Domain: CacheStorage
 			Method name: deleteEntry
-		
+
 			Parameters:
 				Required arguments:
 					'cacheId' (type: CacheId) -> Id of cache where the entry will be deleted.
 					'request' (type: string) -> URL spec of the request.
 			No return value.
-		
+
 			Description: Deletes a cache entry.
 		"""
 		assert isinstance(request, (str,)
@@ -2912,14 +2912,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CacheStorage.requestCachedResponse
 			Domain: CacheStorage
 			Method name: requestCachedResponse
-		
+
 			Parameters:
 				Required arguments:
 					'cacheId' (type: CacheId) -> Id of cache that contains the enty.
 					'requestURL' (type: string) -> URL spec of the request.
 			Returns:
 				'response' (type: CachedResponse) -> Response read from the cache.
-		
+
 			Description: Fetches cache entry.
 		"""
 		assert isinstance(requestURL, (str,)
@@ -2934,9 +2934,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMStorage.enable
 			Domain: DOMStorage
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables storage tracking, storage events will now be delivered to the client.
 		"""
 		subdom_funcs = self.synchronous_command('DOMStorage.enable')
@@ -2947,9 +2947,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMStorage.disable
 			Domain: DOMStorage
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables storage tracking, prevents storage events from being sent to the client.
 		"""
 		subdom_funcs = self.synchronous_command('DOMStorage.disable')
@@ -2960,12 +2960,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMStorage.clear
 			Domain: DOMStorage
 			Method name: clear
-		
+
 			Parameters:
 				Required arguments:
 					'storageId' (type: StorageId) -> No description
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('DOMStorage.clear', storageId=
 		    storageId)
@@ -2976,13 +2976,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMStorage.getDOMStorageItems
 			Domain: DOMStorage
 			Method name: getDOMStorageItems
-		
+
 			Parameters:
 				Required arguments:
 					'storageId' (type: StorageId) -> No description
 			Returns:
 				'entries' (type: array) -> No description
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('DOMStorage.getDOMStorageItems',
 		    storageId=storageId)
@@ -2993,14 +2993,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMStorage.setDOMStorageItem
 			Domain: DOMStorage
 			Method name: setDOMStorageItem
-		
+
 			Parameters:
 				Required arguments:
 					'storageId' (type: StorageId) -> No description
 					'key' (type: string) -> No description
 					'value' (type: string) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(key, (str,)
 		    ), "Argument 'key' must be of type '['str']'. Received type: '%s'" % type(
@@ -3017,13 +3017,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMStorage.removeDOMStorageItem
 			Domain: DOMStorage
 			Method name: removeDOMStorageItem
-		
+
 			Parameters:
 				Required arguments:
 					'storageId' (type: StorageId) -> No description
 					'key' (type: string) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(key, (str,)
 		    ), "Argument 'key' must be of type '['str']'. Received type: '%s'" % type(
@@ -3037,10 +3037,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ApplicationCache.getFramesWithManifests
 			Domain: ApplicationCache
 			Method name: getFramesWithManifests
-		
+
 			Returns:
 				'frameIds' (type: array) -> Array of frame identifiers with manifest urls for each frame containing a document associated with some application cache.
-		
+
 			Description: Returns array of frame identifiers with manifest urls for each frame containing a document associated with some application cache.
 		"""
 		subdom_funcs = self.synchronous_command(
@@ -3052,9 +3052,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ApplicationCache.enable
 			Domain: ApplicationCache
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables application cache domain notifications.
 		"""
 		subdom_funcs = self.synchronous_command('ApplicationCache.enable')
@@ -3065,13 +3065,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ApplicationCache.getManifestForFrame
 			Domain: ApplicationCache
 			Method name: getManifestForFrame
-		
+
 			Parameters:
 				Required arguments:
 					'frameId' (type: Page.FrameId) -> Identifier of the frame containing document whose manifest is retrieved.
 			Returns:
 				'manifestURL' (type: string) -> Manifest URL for document in the given frame.
-		
+
 			Description: Returns manifest URL for document in the given frame.
 		"""
 		subdom_funcs = self.synchronous_command(
@@ -3083,13 +3083,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ApplicationCache.getApplicationCacheForFrame
 			Domain: ApplicationCache
 			Method name: getApplicationCacheForFrame
-		
+
 			Parameters:
 				Required arguments:
 					'frameId' (type: Page.FrameId) -> Identifier of the frame containing document whose application cache is retrieved.
 			Returns:
 				'applicationCache' (type: ApplicationCache) -> Relevant application cache data for the document in given frame.
-		
+
 			Description: Returns relevant application cache data for the document in given frame.
 		"""
 		subdom_funcs = self.synchronous_command(
@@ -3101,9 +3101,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.enable
 			Domain: DOM
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables DOM agent for the given page.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.enable')
@@ -3114,9 +3114,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.disable
 			Domain: DOM
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables DOM agent for the given page.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.disable')
@@ -3127,14 +3127,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.getDocument
 			Domain: DOM
 			Method name: getDocument
-		
+
 			Parameters:
 				Optional arguments:
 					'depth' (type: integer) -> The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the entire subtree or provide an integer larger than 0.
 					'pierce' (type: boolean) -> Whether or not iframes and shadow roots should be traversed when returning the subtree (default is false).
 			Returns:
 				'root' (type: Node) -> Resulting node.
-		
+
 			Description: Returns the root DOM node (and optionally the subtree) to the caller.
 		"""
 		if 'depth' in kwargs:
@@ -3157,14 +3157,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.getFlattenedDocument
 			Domain: DOM
 			Method name: getFlattenedDocument
-		
+
 			Parameters:
 				Optional arguments:
 					'depth' (type: integer) -> The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the entire subtree or provide an integer larger than 0.
 					'pierce' (type: boolean) -> Whether or not iframes and shadow roots should be traversed when returning the subtree (default is false).
 			Returns:
 				'nodes' (type: array) -> Resulting node.
-		
+
 			Description: Returns the root DOM node (and optionally the subtree) to the caller.
 		"""
 		if 'depth' in kwargs:
@@ -3187,15 +3187,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.collectClassNamesFromSubtree
 			Domain: DOM
 			Method name: collectClassNamesFromSubtree
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to collect class names.
 			Returns:
 				'classNames' (type: array) -> Class name list.
-		
+
 			Description: Collects class names for the node with given id and all of it's child nodes.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.collectClassNamesFromSubtree',
@@ -3207,7 +3207,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.requestChildNodes
 			Domain: DOM
 			Method name: requestChildNodes
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to get children for.
@@ -3215,7 +3215,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'depth' (type: integer) -> The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the entire subtree or provide an integer larger than 0.
 					'pierce' (type: boolean) -> Whether or not iframes and shadow roots should be traversed when returning the sub-tree (default is false).
 			No return value.
-		
+
 			Description: Requests that children of the node with given id are returned to the caller in form of <code>setChildNodes</code> events where not only immediate children are retrieved, but all children down to the specified depth.
 		"""
 		if 'depth' in kwargs:
@@ -3239,14 +3239,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.querySelector
 			Domain: DOM
 			Method name: querySelector
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to query upon.
 					'selector' (type: string) -> Selector string.
 			Returns:
 				'nodeId' (type: NodeId) -> Query selector result.
-		
+
 			Description: Executes <code>querySelector</code> on a given node.
 		"""
 		assert isinstance(selector, (str,)
@@ -3261,14 +3261,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.querySelectorAll
 			Domain: DOM
 			Method name: querySelectorAll
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to query upon.
 					'selector' (type: string) -> Selector string.
 			Returns:
 				'nodeIds' (type: array) -> Query selector result.
-		
+
 			Description: Executes <code>querySelectorAll</code> on a given node.
 		"""
 		assert isinstance(selector, (str,)
@@ -3283,14 +3283,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.setNodeName
 			Domain: DOM
 			Method name: setNodeName
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to set name for.
 					'name' (type: string) -> New node's name.
 			Returns:
 				'nodeId' (type: NodeId) -> New node's id.
-		
+
 			Description: Sets node name for a node with given id.
 		"""
 		assert isinstance(name, (str,)
@@ -3305,13 +3305,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.setNodeValue
 			Domain: DOM
 			Method name: setNodeValue
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to set value for.
 					'value' (type: string) -> New node's value.
 			No return value.
-		
+
 			Description: Sets node value for a node with given id.
 		"""
 		assert isinstance(value, (str,)
@@ -3326,12 +3326,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.removeNode
 			Domain: DOM
 			Method name: removeNode
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to remove.
 			No return value.
-		
+
 			Description: Removes node with given id.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.removeNode', nodeId=nodeId)
@@ -3342,14 +3342,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.setAttributeValue
 			Domain: DOM
 			Method name: setAttributeValue
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the element to set attribute for.
 					'name' (type: string) -> Attribute name.
 					'value' (type: string) -> Attribute value.
 			No return value.
-		
+
 			Description: Sets attribute for an element with given id.
 		"""
 		assert isinstance(name, (str,)
@@ -3367,7 +3367,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.setAttributesAsText
 			Domain: DOM
 			Method name: setAttributesAsText
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the element to set attributes for.
@@ -3375,7 +3375,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				Optional arguments:
 					'name' (type: string) -> Attribute name to replace with new attributes derived from text in case text parsed successfully.
 			No return value.
-		
+
 			Description: Sets attributes on element with given id. This method is useful when user edits some existing attribute value and types in several attribute name/value pairs.
 		"""
 		assert isinstance(text, (str,)
@@ -3398,13 +3398,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.removeAttribute
 			Domain: DOM
 			Method name: removeAttribute
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the element to remove attribute from.
 					'name' (type: string) -> Name of the attribute to remove.
 			No return value.
-		
+
 			Description: Removes attribute with given name from an element with given id.
 		"""
 		assert isinstance(name, (str,)
@@ -3419,7 +3419,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.getOuterHTML
 			Domain: DOM
 			Method name: getOuterHTML
-		
+
 			Parameters:
 				Optional arguments:
 					'nodeId' (type: NodeId) -> Identifier of the node.
@@ -3427,7 +3427,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'objectId' (type: Runtime.RemoteObjectId) -> JavaScript object id of the node wrapper.
 			Returns:
 				'outerHTML' (type: string) -> Outer HTML markup.
-		
+
 			Description: Returns node's HTML markup.
 		"""
 		expected = ['nodeId', 'backendNodeId', 'objectId']
@@ -3442,13 +3442,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.setOuterHTML
 			Domain: DOM
 			Method name: setOuterHTML
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to set markup for.
 					'outerHTML' (type: string) -> Outer HTML markup to set.
 			No return value.
-		
+
 			Description: Sets node HTML markup, returns new node id.
 		"""
 		assert isinstance(outerHTML, (str,)
@@ -3463,9 +3463,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.performSearch
 			Domain: DOM
 			Method name: performSearch
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'query' (type: string) -> Plain text or query selector or XPath search query.
@@ -3474,7 +3474,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'searchId' (type: string) -> Unique search session identifier.
 				'resultCount' (type: integer) -> Number of search results.
-		
+
 			Description: Searches for a given string in the DOM tree. Use <code>getSearchResults</code> to access search results or <code>cancelSearch</code> to end this search session.
 		"""
 		assert isinstance(query, (str,)
@@ -3497,9 +3497,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.getSearchResults
 			Domain: DOM
 			Method name: getSearchResults
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'searchId' (type: string) -> Unique search session identifier.
@@ -3507,7 +3507,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'toIndex' (type: integer) -> End index of the search result to be returned.
 			Returns:
 				'nodeIds' (type: array) -> Ids of the search result nodes.
-		
+
 			Description: Returns search results from given <code>fromIndex</code> to given <code>toIndex</code> from the sarch with the given identifier.
 		"""
 		assert isinstance(searchId, (str,)
@@ -3528,14 +3528,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.discardSearchResults
 			Domain: DOM
 			Method name: discardSearchResults
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'searchId' (type: string) -> Unique search session identifier.
 			No return value.
-		
+
 			Description: Discards search results from the session with the given id. <code>getSearchResults</code> should no longer be called for that search.
 		"""
 		assert isinstance(searchId, (str,)
@@ -3550,13 +3550,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.requestNode
 			Domain: DOM
 			Method name: requestNode
-		
+
 			Parameters:
 				Required arguments:
 					'objectId' (type: Runtime.RemoteObjectId) -> JavaScript object id to convert into node.
 			Returns:
 				'nodeId' (type: NodeId) -> Node id for given object.
-		
+
 			Description: Requests that the node is sent to the caller given the JavaScript node object reference. All nodes that form the path from the node to the root are also sent to the client as a series of <code>setChildNodes</code> notifications.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.requestNode', objectId=objectId)
@@ -3567,9 +3567,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.highlightRect
 			Domain: DOM
 			Method name: highlightRect
-		
+
 			No return value.
-		
+
 			Description: Highlights given rectangle.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.highlightRect')
@@ -3580,9 +3580,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.highlightNode
 			Domain: DOM
 			Method name: highlightNode
-		
+
 			No return value.
-		
+
 			Description: Highlights DOM node.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.highlightNode')
@@ -3593,9 +3593,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.hideHighlight
 			Domain: DOM
 			Method name: hideHighlight
-		
+
 			No return value.
-		
+
 			Description: Hides any highlight.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.hideHighlight')
@@ -3606,15 +3606,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.pushNodeByPathToFrontend
 			Domain: DOM
 			Method name: pushNodeByPathToFrontend
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'path' (type: string) -> Path to node in the proprietary format.
 			Returns:
 				'nodeId' (type: NodeId) -> Id of the node for given path.
-		
+
 			Description: Requests that the node is sent to the caller given its path. // FIXME, use XPath
 		"""
 		assert isinstance(path, (str,)
@@ -3629,15 +3629,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.pushNodesByBackendIdsToFrontend
 			Domain: DOM
 			Method name: pushNodesByBackendIdsToFrontend
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'backendNodeIds' (type: array) -> The array of backend node ids.
 			Returns:
 				'nodeIds' (type: array) -> The array of ids of pushed nodes that correspond to the backend ids specified in backendNodeIds.
-		
+
 			Description: Requests that a batch of nodes is sent to the caller given their backend node ids.
 		"""
 		assert isinstance(backendNodeIds, (list, tuple)
@@ -3652,14 +3652,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.setInspectedNode
 			Domain: DOM
 			Method name: setInspectedNode
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> DOM node id to be accessible by means of $x command line API.
 			No return value.
-		
+
 			Description: Enables console to refer to the node with given id via $x (see Command Line API for more details $x functions).
 		"""
 		subdom_funcs = self.synchronous_command('DOM.setInspectedNode', nodeId=nodeId
@@ -3671,7 +3671,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.resolveNode
 			Domain: DOM
 			Method name: resolveNode
-		
+
 			Parameters:
 				Optional arguments:
 					'nodeId' (type: NodeId) -> Id of the node to resolve.
@@ -3679,7 +3679,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'objectGroup' (type: string) -> Symbolic group name that can be used to release multiple objects.
 			Returns:
 				'object' (type: Runtime.RemoteObject) -> JavaScript object wrapper for given node.
-		
+
 			Description: Resolves the JavaScript node object for a given NodeId or BackendNodeId.
 		"""
 		if 'objectGroup' in kwargs:
@@ -3698,13 +3698,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.getAttributes
 			Domain: DOM
 			Method name: getAttributes
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to retrieve attibutes for.
 			Returns:
 				'attributes' (type: array) -> An interleaved array of node attribute names and values.
-		
+
 			Description: Returns attributes for the specified node.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.getAttributes', nodeId=nodeId)
@@ -3715,9 +3715,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.copyTo
 			Domain: DOM
 			Method name: copyTo
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to copy.
@@ -3726,7 +3726,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'insertBeforeNodeId' (type: NodeId) -> Drop the copy before this node (if absent, the copy becomes the last child of <code>targetNodeId</code>).
 			Returns:
 				'nodeId' (type: NodeId) -> Id of the node clone.
-		
+
 			Description: Creates a deep copy of the specified node and places it into the target container before the given anchor.
 		"""
 		expected = ['insertBeforeNodeId']
@@ -3742,7 +3742,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.moveTo
 			Domain: DOM
 			Method name: moveTo
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node to move.
@@ -3751,7 +3751,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'insertBeforeNodeId' (type: NodeId) -> Drop node before this one (if absent, the moved node becomes the last child of <code>targetNodeId</code>).
 			Returns:
 				'nodeId' (type: NodeId) -> New id of the moved node.
-		
+
 			Description: Moves node into the new container, places it before the given anchor.
 		"""
 		expected = ['insertBeforeNodeId']
@@ -3767,11 +3767,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.undo
 			Domain: DOM
 			Method name: undo
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Undoes the last performed action.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.undo')
@@ -3782,11 +3782,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.redo
 			Domain: DOM
 			Method name: redo
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Re-does the last undone action.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.redo')
@@ -3797,11 +3797,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.markUndoableState
 			Domain: DOM
 			Method name: markUndoableState
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Marks last undoable state.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.markUndoableState')
@@ -3812,16 +3812,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.focus
 			Domain: DOM
 			Method name: focus
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Optional arguments:
 					'nodeId' (type: NodeId) -> Identifier of the node.
 					'backendNodeId' (type: BackendNodeId) -> Identifier of the backend node.
 					'objectId' (type: Runtime.RemoteObjectId) -> JavaScript object id of the node wrapper.
 			No return value.
-		
+
 			Description: Focuses the given element.
 		"""
 		expected = ['nodeId', 'backendNodeId', 'objectId']
@@ -3836,9 +3836,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.setFileInputFiles
 			Domain: DOM
 			Method name: setFileInputFiles
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'files' (type: array) -> Array of file paths to set.
@@ -3847,7 +3847,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'backendNodeId' (type: BackendNodeId) -> Identifier of the backend node.
 					'objectId' (type: Runtime.RemoteObjectId) -> JavaScript object id of the node wrapper.
 			No return value.
-		
+
 			Description: Sets files for the given file input element.
 		"""
 		assert isinstance(files, (list, tuple)
@@ -3866,9 +3866,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.getBoxModel
 			Domain: DOM
 			Method name: getBoxModel
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Optional arguments:
 					'nodeId' (type: NodeId) -> Identifier of the node.
@@ -3876,7 +3876,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'objectId' (type: Runtime.RemoteObjectId) -> JavaScript object id of the node wrapper.
 			Returns:
 				'model' (type: BoxModel) -> Box model for the node.
-		
+
 			Description: Returns boxes for the currently selected nodes.
 		"""
 		expected = ['nodeId', 'backendNodeId', 'objectId']
@@ -3891,9 +3891,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.getNodeForLocation
 			Domain: DOM
 			Method name: getNodeForLocation
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'x' (type: integer) -> X coordinate.
@@ -3902,7 +3902,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'includeUserAgentShadowDOM' (type: boolean) -> False to skip to the nearest non-UA shadow root ancestor (default: false).
 			Returns:
 				'nodeId' (type: NodeId) -> Id of the node at given coordinates.
-		
+
 			Description: Returns node id at given location.
 		"""
 		assert isinstance(x, (int,)
@@ -3928,15 +3928,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.getRelayoutBoundary
 			Domain: DOM
 			Method name: getRelayoutBoundary
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: NodeId) -> Id of the node.
 			Returns:
 				'nodeId' (type: NodeId) -> Relayout boundary node id for the given node.
-		
+
 			Description: Returns the id of the nearest ancestor that is a relayout boundary.
 		"""
 		subdom_funcs = self.synchronous_command('DOM.getRelayoutBoundary', nodeId
@@ -3948,7 +3948,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOM.describeNode
 			Domain: DOM
 			Method name: describeNode
-		
+
 			Parameters:
 				Optional arguments:
 					'nodeId' (type: NodeId) -> Identifier of the node.
@@ -3958,7 +3958,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'pierce' (type: boolean) -> Whether or not iframes and shadow roots should be traversed when returning the subtree (default is false).
 			Returns:
 				'node' (type: Node) -> Node description.
-		
+
 			Description: Describes node given its id, does not require domain to be enabled. Does not start tracking any objects, can be used for automation.
 		"""
 		if 'depth' in kwargs:
@@ -3981,9 +3981,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.enable
 			Domain: CSS
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables the CSS agent for the given page. Clients should not assume that the CSS agent has been enabled until the result of this command is received.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.enable')
@@ -3994,9 +3994,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.disable
 			Domain: CSS
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables the CSS agent for the given page.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.disable')
@@ -4007,7 +4007,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.getMatchedStylesForNode
 			Domain: CSS
 			Method name: getMatchedStylesForNode
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> No description
@@ -4018,7 +4018,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				'pseudoElements' (type: array) -> Pseudo style matches for this node.
 				'inherited' (type: array) -> A chain of inherited styles (from the immediate node parent up to the DOM tree root).
 				'cssKeyframesRules' (type: array) -> A list of CSS keyframed animations matching this node.
-		
+
 			Description: Returns requested styles for a DOM node identified by <code>nodeId</code>.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.getMatchedStylesForNode',
@@ -4030,14 +4030,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.getInlineStylesForNode
 			Domain: CSS
 			Method name: getInlineStylesForNode
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> No description
 			Returns:
 				'inlineStyle' (type: CSSStyle) -> Inline style for the specified DOM node.
 				'attributesStyle' (type: CSSStyle) -> Attribute-defined element style (e.g. resulting from "width=20 height=100%").
-		
+
 			Description: Returns the styles defined inline (explicitly in the "style" attribute and implicitly, using DOM attributes) for a DOM node identified by <code>nodeId</code>.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.getInlineStylesForNode',
@@ -4049,13 +4049,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.getComputedStyleForNode
 			Domain: CSS
 			Method name: getComputedStyleForNode
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> No description
 			Returns:
 				'computedStyle' (type: array) -> Computed style for the specified DOM node.
-		
+
 			Description: Returns the computed style for a DOM node identified by <code>nodeId</code>.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.getComputedStyleForNode',
@@ -4067,15 +4067,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.getPlatformFontsForNode
 			Domain: CSS
 			Method name: getPlatformFontsForNode
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> No description
 			Returns:
 				'fonts' (type: array) -> Usage statistics for every employed platform font.
-		
+
 			Description: Requests information about platform fonts which we used to render child TextNodes in the given node.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.getPlatformFontsForNode',
@@ -4087,13 +4087,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.getStyleSheetText
 			Domain: CSS
 			Method name: getStyleSheetText
-		
+
 			Parameters:
 				Required arguments:
 					'styleSheetId' (type: StyleSheetId) -> No description
 			Returns:
 				'text' (type: string) -> The stylesheet text.
-		
+
 			Description: Returns the current textual content and the URL for a stylesheet.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.getStyleSheetText',
@@ -4105,15 +4105,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.collectClassNames
 			Domain: CSS
 			Method name: collectClassNames
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'styleSheetId' (type: StyleSheetId) -> No description
 			Returns:
 				'classNames' (type: array) -> Class name list.
-		
+
 			Description: Returns all class names from specified stylesheet.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.collectClassNames',
@@ -4125,14 +4125,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.setStyleSheetText
 			Domain: CSS
 			Method name: setStyleSheetText
-		
+
 			Parameters:
 				Required arguments:
 					'styleSheetId' (type: StyleSheetId) -> No description
 					'text' (type: string) -> No description
 			Returns:
 				'sourceMapURL' (type: string) -> URL of source map associated with script (if any).
-		
+
 			Description: Sets the new stylesheet text.
 		"""
 		assert isinstance(text, (str,)
@@ -4147,7 +4147,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.setRuleSelector
 			Domain: CSS
 			Method name: setRuleSelector
-		
+
 			Parameters:
 				Required arguments:
 					'styleSheetId' (type: StyleSheetId) -> No description
@@ -4155,7 +4155,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'selector' (type: string) -> No description
 			Returns:
 				'selectorList' (type: SelectorList) -> The resulting selector list after modification.
-		
+
 			Description: Modifies the rule selector.
 		"""
 		assert isinstance(selector, (str,)
@@ -4170,7 +4170,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.setKeyframeKey
 			Domain: CSS
 			Method name: setKeyframeKey
-		
+
 			Parameters:
 				Required arguments:
 					'styleSheetId' (type: StyleSheetId) -> No description
@@ -4178,7 +4178,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'keyText' (type: string) -> No description
 			Returns:
 				'keyText' (type: Value) -> The resulting key text after modification.
-		
+
 			Description: Modifies the keyframe rule key text.
 		"""
 		assert isinstance(keyText, (str,)
@@ -4193,13 +4193,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.setStyleTexts
 			Domain: CSS
 			Method name: setStyleTexts
-		
+
 			Parameters:
 				Required arguments:
 					'edits' (type: array) -> No description
 			Returns:
 				'styles' (type: array) -> The resulting styles after modification.
-		
+
 			Description: Applies specified style edits one after another in the given order.
 		"""
 		assert isinstance(edits, (list, tuple)
@@ -4213,7 +4213,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.setMediaText
 			Domain: CSS
 			Method name: setMediaText
-		
+
 			Parameters:
 				Required arguments:
 					'styleSheetId' (type: StyleSheetId) -> No description
@@ -4221,7 +4221,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'text' (type: string) -> No description
 			Returns:
 				'media' (type: CSSMedia) -> The resulting CSS media rule after modification.
-		
+
 			Description: Modifies the rule selector.
 		"""
 		assert isinstance(text, (str,)
@@ -4236,13 +4236,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.createStyleSheet
 			Domain: CSS
 			Method name: createStyleSheet
-		
+
 			Parameters:
 				Required arguments:
 					'frameId' (type: Page.FrameId) -> Identifier of the frame where "via-inspector" stylesheet should be created.
 			Returns:
 				'styleSheetId' (type: StyleSheetId) -> Identifier of the created "via-inspector" stylesheet.
-		
+
 			Description: Creates a new special "via-inspector" stylesheet in the frame with given <code>frameId</code>.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.createStyleSheet', frameId=
@@ -4254,7 +4254,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.addRule
 			Domain: CSS
 			Method name: addRule
-		
+
 			Parameters:
 				Required arguments:
 					'styleSheetId' (type: StyleSheetId) -> The css style sheet identifier where a new rule should be inserted.
@@ -4262,7 +4262,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'location' (type: SourceRange) -> Text position of a new rule in the target style sheet.
 			Returns:
 				'rule' (type: CSSRule) -> The newly created rule.
-		
+
 			Description: Inserts a new rule with the given <code>ruleText</code> in a stylesheet with given <code>styleSheetId</code>, at the position specified by <code>location</code>.
 		"""
 		assert isinstance(ruleText, (str,)
@@ -4277,13 +4277,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.forcePseudoState
 			Domain: CSS
 			Method name: forcePseudoState
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> The element id for which to force the pseudo state.
 					'forcedPseudoClasses' (type: array) -> Element pseudo classes to force when computing the element's style.
 			No return value.
-		
+
 			Description: Ensures that the given node will have specified pseudo-classes whenever its style is computed by the browser.
 		"""
 		assert isinstance(forcedPseudoClasses, (list, tuple)
@@ -4298,12 +4298,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.getMediaQueries
 			Domain: CSS
 			Method name: getMediaQueries
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'medias' (type: array) -> No description
-		
+
 			Description: Returns all media queries parsed by the rendering engine.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.getMediaQueries')
@@ -4314,16 +4314,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.setEffectivePropertyValueForNode
 			Domain: CSS
 			Method name: setEffectivePropertyValueForNode
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> The element id for which to set property.
 					'propertyName' (type: string) -> No description
 					'value' (type: string) -> No description
 			No return value.
-		
+
 			Description: Find a rule with the given active property for the given node and set the new value for this property
 		"""
 		assert isinstance(propertyName, (str,)
@@ -4342,9 +4342,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.getBackgroundColors
 			Domain: CSS
 			Method name: getBackgroundColors
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> Id of the node to get background colors for.
@@ -4353,7 +4353,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				'computedFontSize' (type: string) -> The computed font size for this node, as a CSS computed value string (e.g. '12px').
 				'computedFontWeight' (type: string) -> The computed font weight for this node, as a CSS computed value string (e.g. 'normal' or '100').
 				'computedBodyFontSize' (type: string) -> The computed font size for the document body, as a computed CSS value string (e.g. '16px').
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('CSS.getBackgroundColors', nodeId
 		    =nodeId)
@@ -4364,11 +4364,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.startRuleUsageTracking
 			Domain: CSS
 			Method name: startRuleUsageTracking
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Enables the selector recording.
 		"""
 		subdom_funcs = self.synchronous_command('CSS.startRuleUsageTracking')
@@ -4379,12 +4379,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.takeCoverageDelta
 			Domain: CSS
 			Method name: takeCoverageDelta
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'coverage' (type: array) -> No description
-		
+
 			Description: Obtain list of rules that became used since last call to this method (or since start of coverage instrumentation)
 		"""
 		subdom_funcs = self.synchronous_command('CSS.takeCoverageDelta')
@@ -4395,12 +4395,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: CSS.stopRuleUsageTracking
 			Domain: CSS
 			Method name: stopRuleUsageTracking
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'ruleUsage' (type: array) -> No description
-		
+
 			Description: The list of rules with an indication of whether these were used
 		"""
 		subdom_funcs = self.synchronous_command('CSS.stopRuleUsageTracking')
@@ -4411,7 +4411,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMSnapshot.getSnapshot
 			Domain: DOMSnapshot
 			Method name: getSnapshot
-		
+
 			Parameters:
 				Required arguments:
 					'computedStyleWhitelist' (type: array) -> Whitelist of computed styles to return.
@@ -4419,8 +4419,8 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				'domNodes' (type: array) -> The nodes in the DOM tree. The DOMNode at index 0 corresponds to the root document.
 				'layoutTreeNodes' (type: array) -> The nodes in the layout tree.
 				'computedStyles' (type: array) -> Whitelisted ComputedStyle properties for each node in the layout tree.
-		
-			Description: Returns a document snapshot, including the full DOM tree of the root node (including iframes, template contents, and imported documents) in a flattened array, as well as layout and white-listed computed style information for the nodes. Shadow DOM in the returned DOM tree is flattened. 
+
+			Description: Returns a document snapshot, including the full DOM tree of the root node (including iframes, template contents, and imported documents) in a flattened array, as well as layout and white-listed computed style information for the nodes. Shadow DOM in the returned DOM tree is flattened.
 		"""
 		assert isinstance(computedStyleWhitelist, (list, tuple)
 		    ), "Argument 'computedStyleWhitelist' must be of type '['list', 'tuple']'. Received type: '%s'" % type(
@@ -4434,7 +4434,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IO.read
 			Domain: IO
 			Method name: read
-		
+
 			Parameters:
 				Required arguments:
 					'handle' (type: StreamHandle) -> Handle of the stream to read.
@@ -4445,7 +4445,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				'base64Encoded' (type: boolean) -> Set if the data is base64-encoded
 				'data' (type: string) -> Data that were read.
 				'eof' (type: boolean) -> Set if the end-of-file condition occured while reading.
-		
+
 			Description: Read a chunk of the stream
 		"""
 		if 'offset' in kwargs:
@@ -4468,12 +4468,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IO.close
 			Domain: IO
 			Method name: close
-		
+
 			Parameters:
 				Required arguments:
 					'handle' (type: StreamHandle) -> Handle of the stream to close.
 			No return value.
-		
+
 			Description: Close the stream, discard any temporary backing storage.
 		"""
 		subdom_funcs = self.synchronous_command('IO.close', handle=handle)
@@ -4484,13 +4484,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: IO.resolveBlob
 			Domain: IO
 			Method name: resolveBlob
-		
+
 			Parameters:
 				Required arguments:
 					'objectId' (type: Runtime.RemoteObjectId) -> Object id of a Blob object wrapper.
 			Returns:
 				'uuid' (type: string) -> UUID of the specified Blob.
-		
+
 			Description: Return UUID of Blob object specified by a remote object id.
 		"""
 		subdom_funcs = self.synchronous_command('IO.resolveBlob', objectId=objectId)
@@ -4501,13 +4501,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMDebugger.setDOMBreakpoint
 			Domain: DOMDebugger
 			Method name: setDOMBreakpoint
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> Identifier of the node to set breakpoint on.
 					'type' (type: DOMBreakpointType) -> Type of the operation to stop upon.
 			No return value.
-		
+
 			Description: Sets breakpoint on particular operation with DOM.
 		"""
 		subdom_funcs = self.synchronous_command('DOMDebugger.setDOMBreakpoint',
@@ -4519,13 +4519,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMDebugger.removeDOMBreakpoint
 			Domain: DOMDebugger
 			Method name: removeDOMBreakpoint
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> Identifier of the node to remove breakpoint from.
 					'type' (type: DOMBreakpointType) -> Type of the breakpoint to remove.
 			No return value.
-		
+
 			Description: Removes DOM breakpoint that was set using <code>setDOMBreakpoint</code>.
 		"""
 		subdom_funcs = self.synchronous_command('DOMDebugger.removeDOMBreakpoint',
@@ -4537,14 +4537,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMDebugger.setEventListenerBreakpoint
 			Domain: DOMDebugger
 			Method name: setEventListenerBreakpoint
-		
+
 			Parameters:
 				Required arguments:
 					'eventName' (type: string) -> DOM Event name to stop on (any DOM event will do).
 				Optional arguments:
 					'targetName' (type: string) -> EventTarget interface name to stop on. If equal to <code>"*"</code> or not provided, will stop on any EventTarget.
 			No return value.
-		
+
 			Description: Sets breakpoint on particular DOM event.
 		"""
 		assert isinstance(eventName, (str,)
@@ -4567,14 +4567,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMDebugger.removeEventListenerBreakpoint
 			Domain: DOMDebugger
 			Method name: removeEventListenerBreakpoint
-		
+
 			Parameters:
 				Required arguments:
 					'eventName' (type: string) -> Event name.
 				Optional arguments:
 					'targetName' (type: string) -> EventTarget interface name.
 			No return value.
-		
+
 			Description: Removes breakpoint on particular DOM event.
 		"""
 		assert isinstance(eventName, (str,)
@@ -4598,14 +4598,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMDebugger.setInstrumentationBreakpoint
 			Domain: DOMDebugger
 			Method name: setInstrumentationBreakpoint
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'eventName' (type: string) -> Instrumentation name to stop on.
 			No return value.
-		
+
 			Description: Sets breakpoint on particular native event.
 		"""
 		assert isinstance(eventName, (str,)
@@ -4620,14 +4620,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMDebugger.removeInstrumentationBreakpoint
 			Domain: DOMDebugger
 			Method name: removeInstrumentationBreakpoint
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'eventName' (type: string) -> Instrumentation name to stop on.
 			No return value.
-		
+
 			Description: Removes breakpoint on particular native event.
 		"""
 		assert isinstance(eventName, (str,)
@@ -4642,12 +4642,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMDebugger.setXHRBreakpoint
 			Domain: DOMDebugger
 			Method name: setXHRBreakpoint
-		
+
 			Parameters:
 				Required arguments:
 					'url' (type: string) -> Resource URL substring. All XHRs having this substring in the URL will get stopped upon.
 			No return value.
-		
+
 			Description: Sets breakpoint on XMLHttpRequest.
 		"""
 		assert isinstance(url, (str,)
@@ -4662,12 +4662,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMDebugger.removeXHRBreakpoint
 			Domain: DOMDebugger
 			Method name: removeXHRBreakpoint
-		
+
 			Parameters:
 				Required arguments:
 					'url' (type: string) -> Resource URL substring.
 			No return value.
-		
+
 			Description: Removes breakpoint from XMLHttpRequest.
 		"""
 		assert isinstance(url, (str,)
@@ -4682,9 +4682,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DOMDebugger.getEventListeners
 			Domain: DOMDebugger
 			Method name: getEventListeners
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'objectId' (type: Runtime.RemoteObjectId) -> Identifier of the object to return listeners for.
@@ -4693,7 +4693,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'pierce' (type: boolean) -> Whether or not iframes and shadow roots should be traversed when returning the subtree (default is false). Reports listeners for all contexts if pierce is enabled.
 			Returns:
 				'listeners' (type: array) -> Array of relevant listeners.
-		
+
 			Description: Returns event listeners of the given object.
 		"""
 		if 'depth' in kwargs:
@@ -4717,12 +4717,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.setDiscoverTargets
 			Domain: Target
 			Method name: setDiscoverTargets
-		
+
 			Parameters:
 				Required arguments:
 					'discover' (type: boolean) -> Whether to discover available targets.
 			No return value.
-		
+
 			Description: Controls whether to discover available targets and notify via <code>targetCreated/targetInfoChanged/targetDestroyed</code> events.
 		"""
 		assert isinstance(discover, (bool,)
@@ -4737,13 +4737,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.setAutoAttach
 			Domain: Target
 			Method name: setAutoAttach
-		
+
 			Parameters:
 				Required arguments:
 					'autoAttach' (type: boolean) -> Whether to auto-attach to related targets.
 					'waitForDebuggerOnStart' (type: boolean) -> Whether to pause new targets when attaching to them. Use <code>Runtime.runIfWaitingForDebugger</code> to run paused targets.
 			No return value.
-		
+
 			Description: Controls whether to automatically attach to new targets which are considered to be related to this one. When turned on, attaches to all existing related targets as well. When turned off, automatically detaches from all currently attached targets.
 		"""
 		assert isinstance(autoAttach, (bool,)
@@ -4761,12 +4761,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.setAttachToFrames
 			Domain: Target
 			Method name: setAttachToFrames
-		
+
 			Parameters:
 				Required arguments:
 					'value' (type: boolean) -> Whether to attach to frames.
 			No return value.
-		
+
 		"""
 		assert isinstance(value, (bool,)
 		    ), "Argument 'value' must be of type '['bool']'. Received type: '%s'" % type(
@@ -4780,12 +4780,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.setRemoteLocations
 			Domain: Target
 			Method name: setRemoteLocations
-		
+
 			Parameters:
 				Required arguments:
 					'locations' (type: array) -> List of remote locations.
 			No return value.
-		
+
 			Description: Enables target discovery for the specified locations, when <code>setDiscoverTargets</code> was set to <code>true</code>.
 		"""
 		assert isinstance(locations, (list, tuple)
@@ -4800,7 +4800,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.sendMessageToTarget
 			Domain: Target
 			Method name: sendMessageToTarget
-		
+
 			Parameters:
 				Required arguments:
 					'message' (type: string) -> No description
@@ -4808,7 +4808,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'sessionId' (type: SessionID) -> Identifier of the session.
 					'targetId' (type: TargetID) -> Deprecated.
 			No return value.
-		
+
 			Description: Sends protocol message over session with given id.
 		"""
 		assert isinstance(message, (str,)
@@ -4827,13 +4827,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.getTargetInfo
 			Domain: Target
 			Method name: getTargetInfo
-		
+
 			Parameters:
 				Required arguments:
 					'targetId' (type: TargetID) -> No description
 			Returns:
 				'targetInfo' (type: TargetInfo) -> No description
-		
+
 			Description: Returns information about a target.
 		"""
 		subdom_funcs = self.synchronous_command('Target.getTargetInfo', targetId=
@@ -4845,12 +4845,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.activateTarget
 			Domain: Target
 			Method name: activateTarget
-		
+
 			Parameters:
 				Required arguments:
 					'targetId' (type: TargetID) -> No description
 			No return value.
-		
+
 			Description: Activates (focuses) the target.
 		"""
 		subdom_funcs = self.synchronous_command('Target.activateTarget', targetId
@@ -4862,13 +4862,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.closeTarget
 			Domain: Target
 			Method name: closeTarget
-		
+
 			Parameters:
 				Required arguments:
 					'targetId' (type: TargetID) -> No description
 			Returns:
 				'success' (type: boolean) -> No description
-		
+
 			Description: Closes the target. If the target is a page that gets closed too.
 		"""
 		subdom_funcs = self.synchronous_command('Target.closeTarget', targetId=
@@ -4880,13 +4880,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.attachToTarget
 			Domain: Target
 			Method name: attachToTarget
-		
+
 			Parameters:
 				Required arguments:
 					'targetId' (type: TargetID) -> No description
 			Returns:
 				'sessionId' (type: SessionID) -> Id assigned to the session.
-		
+
 			Description: Attaches to the target with given id.
 		"""
 		subdom_funcs = self.synchronous_command('Target.attachToTarget', targetId
@@ -4898,13 +4898,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.detachFromTarget
 			Domain: Target
 			Method name: detachFromTarget
-		
+
 			Parameters:
 				Optional arguments:
 					'sessionId' (type: SessionID) -> Session to detach.
 					'targetId' (type: TargetID) -> Deprecated.
 			No return value.
-		
+
 			Description: Detaches session with given id.
 		"""
 		expected = ['sessionId', 'targetId']
@@ -4919,10 +4919,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.createBrowserContext
 			Domain: Target
 			Method name: createBrowserContext
-		
+
 			Returns:
 				'browserContextId' (type: BrowserContextID) -> The id of the context created.
-		
+
 			Description: Creates a new empty BrowserContext. Similar to an incognito profile but you can have more than one.
 		"""
 		subdom_funcs = self.synchronous_command('Target.createBrowserContext')
@@ -4933,13 +4933,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.disposeBrowserContext
 			Domain: Target
 			Method name: disposeBrowserContext
-		
+
 			Parameters:
 				Required arguments:
 					'browserContextId' (type: BrowserContextID) -> No description
 			Returns:
 				'success' (type: boolean) -> No description
-		
+
 			Description: Deletes a BrowserContext, will fail of any open page uses it.
 		"""
 		subdom_funcs = self.synchronous_command('Target.disposeBrowserContext',
@@ -4951,7 +4951,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.createTarget
 			Domain: Target
 			Method name: createTarget
-		
+
 			Parameters:
 				Required arguments:
 					'url' (type: string) -> The initial URL the page will be navigated to.
@@ -4961,7 +4961,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'browserContextId' (type: BrowserContextID) -> The browser context to create the page in (headless chrome only).
 			Returns:
 				'targetId' (type: TargetID) -> The id of the page opened.
-		
+
 			Description: Creates a new page.
 		"""
 		assert isinstance(url, (str,)
@@ -4988,10 +4988,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Target.getTargets
 			Domain: Target
 			Method name: getTargets
-		
+
 			Returns:
 				'targetInfos' (type: array) -> The list of targets.
-		
+
 			Description: Retrieves a list of available targets.
 		"""
 		subdom_funcs = self.synchronous_command('Target.getTargets')
@@ -5002,9 +5002,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.enable
 			Domain: ServiceWorker
 			Method name: enable
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('ServiceWorker.enable')
 		return subdom_funcs
@@ -5014,9 +5014,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.disable
 			Domain: ServiceWorker
 			Method name: disable
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('ServiceWorker.disable')
 		return subdom_funcs
@@ -5026,12 +5026,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.unregister
 			Domain: ServiceWorker
 			Method name: unregister
-		
+
 			Parameters:
 				Required arguments:
 					'scopeURL' (type: string) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(scopeURL, (str,)
 		    ), "Argument 'scopeURL' must be of type '['str']'. Received type: '%s'" % type(
@@ -5045,12 +5045,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.updateRegistration
 			Domain: ServiceWorker
 			Method name: updateRegistration
-		
+
 			Parameters:
 				Required arguments:
 					'scopeURL' (type: string) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(scopeURL, (str,)
 		    ), "Argument 'scopeURL' must be of type '['str']'. Received type: '%s'" % type(
@@ -5064,12 +5064,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.startWorker
 			Domain: ServiceWorker
 			Method name: startWorker
-		
+
 			Parameters:
 				Required arguments:
 					'scopeURL' (type: string) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(scopeURL, (str,)
 		    ), "Argument 'scopeURL' must be of type '['str']'. Received type: '%s'" % type(
@@ -5083,12 +5083,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.skipWaiting
 			Domain: ServiceWorker
 			Method name: skipWaiting
-		
+
 			Parameters:
 				Required arguments:
 					'scopeURL' (type: string) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(scopeURL, (str,)
 		    ), "Argument 'scopeURL' must be of type '['str']'. Received type: '%s'" % type(
@@ -5102,12 +5102,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.stopWorker
 			Domain: ServiceWorker
 			Method name: stopWorker
-		
+
 			Parameters:
 				Required arguments:
 					'versionId' (type: string) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(versionId, (str,)
 		    ), "Argument 'versionId' must be of type '['str']'. Received type: '%s'" % type(
@@ -5121,9 +5121,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.stopAllWorkers
 			Domain: ServiceWorker
 			Method name: stopAllWorkers
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('ServiceWorker.stopAllWorkers')
 		return subdom_funcs
@@ -5133,12 +5133,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.inspectWorker
 			Domain: ServiceWorker
 			Method name: inspectWorker
-		
+
 			Parameters:
 				Required arguments:
 					'versionId' (type: string) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(versionId, (str,)
 		    ), "Argument 'versionId' must be of type '['str']'. Received type: '%s'" % type(
@@ -5152,12 +5152,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.setForceUpdateOnPageLoad
 			Domain: ServiceWorker
 			Method name: setForceUpdateOnPageLoad
-		
+
 			Parameters:
 				Required arguments:
 					'forceUpdateOnPageLoad' (type: boolean) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(forceUpdateOnPageLoad, (bool,)
 		    ), "Argument 'forceUpdateOnPageLoad' must be of type '['bool']'. Received type: '%s'" % type(
@@ -5172,14 +5172,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.deliverPushMessage
 			Domain: ServiceWorker
 			Method name: deliverPushMessage
-		
+
 			Parameters:
 				Required arguments:
 					'origin' (type: string) -> No description
 					'registrationId' (type: string) -> No description
 					'data' (type: string) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(origin, (str,)
 		    ), "Argument 'origin' must be of type '['str']'. Received type: '%s'" % type(
@@ -5200,7 +5200,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: ServiceWorker.dispatchSyncEvent
 			Domain: ServiceWorker
 			Method name: dispatchSyncEvent
-		
+
 			Parameters:
 				Required arguments:
 					'origin' (type: string) -> No description
@@ -5208,7 +5208,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'tag' (type: string) -> No description
 					'lastChance' (type: boolean) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(origin, (str,)
 		    ), "Argument 'origin' must be of type '['str']'. Received type: '%s'" % type(
@@ -5232,12 +5232,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Input.setIgnoreInputEvents
 			Domain: Input
 			Method name: setIgnoreInputEvents
-		
+
 			Parameters:
 				Required arguments:
 					'ignore' (type: boolean) -> Ignores input events processing when set to true.
 			No return value.
-		
+
 			Description: Ignores input events (useful while auditing page).
 		"""
 		assert isinstance(ignore, (bool,)
@@ -5252,7 +5252,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Input.dispatchKeyEvent
 			Domain: Input
 			Method name: dispatchKeyEvent
-		
+
 			Parameters:
 				Required arguments:
 					'type' (type: string) -> Type of the key event.
@@ -5270,7 +5270,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'isKeypad' (type: boolean) -> Whether the event was generated from the keypad (default: false).
 					'isSystemKey' (type: boolean) -> Whether the event was a system key event (default: false).
 			No return value.
-		
+
 			Description: Dispatches a key event to the page.
 		"""
 		assert isinstance(type, (str,)
@@ -5335,7 +5335,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Input.dispatchMouseEvent
 			Domain: Input
 			Method name: dispatchMouseEvent
-		
+
 			Parameters:
 				Required arguments:
 					'type' (type: string) -> Type of the mouse event.
@@ -5349,7 +5349,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'deltaX' (type: number) -> X delta in CSS pixels for mouse wheel event (default: 0).
 					'deltaY' (type: number) -> Y delta in CSS pixels for mouse wheel event (default: 0).
 			No return value.
-		
+
 			Description: Dispatches a mouse event to the page.
 		"""
 		assert isinstance(type, (str,)
@@ -5395,9 +5395,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Input.dispatchTouchEvent
 			Domain: Input
 			Method name: dispatchTouchEvent
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'type' (type: string) -> Type of the touch event. TouchEnd and TouchCancel must not contain any touch points, while TouchStart and TouchMove must contains at least one.
@@ -5406,7 +5406,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'modifiers' (type: integer) -> Bit field representing pressed modifier keys. Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0).
 					'timestamp' (type: TimeSinceEpoch) -> Time at which the event occurred.
 			No return value.
-		
+
 			Description: Dispatches a touch event to the page.
 		"""
 		assert isinstance(type, (str,)
@@ -5433,9 +5433,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Input.emulateTouchFromMouseEvent
 			Domain: Input
 			Method name: emulateTouchFromMouseEvent
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'type' (type: string) -> Type of the mouse event.
@@ -5449,7 +5449,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'modifiers' (type: integer) -> Bit field representing pressed modifier keys. Alt=1, Ctrl=2, Meta/Command=4, Shift=8 (default: 0).
 					'clickCount' (type: integer) -> Number of times the mouse button was clicked (default: 0).
 			No return value.
-		
+
 			Description: Emulates touch event from the mouse event parameters.
 		"""
 		assert isinstance(type, (str,)
@@ -5493,9 +5493,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Input.synthesizePinchGesture
 			Domain: Input
 			Method name: synthesizePinchGesture
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'x' (type: number) -> X coordinate of the start of the gesture in CSS pixels.
@@ -5505,7 +5505,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'relativeSpeed' (type: integer) -> Relative pointer speed in pixels per second (default: 800).
 					'gestureSourceType' (type: GestureSourceType) -> Which type of input events to be generated (default: 'default', which queries the platform for the preferred input type).
 			No return value.
-		
+
 			Description: Synthesizes a pinch gesture over a time period by issuing appropriate touch events.
 		"""
 		assert isinstance(x, (float, int)
@@ -5534,9 +5534,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Input.synthesizeScrollGesture
 			Domain: Input
 			Method name: synthesizeScrollGesture
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'x' (type: number) -> X coordinate of the start of the gesture in CSS pixels.
@@ -5553,7 +5553,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'repeatDelayMs' (type: integer) -> The number of milliseconds delay between each repeat. (default: 250).
 					'interactionMarkerName' (type: string) -> The name of the interaction markers to generate, if not empty (default: "").
 			No return value.
-		
+
 			Description: Synthesizes a scroll gesture over a time period by issuing appropriate touch events.
 		"""
 		assert isinstance(x, (float, int)
@@ -5613,9 +5613,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Input.synthesizeTapGesture
 			Domain: Input
 			Method name: synthesizeTapGesture
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'x' (type: number) -> X coordinate of the start of the gesture in CSS pixels.
@@ -5625,7 +5625,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'tapCount' (type: integer) -> Number of times to perform the tap (e.g. 2 for double tap, default: 1).
 					'gestureSourceType' (type: GestureSourceType) -> Which type of input events to be generated (default: 'default', which queries the platform for the preferred input type).
 			No return value.
-		
+
 			Description: Synthesizes a tap gesture over a time period by issuing appropriate touch events.
 		"""
 		assert isinstance(x, (float, int)
@@ -5655,9 +5655,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: LayerTree.enable
 			Domain: LayerTree
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables compositing tree inspection.
 		"""
 		subdom_funcs = self.synchronous_command('LayerTree.enable')
@@ -5668,9 +5668,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: LayerTree.disable
 			Domain: LayerTree
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables compositing tree inspection.
 		"""
 		subdom_funcs = self.synchronous_command('LayerTree.disable')
@@ -5681,13 +5681,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: LayerTree.compositingReasons
 			Domain: LayerTree
 			Method name: compositingReasons
-		
+
 			Parameters:
 				Required arguments:
 					'layerId' (type: LayerId) -> The id of the layer for which we want to get the reasons it was composited.
 			Returns:
 				'compositingReasons' (type: array) -> A list of strings specifying reasons for the given layer to become composited.
-		
+
 			Description: Provides the reasons why the given layer was composited.
 		"""
 		subdom_funcs = self.synchronous_command('LayerTree.compositingReasons',
@@ -5699,13 +5699,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: LayerTree.makeSnapshot
 			Domain: LayerTree
 			Method name: makeSnapshot
-		
+
 			Parameters:
 				Required arguments:
 					'layerId' (type: LayerId) -> The id of the layer.
 			Returns:
 				'snapshotId' (type: SnapshotId) -> The id of the layer snapshot.
-		
+
 			Description: Returns the layer snapshot identifier.
 		"""
 		subdom_funcs = self.synchronous_command('LayerTree.makeSnapshot', layerId
@@ -5717,13 +5717,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: LayerTree.loadSnapshot
 			Domain: LayerTree
 			Method name: loadSnapshot
-		
+
 			Parameters:
 				Required arguments:
 					'tiles' (type: array) -> An array of tiles composing the snapshot.
 			Returns:
 				'snapshotId' (type: SnapshotId) -> The id of the snapshot.
-		
+
 			Description: Returns the snapshot identifier.
 		"""
 		assert isinstance(tiles, (list, tuple)
@@ -5738,12 +5738,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: LayerTree.releaseSnapshot
 			Domain: LayerTree
 			Method name: releaseSnapshot
-		
+
 			Parameters:
 				Required arguments:
 					'snapshotId' (type: SnapshotId) -> The id of the layer snapshot.
 			No return value.
-		
+
 			Description: Releases layer snapshot captured by the back-end.
 		"""
 		subdom_funcs = self.synchronous_command('LayerTree.releaseSnapshot',
@@ -5755,7 +5755,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: LayerTree.profileSnapshot
 			Domain: LayerTree
 			Method name: profileSnapshot
-		
+
 			Parameters:
 				Required arguments:
 					'snapshotId' (type: SnapshotId) -> The id of the layer snapshot.
@@ -5765,7 +5765,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'clipRect' (type: DOM.Rect) -> The clip rectangle to apply when replaying the snapshot.
 			Returns:
 				'timings' (type: array) -> The array of paint profiles, one per run.
-		
+
 		"""
 		if 'minRepeatCount' in kwargs:
 			assert isinstance(kwargs['minRepeatCount'], (int,)
@@ -5788,7 +5788,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: LayerTree.replaySnapshot
 			Domain: LayerTree
 			Method name: replaySnapshot
-		
+
 			Parameters:
 				Required arguments:
 					'snapshotId' (type: SnapshotId) -> The id of the layer snapshot.
@@ -5798,7 +5798,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'scale' (type: number) -> The scale to apply while replaying (defaults to 1).
 			Returns:
 				'dataURL' (type: string) -> A data: URL for resulting image.
-		
+
 			Description: Replays the layer snapshot and returns the resulting bitmap.
 		"""
 		if 'fromStep' in kwargs:
@@ -5826,13 +5826,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: LayerTree.snapshotCommandLog
 			Domain: LayerTree
 			Method name: snapshotCommandLog
-		
+
 			Parameters:
 				Required arguments:
 					'snapshotId' (type: SnapshotId) -> The id of the layer snapshot.
 			Returns:
 				'commandLog' (type: array) -> The array of canvas function calls.
-		
+
 			Description: Replays the layer snapshot and returns canvas log.
 		"""
 		subdom_funcs = self.synchronous_command('LayerTree.snapshotCommandLog',
@@ -5844,14 +5844,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DeviceOrientation.setDeviceOrientationOverride
 			Domain: DeviceOrientation
 			Method name: setDeviceOrientationOverride
-		
+
 			Parameters:
 				Required arguments:
 					'alpha' (type: number) -> Mock alpha
 					'beta' (type: number) -> Mock beta
 					'gamma' (type: number) -> Mock gamma
 			No return value.
-		
+
 			Description: Overrides the Device Orientation.
 		"""
 		assert isinstance(alpha, (float, int)
@@ -5873,9 +5873,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: DeviceOrientation.clearDeviceOrientationOverride
 			Domain: DeviceOrientation
 			Method name: clearDeviceOrientationOverride
-		
+
 			No return value.
-		
+
 			Description: Clears the overridden Device Orientation.
 		"""
 		subdom_funcs = self.synchronous_command(
@@ -5887,16 +5887,16 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Tracing.start
 			Domain: Tracing
 			Method name: start
-		
+
 			Parameters:
 				Optional arguments:
 					'categories' (type: string) -> Category/tag filter
 					'options' (type: string) -> Tracing options
 					'bufferUsageReportingInterval' (type: number) -> If set, the agent will issue bufferUsage events at this interval, specified in milliseconds
 					'transferMode' (type: string) -> Whether to report trace events as series of dataCollected events or to save trace to a stream (defaults to <code>ReportEvents</code>).
-					'traceConfig' (type: TraceConfig) -> 
+					'traceConfig' (type: TraceConfig) ->
 			No return value.
-		
+
 			Description: Start trace events collection.
 		"""
 		if 'categories' in kwargs:
@@ -5928,9 +5928,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Tracing.end
 			Domain: Tracing
 			Method name: end
-		
+
 			No return value.
-		
+
 			Description: Stop trace events collection.
 		"""
 		subdom_funcs = self.synchronous_command('Tracing.end')
@@ -5941,10 +5941,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Tracing.getCategories
 			Domain: Tracing
 			Method name: getCategories
-		
+
 			Returns:
 				'categories' (type: array) -> A list of supported tracing categories.
-		
+
 			Description: Gets supported tracing categories.
 		"""
 		subdom_funcs = self.synchronous_command('Tracing.getCategories')
@@ -5955,11 +5955,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Tracing.requestMemoryDump
 			Domain: Tracing
 			Method name: requestMemoryDump
-		
+
 			Returns:
 				'dumpGuid' (type: string) -> GUID of the resulting global memory dump.
 				'success' (type: boolean) -> True iff the global memory dump succeeded.
-		
+
 			Description: Request a global memory dump.
 		"""
 		subdom_funcs = self.synchronous_command('Tracing.requestMemoryDump')
@@ -5970,12 +5970,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Tracing.recordClockSyncMarker
 			Domain: Tracing
 			Method name: recordClockSyncMarker
-		
+
 			Parameters:
 				Required arguments:
 					'syncId' (type: string) -> The ID of this clock sync marker
 			No return value.
-		
+
 			Description: Record a clock sync marker in the trace.
 		"""
 		assert isinstance(syncId, (str,)
@@ -5990,9 +5990,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.enable
 			Domain: Animation
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables animation domain notifications.
 		"""
 		subdom_funcs = self.synchronous_command('Animation.enable')
@@ -6003,9 +6003,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.disable
 			Domain: Animation
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables animation domain notifications.
 		"""
 		subdom_funcs = self.synchronous_command('Animation.disable')
@@ -6016,10 +6016,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.getPlaybackRate
 			Domain: Animation
 			Method name: getPlaybackRate
-		
+
 			Returns:
 				'playbackRate' (type: number) -> Playback rate for animations on page.
-		
+
 			Description: Gets the playback rate of the document timeline.
 		"""
 		subdom_funcs = self.synchronous_command('Animation.getPlaybackRate')
@@ -6030,12 +6030,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.setPlaybackRate
 			Domain: Animation
 			Method name: setPlaybackRate
-		
+
 			Parameters:
 				Required arguments:
 					'playbackRate' (type: number) -> Playback rate for animations on page
 			No return value.
-		
+
 			Description: Sets the playback rate of the document timeline.
 		"""
 		assert isinstance(playbackRate, (float, int)
@@ -6050,13 +6050,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.getCurrentTime
 			Domain: Animation
 			Method name: getCurrentTime
-		
+
 			Parameters:
 				Required arguments:
 					'id' (type: string) -> Id of animation.
 			Returns:
 				'currentTime' (type: number) -> Current time of the page.
-		
+
 			Description: Returns the current time of the an animation.
 		"""
 		assert isinstance(id, (str,)
@@ -6070,13 +6070,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.setPaused
 			Domain: Animation
 			Method name: setPaused
-		
+
 			Parameters:
 				Required arguments:
 					'animations' (type: array) -> Animations to set the pause state of.
 					'paused' (type: boolean) -> Paused state to set to.
 			No return value.
-		
+
 			Description: Sets the paused state of a set of animations.
 		"""
 		assert isinstance(animations, (list, tuple)
@@ -6094,14 +6094,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.setTiming
 			Domain: Animation
 			Method name: setTiming
-		
+
 			Parameters:
 				Required arguments:
 					'animationId' (type: string) -> Animation id.
 					'duration' (type: number) -> Duration of the animation.
 					'delay' (type: number) -> Delay of the animation.
 			No return value.
-		
+
 			Description: Sets the timing of an animation node.
 		"""
 		assert isinstance(animationId, (str,)
@@ -6122,13 +6122,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.seekAnimations
 			Domain: Animation
 			Method name: seekAnimations
-		
+
 			Parameters:
 				Required arguments:
 					'animations' (type: array) -> List of animation ids to seek.
 					'currentTime' (type: number) -> Set the current time of each animation.
 			No return value.
-		
+
 			Description: Seek a set of animations to a particular time within each animation.
 		"""
 		assert isinstance(animations, (list, tuple)
@@ -6146,12 +6146,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.releaseAnimations
 			Domain: Animation
 			Method name: releaseAnimations
-		
+
 			Parameters:
 				Required arguments:
 					'animations' (type: array) -> List of animation ids to seek.
 			No return value.
-		
+
 			Description: Releases a set of animations to no longer be manipulated.
 		"""
 		assert isinstance(animations, (list, tuple)
@@ -6166,13 +6166,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Animation.resolveAnimation
 			Domain: Animation
 			Method name: resolveAnimation
-		
+
 			Parameters:
 				Required arguments:
 					'animationId' (type: string) -> Animation id.
 			Returns:
 				'remoteObject' (type: Runtime.RemoteObject) -> Corresponding remote object.
-		
+
 			Description: Gets the remote object of the Animation.
 		"""
 		assert isinstance(animationId, (str,)
@@ -6187,9 +6187,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Accessibility.getPartialAXTree
 			Domain: Accessibility
 			Method name: getPartialAXTree
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'nodeId' (type: DOM.NodeId) -> ID of node to get the partial accessibility tree for.
@@ -6197,7 +6197,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'fetchRelatives' (type: boolean) -> Whether to fetch this nodes ancestors, siblings and children. Defaults to true.
 			Returns:
 				'nodes' (type: array) -> The <code>Accessibility.AXNode</code> for this DOM node, if it exists, plus its ancestors, siblings and children, if requested.
-		
+
 			Description: Fetches the accessibility node and partial accessibility tree for this DOM node, if it exists.
 		"""
 		if 'fetchRelatives' in kwargs:
@@ -6217,13 +6217,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Storage.clearDataForOrigin
 			Domain: Storage
 			Method name: clearDataForOrigin
-		
+
 			Parameters:
 				Required arguments:
 					'origin' (type: string) -> Security origin.
 					'storageTypes' (type: string) -> Comma separated origin names.
 			No return value.
-		
+
 			Description: Clears storage for origin.
 		"""
 		assert isinstance(origin, (str,)
@@ -6241,7 +6241,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Storage.getUsageAndQuota
 			Domain: Storage
 			Method name: getUsageAndQuota
-		
+
 			Parameters:
 				Required arguments:
 					'origin' (type: string) -> Security origin.
@@ -6249,7 +6249,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				'usage' (type: number) -> Storage usage (bytes).
 				'quota' (type: number) -> Storage quota (bytes).
 				'usageBreakdown' (type: array) -> Storage usage per type (bytes).
-		
+
 			Description: Returns usage and quota in bytes.
 		"""
 		assert isinstance(origin, (str,)
@@ -6264,12 +6264,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Storage.trackCacheStorageForOrigin
 			Domain: Storage
 			Method name: trackCacheStorageForOrigin
-		
+
 			Parameters:
 				Required arguments:
 					'origin' (type: string) -> Security origin.
 			No return value.
-		
+
 			Description: Registers origin to be notified when an update occurs to its cache storage list.
 		"""
 		assert isinstance(origin, (str,)
@@ -6284,12 +6284,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Storage.untrackCacheStorageForOrigin
 			Domain: Storage
 			Method name: untrackCacheStorageForOrigin
-		
+
 			Parameters:
 				Required arguments:
 					'origin' (type: string) -> Security origin.
 			No return value.
-		
+
 			Description: Unregisters origin from receiving notifications for cache storage.
 		"""
 		assert isinstance(origin, (str,)
@@ -6304,9 +6304,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Log.enable
 			Domain: Log
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables log domain, sends the entries collected so far to the client by means of the <code>entryAdded</code> notification.
 		"""
 		subdom_funcs = self.synchronous_command('Log.enable')
@@ -6317,9 +6317,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Log.disable
 			Domain: Log
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables log domain, prevents further log entries from being reported to the client.
 		"""
 		subdom_funcs = self.synchronous_command('Log.disable')
@@ -6330,9 +6330,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Log.clear
 			Domain: Log
 			Method name: clear
-		
+
 			No return value.
-		
+
 			Description: Clears the log.
 		"""
 		subdom_funcs = self.synchronous_command('Log.clear')
@@ -6343,12 +6343,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Log.startViolationsReport
 			Domain: Log
 			Method name: startViolationsReport
-		
+
 			Parameters:
 				Required arguments:
 					'config' (type: array) -> Configuration for violations.
 			No return value.
-		
+
 			Description: start violation reporting.
 		"""
 		assert isinstance(config, (list, tuple)
@@ -6363,9 +6363,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Log.stopViolationsReport
 			Domain: Log
 			Method name: stopViolationsReport
-		
+
 			No return value.
-		
+
 			Description: Stop violation reporting.
 		"""
 		subdom_funcs = self.synchronous_command('Log.stopViolationsReport')
@@ -6376,13 +6376,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: SystemInfo.getInfo
 			Domain: SystemInfo
 			Method name: getInfo
-		
+
 			Returns:
 				'gpu' (type: GPUInfo) -> Information about the GPUs on the system.
 				'modelName' (type: string) -> A platform-dependent description of the model of the machine. On Mac OS, this is, for example, 'MacBookPro'. Will be the empty string if not supported.
 				'modelVersion' (type: string) -> A platform-dependent description of the version of the machine. On Mac OS, this is, for example, '10.1'. Will be the empty string if not supported.
 				'commandLine' (type: string) -> The command line string used to launch the browser. Will be the empty string if not supported.
-		
+
 			Description: Returns information about the system.
 		"""
 		subdom_funcs = self.synchronous_command('SystemInfo.getInfo')
@@ -6393,12 +6393,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Tethering.bind
 			Domain: Tethering
 			Method name: bind
-		
+
 			Parameters:
 				Required arguments:
 					'port' (type: integer) -> Port number to bind.
 			No return value.
-		
+
 			Description: Request browser port binding.
 		"""
 		assert isinstance(port, (int,)
@@ -6412,12 +6412,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Tethering.unbind
 			Domain: Tethering
 			Method name: unbind
-		
+
 			Parameters:
 				Required arguments:
 					'port' (type: integer) -> Port number to unbind.
 			No return value.
-		
+
 			Description: Request browser port unbinding.
 		"""
 		assert isinstance(port, (int,)
@@ -6431,14 +6431,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Browser.getWindowForTarget
 			Domain: Browser
 			Method name: getWindowForTarget
-		
+
 			Parameters:
 				Required arguments:
 					'targetId' (type: Target.TargetID) -> Devtools agent host id.
 			Returns:
 				'windowId' (type: WindowID) -> Browser window id.
 				'bounds' (type: Bounds) -> Bounds information of the window. When window state is 'minimized', the restored window position and size are returned.
-		
+
 			Description: Get the browser window that contains the devtools target.
 		"""
 		subdom_funcs = self.synchronous_command('Browser.getWindowForTarget',
@@ -6450,14 +6450,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Browser.getVersion
 			Domain: Browser
 			Method name: getVersion
-		
+
 			Returns:
 				'protocolVersion' (type: string) -> Protocol version.
 				'product' (type: string) -> Product name.
 				'revision' (type: string) -> Product revision.
 				'userAgent' (type: string) -> User-Agent.
 				'jsVersion' (type: string) -> V8 version.
-		
+
 			Description: Returns version information.
 		"""
 		subdom_funcs = self.synchronous_command('Browser.getVersion')
@@ -6468,13 +6468,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Browser.setWindowBounds
 			Domain: Browser
 			Method name: setWindowBounds
-		
+
 			Parameters:
 				Required arguments:
 					'windowId' (type: WindowID) -> Browser window id.
 					'bounds' (type: Bounds) -> New window bounds. The 'minimized', 'maximized' and 'fullscreen' states cannot be combined with 'left', 'top', 'width' or 'height'. Leaves unspecified fields unchanged.
 			No return value.
-		
+
 			Description: Set position and/or size of the browser window.
 		"""
 		subdom_funcs = self.synchronous_command('Browser.setWindowBounds',
@@ -6486,13 +6486,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Browser.getWindowBounds
 			Domain: Browser
 			Method name: getWindowBounds
-		
+
 			Parameters:
 				Required arguments:
 					'windowId' (type: WindowID) -> Browser window id.
 			Returns:
 				'bounds' (type: Bounds) -> Bounds information of the window. When window state is 'minimized', the restored window position and size are returned.
-		
+
 			Description: Get position and size of the browser window.
 		"""
 		subdom_funcs = self.synchronous_command('Browser.getWindowBounds',
@@ -6504,10 +6504,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Schema.getDomains
 			Domain: Schema
 			Method name: getDomains
-		
+
 			Returns:
 				'domains' (type: array) -> List of supported domains.
-		
+
 			Description: Returns supported domains.
 		"""
 		subdom_funcs = self.synchronous_command('Schema.getDomains')
@@ -6518,7 +6518,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.evaluate
 			Domain: Runtime
 			Method name: evaluate
-		
+
 			Parameters:
 				Required arguments:
 					'expression' (type: string) -> Expression to evaluate.
@@ -6534,7 +6534,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'result' (type: RemoteObject) -> Evaluation result.
 				'exceptionDetails' (type: ExceptionDetails) -> Exception details.
-		
+
 			Description: Evaluates expression on global object.
 		"""
 		assert isinstance(expression, (str,)
@@ -6582,7 +6582,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.awaitPromise
 			Domain: Runtime
 			Method name: awaitPromise
-		
+
 			Parameters:
 				Required arguments:
 					'promiseObjectId' (type: RemoteObjectId) -> Identifier of the promise.
@@ -6592,7 +6592,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'result' (type: RemoteObject) -> Promise result. Will contain rejected value if promise was rejected.
 				'exceptionDetails' (type: ExceptionDetails) -> Exception details if stack strace is available.
-		
+
 			Description: Add handler to promise with given promise object id.
 		"""
 		if 'returnByValue' in kwargs:
@@ -6616,7 +6616,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.callFunctionOn
 			Domain: Runtime
 			Method name: callFunctionOn
-		
+
 			Parameters:
 				Required arguments:
 					'functionDeclaration' (type: string) -> Declaration of the function to call.
@@ -6633,7 +6633,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'result' (type: RemoteObject) -> Call result.
 				'exceptionDetails' (type: ExceptionDetails) -> Exception details.
-		
+
 			Description: Calls function with given declaration on the given object. Object group of the result is inherited from the target object.
 		"""
 		assert isinstance(functionDeclaration, (str,)
@@ -6682,7 +6682,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.getProperties
 			Domain: Runtime
 			Method name: getProperties
-		
+
 			Parameters:
 				Required arguments:
 					'objectId' (type: RemoteObjectId) -> Identifier of the object to return properties for.
@@ -6694,7 +6694,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				'result' (type: array) -> Object properties.
 				'internalProperties' (type: array) -> Internal object properties (only of the element itself).
 				'exceptionDetails' (type: ExceptionDetails) -> Exception details.
-		
+
 			Description: Returns properties of a given object. Object group of the result is inherited from the target object.
 		"""
 		if 'ownProperties' in kwargs:
@@ -6722,12 +6722,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.releaseObject
 			Domain: Runtime
 			Method name: releaseObject
-		
+
 			Parameters:
 				Required arguments:
 					'objectId' (type: RemoteObjectId) -> Identifier of the object to release.
 			No return value.
-		
+
 			Description: Releases remote object with given id.
 		"""
 		subdom_funcs = self.synchronous_command('Runtime.releaseObject', objectId
@@ -6739,12 +6739,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.releaseObjectGroup
 			Domain: Runtime
 			Method name: releaseObjectGroup
-		
+
 			Parameters:
 				Required arguments:
 					'objectGroup' (type: string) -> Symbolic object group name.
 			No return value.
-		
+
 			Description: Releases all remote objects that belong to a given group.
 		"""
 		assert isinstance(objectGroup, (str,)
@@ -6759,9 +6759,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.runIfWaitingForDebugger
 			Domain: Runtime
 			Method name: runIfWaitingForDebugger
-		
+
 			No return value.
-		
+
 			Description: Tells inspected instance to run if it was waiting for debugger to attach.
 		"""
 		subdom_funcs = self.synchronous_command('Runtime.runIfWaitingForDebugger')
@@ -6772,9 +6772,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.enable
 			Domain: Runtime
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables reporting of execution contexts creation by means of <code>executionContextCreated</code> event. When the reporting gets enabled the event will be sent immediately for each existing execution context.
 		"""
 		subdom_funcs = self.synchronous_command('Runtime.enable')
@@ -6785,9 +6785,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.disable
 			Domain: Runtime
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables reporting of execution contexts creation.
 		"""
 		subdom_funcs = self.synchronous_command('Runtime.disable')
@@ -6798,9 +6798,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.discardConsoleEntries
 			Domain: Runtime
 			Method name: discardConsoleEntries
-		
+
 			No return value.
-		
+
 			Description: Discards collected exceptions and console API calls.
 		"""
 		subdom_funcs = self.synchronous_command('Runtime.discardConsoleEntries')
@@ -6811,14 +6811,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.setCustomObjectFormatterEnabled
 			Domain: Runtime
 			Method name: setCustomObjectFormatterEnabled
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'enabled' (type: boolean) -> No description
 			No return value.
-		
+
 		"""
 		assert isinstance(enabled, (bool,)
 		    ), "Argument 'enabled' must be of type '['bool']'. Received type: '%s'" % type(
@@ -6833,7 +6833,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.compileScript
 			Domain: Runtime
 			Method name: compileScript
-		
+
 			Parameters:
 				Required arguments:
 					'expression' (type: string) -> Expression to compile.
@@ -6844,7 +6844,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'scriptId' (type: ScriptId) -> Id of the script.
 				'exceptionDetails' (type: ExceptionDetails) -> Exception details.
-		
+
 			Description: Compiles expression.
 		"""
 		assert isinstance(expression, (str,)
@@ -6870,7 +6870,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.runScript
 			Domain: Runtime
 			Method name: runScript
-		
+
 			Parameters:
 				Required arguments:
 					'scriptId' (type: ScriptId) -> Id of the script to run.
@@ -6885,7 +6885,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'result' (type: RemoteObject) -> Run result.
 				'exceptionDetails' (type: ExceptionDetails) -> Exception details.
-		
+
 			Description: Runs script with given id in a given context.
 		"""
 		if 'objectGroup' in kwargs:
@@ -6927,15 +6927,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Runtime.queryObjects
 			Domain: Runtime
 			Method name: queryObjects
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'prototypeObjectId' (type: RemoteObjectId) -> Identifier of the prototype to return objects for.
 			Returns:
 				'objects' (type: RemoteObject) -> Array with objects.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Runtime.queryObjects',
 		    prototypeObjectId=prototypeObjectId)
@@ -6946,9 +6946,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.enable
 			Domain: Debugger
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables debugger for the given page. Clients should not assume that the debugging has been enabled until the result for this command is received.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.enable')
@@ -6959,9 +6959,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.disable
 			Domain: Debugger
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables debugger for given page.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.disable')
@@ -6972,12 +6972,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setBreakpointsActive
 			Domain: Debugger
 			Method name: setBreakpointsActive
-		
+
 			Parameters:
 				Required arguments:
 					'active' (type: boolean) -> New value for breakpoints active state.
 			No return value.
-		
+
 			Description: Activates / deactivates all breakpoints on the page.
 		"""
 		assert isinstance(active, (bool,)
@@ -6992,12 +6992,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setSkipAllPauses
 			Domain: Debugger
 			Method name: setSkipAllPauses
-		
+
 			Parameters:
 				Required arguments:
 					'skip' (type: boolean) -> New value for skip pauses state.
 			No return value.
-		
+
 			Description: Makes page not interrupt on any pauses (breakpoint, exception, dom exception etc).
 		"""
 		assert isinstance(skip, (bool,)
@@ -7012,7 +7012,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setBreakpointByUrl
 			Domain: Debugger
 			Method name: setBreakpointByUrl
-		
+
 			Parameters:
 				Required arguments:
 					'lineNumber' (type: integer) -> Line number to set breakpoint at.
@@ -7024,7 +7024,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'breakpointId' (type: BreakpointId) -> Id of the created breakpoint for further reference.
 				'locations' (type: array) -> List of the locations this breakpoint resolved into upon addition.
-		
+
 			Description: Sets JavaScript breakpoint at given location specified either by URL or URL regex. Once this command is issued, all existing parsed scripts will have breakpoints resolved and returned in <code>locations</code> property. Further matching script parsing will result in subsequent <code>breakpointResolved</code> events issued. This logical breakpoint will survive page reloads.
 		"""
 		assert isinstance(lineNumber, (int,)
@@ -7059,7 +7059,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setBreakpoint
 			Domain: Debugger
 			Method name: setBreakpoint
-		
+
 			Parameters:
 				Required arguments:
 					'location' (type: Location) -> Location to set breakpoint in.
@@ -7068,7 +7068,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'breakpointId' (type: BreakpointId) -> Id of the created breakpoint for further reference.
 				'actualLocation' (type: Location) -> Location this breakpoint resolved into.
-		
+
 			Description: Sets JavaScript breakpoint at a given location.
 		"""
 		if 'condition' in kwargs:
@@ -7088,12 +7088,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.removeBreakpoint
 			Domain: Debugger
 			Method name: removeBreakpoint
-		
+
 			Parameters:
 				Required arguments:
 					'breakpointId' (type: BreakpointId) -> No description
 			No return value.
-		
+
 			Description: Removes JavaScript breakpoint.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.removeBreakpoint',
@@ -7105,9 +7105,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.getPossibleBreakpoints
 			Domain: Debugger
 			Method name: getPossibleBreakpoints
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'start' (type: Location) -> Start of range to search possible breakpoint locations in.
@@ -7116,7 +7116,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'restrictToFunction' (type: boolean) -> Only consider locations which are in the same (non-nested) function as start.
 			Returns:
 				'locations' (type: array) -> List of the possible breakpoint locations.
-		
+
 			Description: Returns possible locations for breakpoint. scriptId in start and end range locations should be the same.
 		"""
 		if 'restrictToFunction' in kwargs:
@@ -7136,14 +7136,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.continueToLocation
 			Domain: Debugger
 			Method name: continueToLocation
-		
+
 			Parameters:
 				Required arguments:
 					'location' (type: Location) -> Location to continue to.
 				Optional arguments:
 					'targetCallFrames' (type: string) -> No description
 			No return value.
-		
+
 			Description: Continues execution until specific location is reached.
 		"""
 		if 'targetCallFrames' in kwargs:
@@ -7163,9 +7163,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.stepOver
 			Domain: Debugger
 			Method name: stepOver
-		
+
 			No return value.
-		
+
 			Description: Steps over the statement.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.stepOver')
@@ -7176,9 +7176,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.stepInto
 			Domain: Debugger
 			Method name: stepInto
-		
+
 			No return value.
-		
+
 			Description: Steps into the function call.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.stepInto')
@@ -7189,9 +7189,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.stepOut
 			Domain: Debugger
 			Method name: stepOut
-		
+
 			No return value.
-		
+
 			Description: Steps out of the function call.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.stepOut')
@@ -7202,9 +7202,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.pause
 			Domain: Debugger
 			Method name: pause
-		
+
 			No return value.
-		
+
 			Description: Stops on the next JavaScript statement.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.pause')
@@ -7215,11 +7215,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.scheduleStepIntoAsync
 			Domain: Debugger
 			Method name: scheduleStepIntoAsync
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Steps into next scheduled async task if any is scheduled before next pause. Returns success when async task is actually scheduled, returns error if no task were scheduled or another scheduleStepIntoAsync was called.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.scheduleStepIntoAsync')
@@ -7230,9 +7230,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.resume
 			Domain: Debugger
 			Method name: resume
-		
+
 			No return value.
-		
+
 			Description: Resumes JavaScript execution.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.resume')
@@ -7243,9 +7243,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.searchInContent
 			Domain: Debugger
 			Method name: searchInContent
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'scriptId' (type: Runtime.ScriptId) -> Id of the script to search in.
@@ -7255,7 +7255,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'isRegex' (type: boolean) -> If true, treats string parameter as regex.
 			Returns:
 				'result' (type: array) -> List of search matches.
-		
+
 			Description: Searches for given string in script content.
 		"""
 		assert isinstance(query, (str,)
@@ -7282,7 +7282,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setScriptSource
 			Domain: Debugger
 			Method name: setScriptSource
-		
+
 			Parameters:
 				Required arguments:
 					'scriptId' (type: Runtime.ScriptId) -> Id of the script to edit.
@@ -7294,7 +7294,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 				'stackChanged' (type: boolean) -> Whether current call stack  was modified after applying the changes.
 				'asyncStackTrace' (type: Runtime.StackTrace) -> Async stack trace, if any.
 				'exceptionDetails' (type: Runtime.ExceptionDetails) -> Exception details if any.
-		
+
 			Description: Edits JavaScript source live.
 		"""
 		assert isinstance(scriptSource, (str,)
@@ -7317,14 +7317,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.restartFrame
 			Domain: Debugger
 			Method name: restartFrame
-		
+
 			Parameters:
 				Required arguments:
 					'callFrameId' (type: CallFrameId) -> Call frame identifier to evaluate on.
 			Returns:
 				'callFrames' (type: array) -> New stack trace.
 				'asyncStackTrace' (type: Runtime.StackTrace) -> Async stack trace, if any.
-		
+
 			Description: Restarts particular call frame from the beginning.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.restartFrame',
@@ -7336,13 +7336,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.getScriptSource
 			Domain: Debugger
 			Method name: getScriptSource
-		
+
 			Parameters:
 				Required arguments:
 					'scriptId' (type: Runtime.ScriptId) -> Id of the script to get source for.
 			Returns:
 				'scriptSource' (type: string) -> Script source.
-		
+
 			Description: Returns source for the script with given id.
 		"""
 		subdom_funcs = self.synchronous_command('Debugger.getScriptSource',
@@ -7354,12 +7354,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setPauseOnExceptions
 			Domain: Debugger
 			Method name: setPauseOnExceptions
-		
+
 			Parameters:
 				Required arguments:
 					'state' (type: string) -> Pause on exceptions mode.
 			No return value.
-		
+
 			Description: Defines pause on exceptions state. Can be set to stop on all exceptions, uncaught exceptions or no exceptions. Initial pause on exceptions state is <code>none</code>.
 		"""
 		assert isinstance(state, (str,)
@@ -7374,7 +7374,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.evaluateOnCallFrame
 			Domain: Debugger
 			Method name: evaluateOnCallFrame
-		
+
 			Parameters:
 				Required arguments:
 					'callFrameId' (type: CallFrameId) -> Call frame identifier to evaluate on.
@@ -7389,7 +7389,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 			Returns:
 				'result' (type: Runtime.RemoteObject) -> Object wrapper for the evaluation result.
 				'exceptionDetails' (type: Runtime.ExceptionDetails) -> Exception details.
-		
+
 			Description: Evaluates expression on a given call frame.
 		"""
 		assert isinstance(expression, (str,)
@@ -7434,7 +7434,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setVariableValue
 			Domain: Debugger
 			Method name: setVariableValue
-		
+
 			Parameters:
 				Required arguments:
 					'scopeNumber' (type: integer) -> 0-based number of scope as was listed in scope chain. Only 'local', 'closure' and 'catch' scope types are allowed. Other scopes could be manipulated manually.
@@ -7442,7 +7442,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'newValue' (type: Runtime.CallArgument) -> New variable value.
 					'callFrameId' (type: CallFrameId) -> Id of callframe that holds variable.
 			No return value.
-		
+
 			Description: Changes value of variable in a callframe. Object-based scopes are not supported and must be mutated manually.
 		"""
 		assert isinstance(scopeNumber, (int,)
@@ -7461,12 +7461,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setAsyncCallStackDepth
 			Domain: Debugger
 			Method name: setAsyncCallStackDepth
-		
+
 			Parameters:
 				Required arguments:
 					'maxDepth' (type: integer) -> Maximum depth of async call stacks. Setting to <code>0</code> will effectively disable collecting async call stacks (default).
 			No return value.
-		
+
 			Description: Enables or disables async call stacks tracking.
 		"""
 		assert isinstance(maxDepth, (int,)
@@ -7481,14 +7481,14 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setBlackboxPatterns
 			Domain: Debugger
 			Method name: setBlackboxPatterns
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'patterns' (type: array) -> Array of regexps that will be used to check script url for blackbox state.
 			No return value.
-		
+
 			Description: Replace previous blackbox patterns with passed ones. Forces backend to skip stepping/pausing in scripts with url matching one of the patterns. VM will try to leave blackboxed script by performing 'step in' several times, finally resorting to 'step out' if unsuccessful.
 		"""
 		assert isinstance(patterns, (list, tuple)
@@ -7503,15 +7503,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Debugger.setBlackboxedRanges
 			Domain: Debugger
 			Method name: setBlackboxedRanges
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Required arguments:
 					'scriptId' (type: Runtime.ScriptId) -> Id of the script.
 					'positions' (type: array) -> No description
 			No return value.
-		
+
 			Description: Makes backend skip steps in the script in blackboxed ranges. VM will try leave blacklisted scripts by performing 'step in' several times, finally resorting to 'step out' if unsuccessful. Positions array contains positions where blackbox state is changed. First interval isn't blackboxed. Array should be sorted.
 		"""
 		assert isinstance(positions, (list, tuple)
@@ -7526,9 +7526,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Console.enable
 			Domain: Console
 			Method name: enable
-		
+
 			No return value.
-		
+
 			Description: Enables console domain, sends the messages collected so far to the client by means of the <code>messageAdded</code> notification.
 		"""
 		subdom_funcs = self.synchronous_command('Console.enable')
@@ -7539,9 +7539,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Console.disable
 			Domain: Console
 			Method name: disable
-		
+
 			No return value.
-		
+
 			Description: Disables console domain, prevents further console messages from being reported to the client.
 		"""
 		subdom_funcs = self.synchronous_command('Console.disable')
@@ -7552,9 +7552,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Console.clearMessages
 			Domain: Console
 			Method name: clearMessages
-		
+
 			No return value.
-		
+
 			Description: Does nothing.
 		"""
 		subdom_funcs = self.synchronous_command('Console.clearMessages')
@@ -7565,9 +7565,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.enable
 			Domain: Profiler
 			Method name: enable
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.enable')
 		return subdom_funcs
@@ -7577,9 +7577,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.disable
 			Domain: Profiler
 			Method name: disable
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.disable')
 		return subdom_funcs
@@ -7589,12 +7589,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.setSamplingInterval
 			Domain: Profiler
 			Method name: setSamplingInterval
-		
+
 			Parameters:
 				Required arguments:
 					'interval' (type: integer) -> New sampling interval in microseconds.
 			No return value.
-		
+
 			Description: Changes CPU profiler sampling interval. Must be called before CPU profiles recording started.
 		"""
 		assert isinstance(interval, (int,)
@@ -7609,9 +7609,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.start
 			Domain: Profiler
 			Method name: start
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.start')
 		return subdom_funcs
@@ -7621,10 +7621,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.stop
 			Domain: Profiler
 			Method name: stop
-		
+
 			Returns:
 				'profile' (type: Profile) -> Recorded profile.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.stop')
 		return subdom_funcs
@@ -7634,15 +7634,15 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.startPreciseCoverage
 			Domain: Profiler
 			Method name: startPreciseCoverage
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Parameters:
 				Optional arguments:
 					'callCount' (type: boolean) -> Collect accurate call counts beyond simple 'covered' or 'not covered'.
 					'detailed' (type: boolean) -> Collect block-based coverage.
 			No return value.
-		
+
 			Description: Enable precise code coverage. Coverage data for JavaScript executed before enabling precise code coverage may be incomplete. Enabling prevents running optimized code and resets execution counters.
 		"""
 		if 'callCount' in kwargs:
@@ -7666,11 +7666,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.stopPreciseCoverage
 			Domain: Profiler
 			Method name: stopPreciseCoverage
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Disable precise code coverage. Disabling releases unnecessary execution count records and allows executing optimized code.
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.stopPreciseCoverage')
@@ -7681,12 +7681,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.takePreciseCoverage
 			Domain: Profiler
 			Method name: takePreciseCoverage
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'result' (type: array) -> Coverage data for the current isolate.
-		
+
 			Description: Collect coverage data for the current isolate, and resets execution counters. Precise code coverage needs to have started.
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.takePreciseCoverage')
@@ -7697,12 +7697,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.getBestEffortCoverage
 			Domain: Profiler
 			Method name: getBestEffortCoverage
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'result' (type: array) -> Coverage data for the current isolate.
-		
+
 			Description: Collect coverage data for the current isolate. The coverage data may be incomplete due to garbage collection.
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.getBestEffortCoverage')
@@ -7713,11 +7713,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.startTypeProfile
 			Domain: Profiler
 			Method name: startTypeProfile
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Enable type profile.
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.startTypeProfile')
@@ -7728,11 +7728,11 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.stopTypeProfile
 			Domain: Profiler
 			Method name: stopTypeProfile
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			No return value.
-		
+
 			Description: Disable type profile. Disabling releases type profile data collected so far.
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.stopTypeProfile')
@@ -7743,12 +7743,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: Profiler.takeTypeProfile
 			Domain: Profiler
 			Method name: takeTypeProfile
-		
+
 			WARNING: This function is marked 'Experimental'!
-		
+
 			Returns:
 				'result' (type: array) -> Type profile for all scripts since startTypeProfile() was turned on.
-		
+
 			Description: Collect type profile.
 		"""
 		subdom_funcs = self.synchronous_command('Profiler.takeTypeProfile')
@@ -7759,9 +7759,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.enable
 			Domain: HeapProfiler
 			Method name: enable
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('HeapProfiler.enable')
 		return subdom_funcs
@@ -7771,9 +7771,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.disable
 			Domain: HeapProfiler
 			Method name: disable
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('HeapProfiler.disable')
 		return subdom_funcs
@@ -7783,12 +7783,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.startTrackingHeapObjects
 			Domain: HeapProfiler
 			Method name: startTrackingHeapObjects
-		
+
 			Parameters:
 				Optional arguments:
 					'trackAllocations' (type: boolean) -> No description
 			No return value.
-		
+
 		"""
 		if 'trackAllocations' in kwargs:
 			assert isinstance(kwargs['trackAllocations'], (bool,)
@@ -7807,12 +7807,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.stopTrackingHeapObjects
 			Domain: HeapProfiler
 			Method name: stopTrackingHeapObjects
-		
+
 			Parameters:
 				Optional arguments:
 					'reportProgress' (type: boolean) -> If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken when the tracking is stopped.
 			No return value.
-		
+
 		"""
 		if 'reportProgress' in kwargs:
 			assert isinstance(kwargs['reportProgress'], (bool,)
@@ -7831,12 +7831,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.takeHeapSnapshot
 			Domain: HeapProfiler
 			Method name: takeHeapSnapshot
-		
+
 			Parameters:
 				Optional arguments:
 					'reportProgress' (type: boolean) -> If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken.
 			No return value.
-		
+
 		"""
 		if 'reportProgress' in kwargs:
 			assert isinstance(kwargs['reportProgress'], (bool,)
@@ -7855,9 +7855,9 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.collectGarbage
 			Domain: HeapProfiler
 			Method name: collectGarbage
-		
+
 			No return value.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('HeapProfiler.collectGarbage')
 		return subdom_funcs
@@ -7867,7 +7867,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.getObjectByHeapObjectId
 			Domain: HeapProfiler
 			Method name: getObjectByHeapObjectId
-		
+
 			Parameters:
 				Required arguments:
 					'objectId' (type: HeapSnapshotObjectId) -> No description
@@ -7875,7 +7875,7 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 					'objectGroup' (type: string) -> Symbolic group name that can be used to release multiple objects.
 			Returns:
 				'result' (type: Runtime.RemoteObject) -> Evaluation result.
-		
+
 		"""
 		if 'objectGroup' in kwargs:
 			assert isinstance(kwargs['objectGroup'], (str,)
@@ -7894,12 +7894,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.addInspectedHeapObject
 			Domain: HeapProfiler
 			Method name: addInspectedHeapObject
-		
+
 			Parameters:
 				Required arguments:
 					'heapObjectId' (type: HeapSnapshotObjectId) -> Heap snapshot object id to be accessible by means of $x command line API.
 			No return value.
-		
+
 			Description: Enables console to refer to the node with given id via $x (see Command Line API for more details $x functions).
 		"""
 		subdom_funcs = self.synchronous_command('HeapProfiler.addInspectedHeapObject'
@@ -7911,13 +7911,13 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.getHeapObjectId
 			Domain: HeapProfiler
 			Method name: getHeapObjectId
-		
+
 			Parameters:
 				Required arguments:
 					'objectId' (type: Runtime.RemoteObjectId) -> Identifier of the object to get heap object id for.
 			Returns:
 				'heapSnapshotObjectId' (type: HeapSnapshotObjectId) -> Id of the heap snapshot object corresponding to the passed remote object id.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('HeapProfiler.getHeapObjectId',
 		    objectId=objectId)
@@ -7928,12 +7928,12 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.startSampling
 			Domain: HeapProfiler
 			Method name: startSampling
-		
+
 			Parameters:
 				Optional arguments:
 					'samplingInterval' (type: number) -> Average sample interval in bytes. Poisson distribution is used for the intervals. The default value is 32768 bytes.
 			No return value.
-		
+
 		"""
 		if 'samplingInterval' in kwargs:
 			assert isinstance(kwargs['samplingInterval'], (float, int)
@@ -7952,10 +7952,10 @@ class ChromeRemoteDebugInterface(ChromeInterface):
 		Function path: HeapProfiler.stopSampling
 			Domain: HeapProfiler
 			Method name: stopSampling
-		
+
 			Returns:
 				'profile' (type: SamplingHeapProfile) -> Recorded sampling heap profile.
-		
+
 		"""
 		subdom_funcs = self.synchronous_command('HeapProfiler.stopSampling')
 		return subdom_funcs

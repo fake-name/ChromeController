@@ -29,11 +29,11 @@ nosetests                            \
 	--with-coverage                  \
 	--exe                            \
 	--cover-package=ChromeController \
-	--nocapture                      \
+	--stop                      \
 	tests
+	# --nocapture                      \
 	# tests.test_xhr_get
 	# tests.test_post
-	# --stop                      \
 	# tests.test_tab_pool
 
 # nosetests                            \

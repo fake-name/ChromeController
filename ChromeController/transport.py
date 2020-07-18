@@ -27,8 +27,6 @@ if 'win' in sys.platform:
 ACTIVE_PORTS = set()
 
 
-
-
 class ChromeExecutionManager():
 	"""
 	Class for managing talking to a chromium instance, as well as
@@ -537,6 +535,39 @@ class ChromeExecutionManager():
 		finally:
 			self.soclist[tab_key].settimeout(self.websocket_timeout)
 
+	def __check_console_log(self, message):
+		'''
+		Examine received message to determine if it was the output of a `console.xxx()` call, and
+		optionally output it to stdout.
+		'''
+
+		# I haven't figured out how this is ever called with a None argument.
+		if not message:
+			return
+
+		if 'method' not in message:
+			return
+		if message['method'] != "Runtime.consoleAPICalled":
+			return
+		if 'params' not in message:
+			return
+
+		params = message['params']
+
+		if 'type' not in params:
+			return
+		if params['type'] != 'log':
+			return
+
+		if 'args' not in params:
+			return
+
+		output = " ".join([str(tmp.get("value", "")) for tmp in params['args']])
+		self.log.info("Console output: %s", output)
+
+
+
+
 	def recv_filtered(self, keycheck, tab_key, timeout=30, message=None):
 		'''
 		Receive a filtered message, using the callable `keycheck` to filter received messages
@@ -574,6 +605,7 @@ class ChromeExecutionManager():
 		timeout_at = time.time() + timeout
 		while 1:
 			tmp = self.___recv(tab_key)
+			self.__check_console_log(tmp)
 			if keycheck(tmp):
 				return tmp
 			else:
