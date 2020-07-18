@@ -1,0 +1,3 @@
+[submodule "ChromeController/resources/puppeteer-extra"]
+	path = ChromeController/resources/puppeteer-extra
+	url = https://github.com/berstend/puppeteer-extra
