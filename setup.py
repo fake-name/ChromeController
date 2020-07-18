@@ -22,7 +22,11 @@ setup(
 	package_dir = {'ChromeController': 'ChromeController'},
 
 	# Bundle the protocol json files.
-	package_data={'ChromeController': ['protocols/*.json']},
+	package_data={
+		'ChromeController': [
+			'protocols/*.json',
+			'resources/evasions/*.js'
+		]},
 
 	# Details
 	url="https://github.com/fake-name/ChromeController",
