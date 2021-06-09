@@ -69,6 +69,14 @@ class ChromeInterface():
 			self.transport.check_process_ded()
 
 
+		# To correlate request IDs to remote URLs, we have to track the relationship ourselves or
+		# do a lot more querying. Ugh.
+		self.__active_request_ids           = {}
+
+		# install_listener_for_content() operates asynchronously, so we need
+		# to track outstanding requests for the content that underpins each request ID.
+		self.__active_file_content_requests = {}
+
 	def __check_ret(self, ret):
 		if ret is False or ret is None:
 			raise cr_exceptions.ChromeError("Null response from Chromium (or timed out)!")
@@ -101,6 +109,36 @@ class ChromeInterface():
 		self.transport.check_process_ded()
 		return ret
 
+
+	def asynchronous_command(self, command, **kwargs):
+		'''
+		Forward a command to the remote chrome instance via the transport
+		connection, returning the send_id for the sent command.
+
+		This is primarily useful for writing intentionally async code that
+		handles it's own responses via the install_message_handler facilities.
+		'''
+
+		self.log.debug("Asynchronous_command to tab %s (%s):", self.tab_id, self.transport._get_cr_tab_meta_for_key(self.tab_id))
+		self.log.debug("	kwargs:  '%s'", kwargs)
+		self.log.debug("	tab_key:  '%s'", self.tab_id)
+
+		assert "tab_id" not in kwargs, "tab_id is an invalid parameter for an asynchronous command"
+
+		self.transport.check_process_ded()
+		send_id = self.transport.asynchronous_command(command=command, tab_key=self.tab_id, **kwargs)
+		self.transport.check_process_ded()
+		return send_id
+
+	def process_available(self):
+		'''
+		Process all messages in the socket rx queue.
+
+		Will block for at least 100 milliseconds.
+
+		'''
+		self.transport.process_available(self.tab_id)
+
 	def drain_transport(self):
 		'''
 		"Drain" the transport connection.
@@ -115,6 +153,47 @@ class ChromeInterface():
 		ret = self.transport.drain(tab_key=self.tab_id)
 		self.transport.check_process_ded()
 		return ret
+
+
+
+	def install_message_handler(self, handler):
+		'''
+		Add handler `handler` to the list of message handlers that will be called on all received messages.
+
+		The handler will be called with the tab context for each message the tab generates.
+
+		NOTE: Handler call order is not specified!
+
+		'''
+		def tab_context_closure(message):
+			handler(self, message)
+
+		self.transport.install_message_handler_for_tab_key(self.tab_id, tab_context_closure)
+
+
+	def remove_handlers(self, handler):
+		'''
+		Remove handler `handler` from the list of message handlers that will be called
+		on all received messages for the current tab.
+
+		If the the handler is not present, a KeyError will be raised.
+		'''
+
+
+		def tab_context_closure(message):
+			handler(self, message)
+
+		self.transport.remove_handlers_for_tab_key(self.tab_id, tab_context_closure)
+
+
+	def remove_all_handlers(self, tab_key):
+		'''
+		Remove all message handlers for the current tab.
+
+		'''
+
+		self.transport.remove_all_handlers_for_tab_key(self.tab_id)
+
 
 	def new_tab(self, *args, **kwargs):
 		new = self.__class__(use_execution_manager=(self.transport, uuid.uuid4()), *args, **kwargs)
@@ -131,6 +210,21 @@ class ChromeInterface():
 			self.transport.close_tab(tab_key=self.tab_id)
 
 		gc.collect()
+
+
+
+	def install_listener_for_content(self, handler):
+
+		def handler(ctx, message):
+			if 'method' in message and message['method'] == "Network.loadingFinished":
+				# print("Handler call with context %s, for message %s" % (ctx, message))
+				response_id = ctx.asynchronous_command("Network.getResponseBody", requestId = message['params']['requestId'])
+				self.__active_file_content_requests[response_id] = {
+
+				}
+			if 'id' in message:
+				pass
+
 
 
 
