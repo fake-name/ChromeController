@@ -1,6 +1,6 @@
 
 import time
-import traceback
+import base64
 import pprint
 import gc
 import uuid
@@ -9,6 +9,24 @@ import logging
 from . import cr_exceptions
 from .transport import ChromeExecutionManager
 
+
+def decode_chrome_getResponseBody(message):
+	'''
+	Given a response dict from a Network.getResponseBody command,
+	return either the properly decoded binary object, or the unicode
+	string.
+
+	'''
+	assert 'body' in message
+	assert 'base64Encoded' in message
+
+	if message['base64Encoded']:
+		# Binary message, decode it
+		return base64.b64decode(message['body'])
+
+	else:
+		# Message is string, just return it
+		return message['body']
 
 
 class ChromeInterface():
@@ -66,7 +84,7 @@ class ChromeInterface():
 					*args,
 					**kwargs
 				)
-			self.transport.check_process_ded()
+			self.transport._check_process_dead()
 
 
 		# To correlate request IDs to remote URLs, we have to track the relationship ourselves or
@@ -75,6 +93,7 @@ class ChromeInterface():
 
 		# install_listener_for_content() operates asynchronously, so we need
 		# to track outstanding requests for the content that underpins each request ID.
+		self.__request_id_to_url_mapping    = {}
 		self.__active_file_content_requests = {}
 
 	def __check_ret(self, ret):
@@ -102,11 +121,11 @@ class ChromeInterface():
 
 		'''
 
-		self.transport.check_process_ded()
+		self.transport._check_process_dead()
 		ret = self.transport.synchronous_command(tab_key=self.tab_id, *args, **kwargs)
-		self.transport.check_process_ded()
+		self.transport._check_process_dead()
 		self.__check_ret(ret)
-		self.transport.check_process_ded()
+		self.transport._check_process_dead()
 		return ret
 
 
@@ -125,9 +144,9 @@ class ChromeInterface():
 
 		assert "tab_id" not in kwargs, "tab_id is an invalid parameter for an asynchronous command"
 
-		self.transport.check_process_ded()
+		self.transport._check_process_dead()
 		send_id = self.transport.asynchronous_command(command=command, tab_key=self.tab_id, **kwargs)
-		self.transport.check_process_ded()
+		self.transport._check_process_dead()
 		return send_id
 
 	def process_available(self):
@@ -149,9 +168,9 @@ class ChromeInterface():
 		type needs.
 
 		'''
-		self.transport.check_process_ded()
+		self.transport._check_process_dead()
 		ret = self.transport.drain(tab_key=self.tab_id)
-		self.transport.check_process_ded()
+		self.transport._check_process_dead()
 		return ret
 
 
@@ -186,23 +205,25 @@ class ChromeInterface():
 		self.transport.remove_handlers_for_tab_key(self.tab_id, tab_context_closure)
 
 
-	def remove_all_handlers(self, tab_key):
+	def remove_all_handlers(self):
 		'''
 		Remove all message handlers for the current tab.
 
 		'''
-
-		self.transport.remove_all_handlers_for_tab_key(self.tab_id)
+		try:
+			self.transport.remove_all_handlers_for_tab_key(self.tab_id)
+		except KeyError:
+			pass
 
 
 	def new_tab(self, *args, **kwargs):
 		new = self.__class__(use_execution_manager=(self.transport, uuid.uuid4()), *args, **kwargs)
-		self.transport.check_process_ded()
+		self.transport._check_process_dead()
 		return new
 
 	def close(self):
 		# The process shouldn't be dead before we explicitly kill it.
-		self.transport.check_process_ded()
+		self.transport._check_process_dead()
 
 		if self.is_root_session:
 			self.transport.close_all()
@@ -214,17 +235,63 @@ class ChromeInterface():
 
 
 	def install_listener_for_content(self, handler):
+		'''
+		Install a content handler.
+		`handler` will be called for each received content item.
+		Internally, this involves a larger set of handlers to track the mappings of request-id to actual URL,
+		and asynchronously invoked Network.getResponseBody against the chromium tab instance.
 
-		def handler(ctx, message):
+		The handler is invoked as:
+		`handler(self, req_url, response_body)` where self is the pointer to the local ChromeInterface instance.
+
+		'''
+
+
+
+		def _handler(ctx, message):
 			if 'method' in message and message['method'] == "Network.loadingFinished":
-				# print("Handler call with context %s, for message %s" % (ctx, message))
-				response_id = ctx.asynchronous_command("Network.getResponseBody", requestId = message['params']['requestId'])
-				self.__active_file_content_requests[response_id] = {
+				request_id = message['params']['requestId']
+				content_request_id = ctx.asynchronous_command("Network.getResponseBody", requestId = request_id)
+				self.__active_file_content_requests[content_request_id] = request_id
 
-				}
+			elif 'method' in message and message['method'] == "Network.responseReceived":
+				request_id = message['params']['requestId']
+				url = message['params']['response']['url']
+				self.__request_id_to_url_mapping[request_id] = url
+
+
 			if 'id' in message:
-				pass
+				message_id = message['id']
+				if message_id in self.__active_file_content_requests:
+					req_id = self.__active_file_content_requests[message_id]
+					if req_id in self.__request_id_to_url_mapping:
+						req_url = self.__request_id_to_url_mapping[req_id]
+						if 'result' in message:
+							response_body = decode_chrome_getResponseBody(message['result'])
+							handler(self, req_url, response_body)
+						else:
+							self.log.error("Failed to extract content for request %s, url %s", req_id, req_url)
+							self.log.error("Received response: %s", message)
 
+
+
+
+		self.install_message_handler(_handler)
+
+	def clear_content_listener_cache(self):
+		'''
+		The handlers installed by install_listener_for_content() have some persistant
+		storage in the class to allow tracking request-id -> response body mappings.
+
+		These shouldn't take much RAM, but extremely long chromium execution times can
+		conceivably cause them to grow excessively.
+
+		This call clears them. Note that calling this while a request is in-flight may cause
+		strange callback errors.
+		'''
+
+		self.__request_id_to_url_mapping    = {}
+		self.__active_file_content_requests = {}
 
 
 

@@ -103,11 +103,9 @@ class ChromeExecutionManager():
 					raise
 
 		# self.log.info("Connecting to %s:%s", self.host, self.port)
-		# self.connect(base_tab_key)
-
+		# self.connect_to_chromium(base_tab_key)
 
 		self._messages = {}
-
 		self._message_filters = {}
 
 
@@ -115,6 +113,7 @@ class ChromeExecutionManager():
 
 		if binary is None:
 			binary = "chromium"
+
 		binary, *args = shlex.split(binary)
 
 		if not os.path.exists(binary):
@@ -182,10 +181,16 @@ class ChromeExecutionManager():
 				time.sleep(2)
 
 	def __close_internal_linux(self):
+		'''
+		Shut down the chrome process. On linux, this will call terminate() on the process
+		if chrome does not shut down within the timeout (5 seconds).
+		'''
+
+
 		self.log.debug("Sending sigint to chromium")
 		self.cr_proc.send_signal(signal.SIGINT)
 		try:
-			self.check_process_ded()  # Needed to flush the communcation pipes, sometimes
+			self._check_process_dead()  # Needed to flush the communcation pipes, sometimes
 			self.log.debug("Waiting for chromium to exit")
 			try:
 				self.cr_proc.wait(timeout=5)
@@ -197,14 +202,14 @@ class ChromeExecutionManager():
 			except ProcessLookupError:
 				self.log.debug("Process exited normally, no need to terminate.")
 
-			self.check_process_ded()  # Processes may dangle until the pipes are closed.
+			self._check_process_dead()  # Processes may dangle until the pipes are closed.
 
 			try:
 				self.cr_proc.kill()
 			except ProcessLookupError:
 				self.log.debug("Process exited normally, no need to terminate.")
 
-			self.check_process_ded()  # Processes may dangle until the pipes are closed.
+			self._check_process_dead()  # Processes may dangle until the pipes are closed.
 
 		except cr_exceptions.ChromeDiedError:
 			# Considering we're /trying/ to kill chrome, it
@@ -215,6 +220,11 @@ class ChromeExecutionManager():
 		self.log.debug("Chromium closed!")
 
 	def __close_internal_windows(self):
+		'''
+		Shut down the chrome process. On linux, this will emit a CTRL+C event to the process
+		if chrome does not shut down within the timeout (5 seconds).
+		'''
+
 		self.log.debug("Sending CTRL_C_EVENT to chromium")
 
 		win32api.GenerateConsoleCtrlEvent(win32con.CTRL_C_EVENT, self.cr_proc.pid)
@@ -223,7 +233,7 @@ class ChromeExecutionManager():
 		self.cr_proc.send_signal(1)
 		self.log.debug("Sent")
 		try:
-			self.check_process_ded()  # Needed to flush the communcation pipes, sometimes
+			self._check_process_dead()  # Needed to flush the communcation pipes, sometimes
 
 			# I can't get this to fucking ever work,
 			# so just skip and go straight to termination.
@@ -238,14 +248,14 @@ class ChromeExecutionManager():
 			except ProcessLookupError:
 				self.log.debug("Process exited normally, no need to terminate.")
 
-			self.check_process_ded()  # Processes may dangle until the pipes are closed.
+			self._check_process_dead()  # Processes may dangle until the pipes are closed.
 
 			try:
 				self.cr_proc.kill()
 			except ProcessLookupError:
 				self.log.debug("Process exited normally, no need to terminate.")
 
-			self.check_process_ded()  # Processes may dangle until the pipes are closed.
+			self._check_process_dead()  # Processes may dangle until the pipes are closed.
 
 		except cr_exceptions.ChromeDiedError:
 			self.log.debug("ChromeDiedError while polling. Ignoring due to shutdown.")
@@ -282,7 +292,13 @@ class ChromeExecutionManager():
 		ACTIVE_PORTS.discard(self.port)
 
 
-	def check_process_ded(self):
+	def _check_process_dead(self):
+		'''
+		Poll the chromium sub-process to check if it's still alive.
+
+		Will raise cr_exceptions.ChromeDiedError if chrome is not alive.
+
+		'''
 		self.cr_proc.poll()
 		if self.cr_proc.returncode != None:
 			try:
@@ -296,6 +312,9 @@ class ChromeExecutionManager():
 
 
 	def _get_tab_idx_for_key(self, tab_key):
+		'''
+
+		'''
 
 		if tab_key not in self.tab_id_map:
 			return None
@@ -322,11 +341,16 @@ class ChromeExecutionManager():
 
 		return self.tab_id_map[tab_key]
 
-	def connect(self, tab_key):
+	def connect_to_chromium(self, tab_key):
 		"""
 		Open a websocket connection to remote browser, determined by
 		self.host and self.port.  Each tab has it's own websocket
 		endpoint.
+
+		Note that the manager maintains a connection to a blank tab to
+		prevent closing all remote tabs from causing the browser to exit.
+		This tab is not used by anything.
+
 
 		"""
 
@@ -470,9 +494,9 @@ class ChromeExecutionManager():
 	def __check_open_socket(self, tab_key):
 		# self.log.info("__check_open_socket -> %s", tab_key)
 		if not tab_key in self.soclist:
-			self.connect(tab_key=tab_key)
+			self.connect_to_chromium(tab_key=tab_key)
 		if self.soclist[tab_key].connected is not True:
-			self.connect(tab_key=tab_key)
+			self.connect_to_chromium(tab_key=tab_key)
 		if not tab_key in self._messages:
 			self._messages[tab_key] = []
 
@@ -820,16 +844,18 @@ class ChromeExecutionManager():
 		tab_set = self._message_filters[tab_key]  # Will error if tab_key is not a valid tab-key.
 		tab_set.remove(handler)  # Remove the handler
 
+
 	def remove_all_handlers_for_tab_key(self, tab_key):
 		'''
 		Add handler `handler` to the list of message handlers that will be called on all received messages.
 
-		If the tab_key is not present a KeyError will be raised
+		If the tab key is not present, no error will be raised.
 
 		'''
 
-		tab_set = self._message_filters[tab_key]  # Will error if tab_key is not a valid tab-key.
-		tab_set.clear()
+		if tab_key in self._message_filters:
+			tab_set = self._message_filters[tab_key]
+			tab_set.clear()
 
 
 if __name__ == '__main__':
