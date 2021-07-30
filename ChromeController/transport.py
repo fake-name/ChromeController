@@ -21,7 +21,7 @@ import subprocess
 import distutils.spawn
 from . import cr_exceptions
 
-if 'win' in sys.platform:
+if sys.platform == 'win32':
 	import win32con
 	import win32api
 
@@ -148,7 +148,7 @@ class ChromeExecutionManager():
 		# We need a separate process group on windows,
 		# to make ctrl+c work properly.
 		creationflags = 0
-		if 'win' in sys.platform:
+		if sys.platform == 'win32':
 			creationflags |= subprocess.CREATE_NEW_PROCESS_GROUP
 
 		preexec_fn = None
@@ -279,7 +279,7 @@ class ChromeExecutionManager():
 		'''
 		if self.cr_proc:
 			try:
-				if 'win' in sys.platform:
+				if sys.platform == 'win32':
 					self.__close_internal_windows()
 				else:
 					self.__close_internal_linux()
