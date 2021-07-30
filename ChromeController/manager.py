@@ -1110,3 +1110,30 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 
 
 
+
+
+	def scroll_page(self, scroll_y_delta, scroll_x_delta=0, mouse_pos_x=10, mouse_pos_y=10):
+		'''
+		Inject a synthezised mouse scroll event into the page.
+
+		Positive Y scroll means "down" on the page. The mouse position is where the
+		virtual mouse pointer is placed when it emits the scroll event.
+
+		Note that this returns immediately, and the browser takes a short period of time
+		to actually perform the scroll (and for any onscroll() events to be triggered.)
+
+		Additionally, scroll events are delta relatve to the current viewport. Repeated
+		calls with the same scroll delta will incrementally move the viewport in the
+		chosen direction.
+		'''
+
+		self.Input_dispatchMouseEvent(
+				type        = 'mouseWheel',
+				x           = mouse_pos_x,
+				y           = mouse_pos_y,
+				deltaX      = scroll_x_delta,
+				deltaY      = scroll_y_delta,
+				pointerType = 'mouse',
+			)
+
+
