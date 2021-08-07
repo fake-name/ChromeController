@@ -94,6 +94,7 @@ class ChromeInterface():
 		# install_listener_for_content() operates asynchronously, so we need
 		# to track outstanding requests for the content that underpins each request ID.
 		self.__request_id_to_url_mapping    = {}
+		self.__request_id_to_response_meta  = {}
 		self.__active_file_content_requests = {}
 
 	def __check_ret(self, ret):
@@ -246,8 +247,8 @@ class ChromeInterface():
 
 		'''
 
-
-
+		# TODO: The generic filtering of Network.loadingFinished and Network.responseReceived should
+		# be moved into a single stand-alone handler that gets called first.
 		def _handler(ctx, message):
 			if 'method' in message and message['method'] == "Network.loadingFinished":
 				request_id = message['params']['requestId']
@@ -257,7 +258,8 @@ class ChromeInterface():
 			elif 'method' in message and message['method'] == "Network.responseReceived":
 				request_id = message['params']['requestId']
 				url = message['params']['response']['url']
-				self.__request_id_to_url_mapping[request_id] = url
+				self.__request_id_to_url_mapping[request_id]   = url
+				self.__request_id_to_response_meta[request_id] = message['params']['response']
 
 
 			if 'id' in message:
@@ -265,18 +267,24 @@ class ChromeInterface():
 				if message_id in self.__active_file_content_requests:
 					req_id = self.__active_file_content_requests[message_id]
 					if req_id in self.__request_id_to_url_mapping:
-						req_url = self.__request_id_to_url_mapping[req_id]
+						req_url  = self.__request_id_to_url_mapping[req_id]
+						req_meta = self.__request_id_to_response_meta[req_id]
 						if 'result' in message:
 							response_body = decode_chrome_getResponseBody(message['result'])
-							handler(self, req_url, response_body)
+
+							# This is kind of evil
+							if handler.__code__.co_argcount == 3:
+								handler(self, req_url, response_body)
+							elif handler.__code__.co_argcount == 4:
+								handler(self, req_url, response_body, meta=req_meta)
+							else:
+								raise RuntimeError("Only handler callback that accept 3 or 4 arguments permitted")
 						else:
 							self.log.error("Failed to extract content for request %s, url %s", req_id, req_url)
 							self.log.error("Received response: %s", message)
 
-
-
-
 		self.install_message_handler(_handler)
+
 
 	def clear_content_listener_cache(self):
 		'''
@@ -290,6 +298,7 @@ class ChromeInterface():
 		strange callback errors.
 		'''
 
+		self.__request_id_to_response_meta  = {}
 		self.__request_id_to_url_mapping    = {}
 		self.__active_file_content_requests = {}
 
