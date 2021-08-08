@@ -28,8 +28,165 @@ def decode_chrome_getResponseBody(message):
 		# Message is string, just return it
 		return message['body']
 
+def filter_stub(url, meta):
+	return True
 
-class ChromeInterface():
+class ChromeListenerMixin():
+	'''
+	Docs plzzzz
+
+	'''
+
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
+		# install_listener_for_content() operates asynchronously, so we need
+		# to track outstanding requests for the content that underpins each request ID.
+		self.__request_id_to_url_mapping    = {}
+		self.__request_id_to_response_meta  = {}
+		self.__active_file_content_requests = {}
+
+		self._precondition_check_want_content_request = filter_stub
+
+
+	def install_message_handler(self, handler):
+		'''
+		Add handler `handler` to the list of message handlers that will be called on all received messages.
+
+		The handler will be called with the tab context for each message the tab generates.
+
+		NOTE: Handler call order is not specified!
+
+		'''
+		def tab_context_closure(message):
+			handler(self, message)
+
+		self.transport.install_message_handler_for_tab_key(self.tab_id, tab_context_closure)
+
+
+	def remove_handlers(self, handler):
+		'''
+		Remove handler `handler` from the list of message handlers that will be called
+		on all received messages for the current tab.
+
+		If the the handler is not present, a KeyError will be raised.
+		'''
+
+
+		def tab_context_closure(message):
+			handler(self, message)
+
+		self.transport.remove_handlers_for_tab_key(self.tab_id, tab_context_closure)
+
+
+	def remove_all_handlers(self):
+		'''
+		Remove all message handlers for the current tab.
+
+		'''
+		try:
+			self.transport.remove_all_handlers_for_tab_key(self.tab_id)
+		except KeyError:
+			pass
+
+	def set_filter_func(self, func):
+		'''
+		Specify a function with a signature `func(url, meta)` to be used as the precondition filter
+		for requesting full fetch results from the browser.
+
+		Precondition check before executing the fetch of content for url `url` from the browser.
+		This is mostly useful for preventing the overhead of requesting large binary files multiple times.
+
+		Overriding and returning false on later requests prevents additionl `Network.getResponseBody` invocations
+		being set to the browser.
+
+		Note that specifying func=None is a special case where a empty pass function that always returns true will
+		be used.
+
+		Additionally, this function is *per tab*, and not automatically copied to a new tab when it is created.
+
+		'''
+
+		self.log.info("Updating getResponseBody precondition filter function to %s", func)
+
+		if func:
+			self._precondition_check_want_content_request = func
+		else:
+			self._precondition_check_want_content_request_ = filter_stub
+
+
+	def install_listener_for_content(self, handler):
+		'''
+		Install a content handler.
+		`handler` will be called for each received content item.
+		Internally, this involves a larger set of handlers to track the mappings of request-id to actual URL,
+		and asynchronously invoked Network.getResponseBody against the chromium tab instance.
+
+		The handler is invoked as:
+		`handler(self, req_url, response_body)` where self is the pointer to the local ChromeInterface instance.
+
+		'''
+
+		# TODO: The generic filtering of Network.loadingFinished and Network.responseReceived should
+		# be moved into a single stand-alone handler that gets called first.
+		def _handler(ctx, message):
+			if 'method' in message and message['method'] == "Network.loadingFinished":
+				request_id = message['params']['requestId']
+
+			elif 'method' in message and message['method'] == "Network.responseReceived":
+				request_id = message['params']['requestId']
+				url = message['params']['response']['url']
+				self.__request_id_to_url_mapping[request_id]   = url
+				self.__request_id_to_response_meta[request_id] = message['params']['response']
+
+				if self._precondition_check_want_content_request(url=url, meta=message['params']['response']):
+					content_request_id = ctx.asynchronous_command("Network.getResponseBody", requestId = request_id)
+					self.__active_file_content_requests[content_request_id] = request_id
+
+			if 'id' in message:
+				message_id = message['id']
+				if message_id in self.__active_file_content_requests:
+					req_id = self.__active_file_content_requests[message_id]
+					if req_id in self.__request_id_to_url_mapping:
+						req_url  = self.__request_id_to_url_mapping[req_id]
+						req_meta = self.__request_id_to_response_meta[req_id]
+						if 'result' in message:
+							response_body = decode_chrome_getResponseBody(message['result'])
+
+							# This is kind of evil
+							if handler.__code__.co_argcount == 3:
+								handler(self, req_url, response_body)
+							elif handler.__code__.co_argcount == 4:
+								handler(self, req_url, response_body, meta=req_meta)
+							else:
+								raise RuntimeError("Only handler callback that accept 3 or 4 arguments permitted")
+						else:
+							self.log.error("Failed to extract content for request %s, url %s", req_id, req_url)
+							self.log.error("Received response: %s", message)
+
+		self.install_message_handler(_handler)
+
+
+	def clear_content_listener_cache(self):
+		'''
+		The handlers installed by install_listener_for_content() have some persistant
+		storage in the class to allow tracking request-id -> response body mappings.
+
+		These shouldn't take much RAM, but extremely long chromium execution times can
+		conceivably cause them to grow excessively.
+
+		This call clears them. Note that calling this while a request is in-flight may cause
+		strange callback errors.
+		'''
+
+		self.__request_id_to_response_meta  = {}
+		self.__request_id_to_url_mapping    = {}
+		self.__active_file_content_requests = {}
+
+
+
+class ChromeInterface(ChromeListenerMixin):
 	"""
 	Document me, maybe?
 	"""
@@ -53,6 +210,8 @@ class ChromeInterface():
 		at once.
 
 		"""
+
+		super().__init__()
 
 		# Force cleanup of dangling processes (if any)
 		# This is needed because the deletion of active chromium processes
@@ -91,11 +250,6 @@ class ChromeInterface():
 		# do a lot more querying. Ugh.
 		self.__active_request_ids           = {}
 
-		# install_listener_for_content() operates asynchronously, so we need
-		# to track outstanding requests for the content that underpins each request ID.
-		self.__request_id_to_url_mapping    = {}
-		self.__request_id_to_response_meta  = {}
-		self.__active_file_content_requests = {}
 
 	def __check_ret(self, ret):
 		if ret is False or ret is None:
@@ -175,50 +329,9 @@ class ChromeInterface():
 		return ret
 
 
-
-	def install_message_handler(self, handler):
-		'''
-		Add handler `handler` to the list of message handlers that will be called on all received messages.
-
-		The handler will be called with the tab context for each message the tab generates.
-
-		NOTE: Handler call order is not specified!
-
-		'''
-		def tab_context_closure(message):
-			handler(self, message)
-
-		self.transport.install_message_handler_for_tab_key(self.tab_id, tab_context_closure)
-
-
-	def remove_handlers(self, handler):
-		'''
-		Remove handler `handler` from the list of message handlers that will be called
-		on all received messages for the current tab.
-
-		If the the handler is not present, a KeyError will be raised.
-		'''
-
-
-		def tab_context_closure(message):
-			handler(self, message)
-
-		self.transport.remove_handlers_for_tab_key(self.tab_id, tab_context_closure)
-
-
-	def remove_all_handlers(self):
-		'''
-		Remove all message handlers for the current tab.
-
-		'''
-		try:
-			self.transport.remove_all_handlers_for_tab_key(self.tab_id)
-		except KeyError:
-			pass
-
-
 	def new_tab(self, *args, **kwargs):
 		new = self.__class__(use_execution_manager=(self.transport, uuid.uuid4()), *args, **kwargs)
+
 		self.transport._check_process_dead()
 		return new
 
@@ -232,75 +345,6 @@ class ChromeInterface():
 			self.transport.close_tab(tab_key=self.tab_id)
 
 		gc.collect()
-
-
-
-	def install_listener_for_content(self, handler):
-		'''
-		Install a content handler.
-		`handler` will be called for each received content item.
-		Internally, this involves a larger set of handlers to track the mappings of request-id to actual URL,
-		and asynchronously invoked Network.getResponseBody against the chromium tab instance.
-
-		The handler is invoked as:
-		`handler(self, req_url, response_body)` where self is the pointer to the local ChromeInterface instance.
-
-		'''
-
-		# TODO: The generic filtering of Network.loadingFinished and Network.responseReceived should
-		# be moved into a single stand-alone handler that gets called first.
-		def _handler(ctx, message):
-			if 'method' in message and message['method'] == "Network.loadingFinished":
-				request_id = message['params']['requestId']
-				content_request_id = ctx.asynchronous_command("Network.getResponseBody", requestId = request_id)
-				self.__active_file_content_requests[content_request_id] = request_id
-
-			elif 'method' in message and message['method'] == "Network.responseReceived":
-				request_id = message['params']['requestId']
-				url = message['params']['response']['url']
-				self.__request_id_to_url_mapping[request_id]   = url
-				self.__request_id_to_response_meta[request_id] = message['params']['response']
-
-
-			if 'id' in message:
-				message_id = message['id']
-				if message_id in self.__active_file_content_requests:
-					req_id = self.__active_file_content_requests[message_id]
-					if req_id in self.__request_id_to_url_mapping:
-						req_url  = self.__request_id_to_url_mapping[req_id]
-						req_meta = self.__request_id_to_response_meta[req_id]
-						if 'result' in message:
-							response_body = decode_chrome_getResponseBody(message['result'])
-
-							# This is kind of evil
-							if handler.__code__.co_argcount == 3:
-								handler(self, req_url, response_body)
-							elif handler.__code__.co_argcount == 4:
-								handler(self, req_url, response_body, meta=req_meta)
-							else:
-								raise RuntimeError("Only handler callback that accept 3 or 4 arguments permitted")
-						else:
-							self.log.error("Failed to extract content for request %s, url %s", req_id, req_url)
-							self.log.error("Received response: %s", message)
-
-		self.install_message_handler(_handler)
-
-
-	def clear_content_listener_cache(self):
-		'''
-		The handlers installed by install_listener_for_content() have some persistant
-		storage in the class to allow tracking request-id -> response body mappings.
-
-		These shouldn't take much RAM, but extremely long chromium execution times can
-		conceivably cause them to grow excessively.
-
-		This call clears them. Note that calling this while a request is in-flight may cause
-		strange callback errors.
-		'''
-
-		self.__request_id_to_response_meta  = {}
-		self.__request_id_to_url_mapping    = {}
-		self.__active_file_content_requests = {}
 
 
 
