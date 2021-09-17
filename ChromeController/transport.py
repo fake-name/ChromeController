@@ -22,6 +22,7 @@ import distutils.spawn
 from . import cr_exceptions
 
 if sys.platform == 'win32':
+	import pywintypes
 	import win32con
 	import win32api
 
@@ -227,11 +228,23 @@ class ChromeExecutionManager():
 
 		self.log.debug("Sending CTRL_C_EVENT to chromium")
 
-		win32api.GenerateConsoleCtrlEvent(win32con.CTRL_C_EVENT, self.cr_proc.pid)
-		self.cr_proc.send_signal(signal.CTRL_BREAK_EVENT)
-		self.cr_proc.send_signal(signal.CTRL_C_EVENT)
-		self.cr_proc.send_signal(1)
-		self.log.debug("Sent")
+		try:
+			win32api.GenerateConsoleCtrlEvent(win32con.CTRL_C_EVENT, self.cr_proc.pid)
+			self.cr_proc.send_signal(signal.CTRL_BREAK_EVENT)
+			self.cr_proc.send_signal(signal.CTRL_C_EVENT)
+			self.cr_proc.send_signal(1)
+
+		except (OSError, SystemError, pywintypes.error) as e:
+			# Ignore "invalid handle" errors, probably caused by running without a shell
+			# (e.g. in pyinstaller frozen bundle with --noconsole).
+			if 6 == getattr(e, "winerror", getattr(e.__cause__, "winerror", -1)):
+				self.log.debug("Sending signal failed; attempting termination.")
+			else:
+				raise
+
+		else:
+			self.log.debug("Sent")
+
 		try:
 			self._check_process_dead()  # Needed to flush the communcation pipes, sometimes
 
