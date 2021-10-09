@@ -35,22 +35,31 @@
 <dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
 </font></dt><dd>
 <dl>
+<dt><font face="helvetica, arial"><a href="ChromeController.manager_base.html#ChromeListenerMixin">ChromeListenerMixin</a>
+</font></dt><dd>
+<dl>
 <dt><font face="helvetica, arial"><a href="ChromeController.manager_base.html#ChromeInterface">ChromeInterface</a>
 </font></dt></dl>
+</dd>
+</dl>
 </dd>
 </dl>
  <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="ChromeInterface">class <strong>ChromeInterface</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="ChromeInterface">class <strong>ChromeInterface</strong></a>(<a href="ChromeController.manager_base.html#ChromeListenerMixin">ChromeListenerMixin</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt><a href="#ChromeInterface">ChromeInterface</a>(binary,&nbsp;dbg_port,&nbsp;use_execution_manager,&nbsp;additional_options,&nbsp;*args,&nbsp;**kwargs)<br>
-&nbsp;<br>
-Document&nbsp;me,&nbsp;maybe?<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt>Document&nbsp;me,&nbsp;maybe?<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
-<td width="100%">Methods defined here:<br>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="ChromeController.manager_base.html#ChromeInterface">ChromeInterface</a></dd>
+<dd><a href="ChromeController.manager_base.html#ChromeListenerMixin">ChromeListenerMixin</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
 <dl><dt><a name="ChromeInterface-__init__"><strong>__init__</strong></a>(self, binary, dbg_port, use_execution_manager, additional_options, *args, **kwargs)</dt><dd><tt>Base&nbsp;chromium&nbsp;transport&nbsp;initialization.<br>
 &nbsp;<br>
 The&nbsp;binary&nbsp;to&nbsp;execute&nbsp;is&nbsp;assumed&nbsp;to&nbsp;be&nbsp;named&nbsp;`chromium`,&nbsp;and&nbsp;on&nbsp;$PATH<br>
@@ -64,22 +73,19 @@ will&nbsp;default&nbsp;to&nbsp;an&nbsp;unused&nbsp;port&nbsp;&gt;=&nbsp;9222.<br
 Duplication&nbsp;of&nbsp;the&nbsp;dbg_port&nbsp;parameter&nbsp;can&nbsp;often&nbsp;lead&nbsp;to&nbsp;cr_exceptions.ChromeStartupException<br>
 exceptions.&nbsp;If&nbsp;these&nbsp;happen,&nbsp;you&nbsp;may&nbsp;need&nbsp;to&nbsp;call&nbsp;<a href="#ChromeInterface">ChromeInterface</a>.<a href="#ChromeInterface-close">close</a>()&nbsp;to&nbsp;force&nbsp;shutdown<br>
 of&nbsp;chromium&nbsp;instances,&nbsp;if&nbsp;you&nbsp;are&nbsp;not&nbsp;trying&nbsp;to&nbsp;instantiate&nbsp;multiple&nbsp;instances&nbsp;of&nbsp;chromium<br>
-at&nbsp;once.</tt></dd></dl>
+at&nbsp;once.<br>
+&nbsp;<br>
+&nbsp;<br>
+All&nbsp;arguments&nbsp;that&nbsp;are&nbsp;not&nbsp;explicitly&nbsp;handled&nbsp;by&nbsp;<a href="#ChromeInterface">ChromeInterface</a>()&nbsp;are&nbsp;forwarded&nbsp;to&nbsp;the<br>
+underlying&nbsp;ChromeExecutionManager()&nbsp;instace.&nbsp;This&nbsp;is&nbsp;how&nbsp;you&nbsp;can&nbsp;control&nbsp;the&nbsp;behaviour<br>
+of&nbsp;the&nbsp;execution&nbsp;manager,&nbsp;including&nbsp;things&nbsp;like&nbsp;whether&nbsp;chromium&nbsp;is&nbsp;run&nbsp;in&nbsp;headless<br>
+mode,&nbsp;etc...</tt></dd></dl>
 
 <dl><dt><a name="ChromeInterface-asynchronous_command"><strong>asynchronous_command</strong></a>(self, command, **kwargs)</dt><dd><tt>Forward&nbsp;a&nbsp;command&nbsp;to&nbsp;the&nbsp;remote&nbsp;chrome&nbsp;instance&nbsp;via&nbsp;the&nbsp;transport<br>
 connection,&nbsp;returning&nbsp;the&nbsp;send_id&nbsp;for&nbsp;the&nbsp;sent&nbsp;command.<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;primarily&nbsp;useful&nbsp;for&nbsp;writing&nbsp;intentionally&nbsp;async&nbsp;code&nbsp;that<br>
 handles&nbsp;it's&nbsp;own&nbsp;responses&nbsp;via&nbsp;the&nbsp;install_message_handler&nbsp;facilities.</tt></dd></dl>
-
-<dl><dt><a name="ChromeInterface-clear_content_listener_cache"><strong>clear_content_listener_cache</strong></a>(self)</dt><dd><tt>The&nbsp;handlers&nbsp;installed&nbsp;by&nbsp;<a href="#ChromeInterface-install_listener_for_content">install_listener_for_content</a>()&nbsp;have&nbsp;some&nbsp;persistant<br>
-storage&nbsp;in&nbsp;the&nbsp;class&nbsp;to&nbsp;allow&nbsp;tracking&nbsp;request-id&nbsp;-&gt;&nbsp;response&nbsp;body&nbsp;mappings.<br>
-&nbsp;<br>
-These&nbsp;shouldn't&nbsp;take&nbsp;much&nbsp;RAM,&nbsp;but&nbsp;extremely&nbsp;long&nbsp;chromium&nbsp;execution&nbsp;times&nbsp;can<br>
-conceivably&nbsp;cause&nbsp;them&nbsp;to&nbsp;grow&nbsp;excessively.<br>
-&nbsp;<br>
-This&nbsp;call&nbsp;clears&nbsp;them.&nbsp;Note&nbsp;that&nbsp;calling&nbsp;this&nbsp;while&nbsp;a&nbsp;request&nbsp;is&nbsp;in-flight&nbsp;may&nbsp;cause<br>
-strange&nbsp;callback&nbsp;errors.</tt></dd></dl>
 
 <dl><dt><a name="ChromeInterface-close"><strong>close</strong></a>(self)</dt></dl>
 
@@ -89,6 +95,33 @@ This&nbsp;command&nbsp;simply&nbsp;returns&nbsp;all&nbsp;waiting&nbsp;messages&n
 instance.&nbsp;This&nbsp;can&nbsp;be&nbsp;useful&nbsp;when&nbsp;waiting&nbsp;for&nbsp;a&nbsp;specific&nbsp;asynchronous&nbsp;message<br>
 from&nbsp;chrome,&nbsp;but&nbsp;higher&nbsp;level&nbsp;calls&nbsp;are&nbsp;better&nbsp;suited&nbsp;for&nbsp;managing&nbsp;wait-for-message<br>
 type&nbsp;needs.</tt></dd></dl>
+
+<dl><dt><a name="ChromeInterface-new_tab"><strong>new_tab</strong></a>(self, *args, **kwargs)</dt></dl>
+
+<dl><dt><a name="ChromeInterface-process_available"><strong>process_available</strong></a>(self)</dt><dd><tt>Process&nbsp;all&nbsp;messages&nbsp;in&nbsp;the&nbsp;socket&nbsp;rx&nbsp;queue.<br>
+&nbsp;<br>
+Will&nbsp;block&nbsp;for&nbsp;at&nbsp;least&nbsp;100&nbsp;milliseconds.</tt></dd></dl>
+
+<dl><dt><a name="ChromeInterface-synchronous_command"><strong>synchronous_command</strong></a>(self, *args, **kwargs)</dt><dd><tt>Forward&nbsp;a&nbsp;command&nbsp;to&nbsp;the&nbsp;remote&nbsp;chrome&nbsp;instance&nbsp;via&nbsp;the&nbsp;transport<br>
+connection,&nbsp;and&nbsp;check&nbsp;the&nbsp;return&nbsp;for&nbsp;an&nbsp;error.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;command&nbsp;resulted&nbsp;in&nbsp;an&nbsp;error,&nbsp;a&nbsp;`ChromeController.ChromeError`&nbsp;is&nbsp;raised,<br>
+with&nbsp;the&nbsp;error&nbsp;string&nbsp;containing&nbsp;the&nbsp;response&nbsp;from&nbsp;the&nbsp;remote<br>
+chrome&nbsp;instance&nbsp;describing&nbsp;the&nbsp;problem&nbsp;and&nbsp;it's&nbsp;cause.<br>
+&nbsp;<br>
+Otherwise,&nbsp;the&nbsp;decoded&nbsp;json&nbsp;data-structure&nbsp;returned&nbsp;from&nbsp;the&nbsp;remote&nbsp;instance&nbsp;is<br>
+returned.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="ChromeController.manager_base.html#ChromeListenerMixin">ChromeListenerMixin</a>:<br>
+<dl><dt><a name="ChromeInterface-clear_content_listener_cache"><strong>clear_content_listener_cache</strong></a>(self)</dt><dd><tt>The&nbsp;handlers&nbsp;installed&nbsp;by&nbsp;<a href="#ChromeInterface-install_listener_for_content">install_listener_for_content</a>()&nbsp;have&nbsp;some&nbsp;persistant<br>
+storage&nbsp;in&nbsp;the&nbsp;class&nbsp;to&nbsp;allow&nbsp;tracking&nbsp;request-id&nbsp;-&gt;&nbsp;response&nbsp;body&nbsp;mappings.<br>
+&nbsp;<br>
+These&nbsp;shouldn't&nbsp;take&nbsp;much&nbsp;RAM,&nbsp;but&nbsp;extremely&nbsp;long&nbsp;chromium&nbsp;execution&nbsp;times&nbsp;can<br>
+conceivably&nbsp;cause&nbsp;them&nbsp;to&nbsp;grow&nbsp;excessively.<br>
+&nbsp;<br>
+This&nbsp;call&nbsp;clears&nbsp;them.&nbsp;Note&nbsp;that&nbsp;calling&nbsp;this&nbsp;while&nbsp;a&nbsp;request&nbsp;is&nbsp;in-flight&nbsp;may&nbsp;cause<br>
+strange&nbsp;callback&nbsp;errors.</tt></dd></dl>
 
 <dl><dt><a name="ChromeInterface-install_listener_for_content"><strong>install_listener_for_content</strong></a>(self, handler)</dt><dd><tt>Install&nbsp;a&nbsp;content&nbsp;handler.<br>
 `handler`&nbsp;will&nbsp;be&nbsp;called&nbsp;for&nbsp;each&nbsp;received&nbsp;content&nbsp;item.<br>
@@ -104,12 +137,6 @@ The&nbsp;handler&nbsp;will&nbsp;be&nbsp;called&nbsp;with&nbsp;the&nbsp;tab&nbsp;
 &nbsp;<br>
 NOTE:&nbsp;Handler&nbsp;call&nbsp;order&nbsp;is&nbsp;not&nbsp;specified!</tt></dd></dl>
 
-<dl><dt><a name="ChromeInterface-new_tab"><strong>new_tab</strong></a>(self, *args, **kwargs)</dt></dl>
-
-<dl><dt><a name="ChromeInterface-process_available"><strong>process_available</strong></a>(self)</dt><dd><tt>Process&nbsp;all&nbsp;messages&nbsp;in&nbsp;the&nbsp;socket&nbsp;rx&nbsp;queue.<br>
-&nbsp;<br>
-Will&nbsp;block&nbsp;for&nbsp;at&nbsp;least&nbsp;100&nbsp;milliseconds.</tt></dd></dl>
-
 <dl><dt><a name="ChromeInterface-remove_all_handlers"><strong>remove_all_handlers</strong></a>(self)</dt><dd><tt>Remove&nbsp;all&nbsp;message&nbsp;handlers&nbsp;for&nbsp;the&nbsp;current&nbsp;tab.</tt></dd></dl>
 
 <dl><dt><a name="ChromeInterface-remove_handlers"><strong>remove_handlers</strong></a>(self, handler)</dt><dd><tt>Remove&nbsp;handler&nbsp;`handler`&nbsp;from&nbsp;the&nbsp;list&nbsp;of&nbsp;message&nbsp;handlers&nbsp;that&nbsp;will&nbsp;be&nbsp;called<br>
@@ -117,15 +144,83 @@ on&nbsp;all&nbsp;received&nbsp;messages&nbsp;for&nbsp;the&nbsp;current&nbsp;tab.
 &nbsp;<br>
 If&nbsp;the&nbsp;the&nbsp;handler&nbsp;is&nbsp;not&nbsp;present,&nbsp;a&nbsp;KeyError&nbsp;will&nbsp;be&nbsp;raised.</tt></dd></dl>
 
-<dl><dt><a name="ChromeInterface-synchronous_command"><strong>synchronous_command</strong></a>(self, *args, **kwargs)</dt><dd><tt>Forward&nbsp;a&nbsp;command&nbsp;to&nbsp;the&nbsp;remote&nbsp;chrome&nbsp;instance&nbsp;via&nbsp;the&nbsp;transport<br>
-connection,&nbsp;and&nbsp;check&nbsp;the&nbsp;return&nbsp;for&nbsp;an&nbsp;error.<br>
+<dl><dt><a name="ChromeInterface-set_filter_func"><strong>set_filter_func</strong></a>(self, func)</dt><dd><tt>Specify&nbsp;a&nbsp;function&nbsp;with&nbsp;a&nbsp;signature&nbsp;`func(url,&nbsp;meta)`&nbsp;to&nbsp;be&nbsp;used&nbsp;as&nbsp;the&nbsp;precondition&nbsp;filter<br>
+for&nbsp;requesting&nbsp;full&nbsp;fetch&nbsp;results&nbsp;from&nbsp;the&nbsp;browser.<br>
 &nbsp;<br>
-If&nbsp;the&nbsp;command&nbsp;resulted&nbsp;in&nbsp;an&nbsp;error,&nbsp;a&nbsp;`ChromeController.ChromeError`&nbsp;is&nbsp;raised,<br>
-with&nbsp;the&nbsp;error&nbsp;string&nbsp;containing&nbsp;the&nbsp;response&nbsp;from&nbsp;the&nbsp;remote<br>
-chrome&nbsp;instance&nbsp;describing&nbsp;the&nbsp;problem&nbsp;and&nbsp;it's&nbsp;cause.<br>
+Precondition&nbsp;check&nbsp;before&nbsp;executing&nbsp;the&nbsp;fetch&nbsp;of&nbsp;content&nbsp;for&nbsp;url&nbsp;`url`&nbsp;from&nbsp;the&nbsp;browser.<br>
+This&nbsp;is&nbsp;mostly&nbsp;useful&nbsp;for&nbsp;preventing&nbsp;the&nbsp;overhead&nbsp;of&nbsp;requesting&nbsp;large&nbsp;binary&nbsp;files&nbsp;multiple&nbsp;times.<br>
 &nbsp;<br>
-Otherwise,&nbsp;the&nbsp;decoded&nbsp;json&nbsp;data-structure&nbsp;returned&nbsp;from&nbsp;the&nbsp;remote&nbsp;instance&nbsp;is<br>
-returned.</tt></dd></dl>
+Overriding&nbsp;and&nbsp;returning&nbsp;false&nbsp;on&nbsp;later&nbsp;requests&nbsp;prevents&nbsp;additionl&nbsp;`Network.getResponseBody`&nbsp;invocations<br>
+being&nbsp;set&nbsp;to&nbsp;the&nbsp;browser.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;specifying&nbsp;func=None&nbsp;is&nbsp;a&nbsp;special&nbsp;case&nbsp;where&nbsp;a&nbsp;empty&nbsp;pass&nbsp;function&nbsp;that&nbsp;always&nbsp;returns&nbsp;true&nbsp;will<br>
+be&nbsp;used.<br>
+&nbsp;<br>
+Additionally,&nbsp;this&nbsp;function&nbsp;is&nbsp;*per&nbsp;tab*,&nbsp;and&nbsp;not&nbsp;automatically&nbsp;copied&nbsp;to&nbsp;a&nbsp;new&nbsp;tab&nbsp;when&nbsp;it&nbsp;is&nbsp;created.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="ChromeController.manager_base.html#ChromeListenerMixin">ChromeListenerMixin</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ChromeListenerMixin">class <strong>ChromeListenerMixin</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Docs&nbsp;plzzzz<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ChromeListenerMixin-__init__"><strong>__init__</strong></a>(self, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="ChromeListenerMixin-clear_content_listener_cache"><strong>clear_content_listener_cache</strong></a>(self)</dt><dd><tt>The&nbsp;handlers&nbsp;installed&nbsp;by&nbsp;<a href="#ChromeListenerMixin-install_listener_for_content">install_listener_for_content</a>()&nbsp;have&nbsp;some&nbsp;persistant<br>
+storage&nbsp;in&nbsp;the&nbsp;class&nbsp;to&nbsp;allow&nbsp;tracking&nbsp;request-id&nbsp;-&gt;&nbsp;response&nbsp;body&nbsp;mappings.<br>
+&nbsp;<br>
+These&nbsp;shouldn't&nbsp;take&nbsp;much&nbsp;RAM,&nbsp;but&nbsp;extremely&nbsp;long&nbsp;chromium&nbsp;execution&nbsp;times&nbsp;can<br>
+conceivably&nbsp;cause&nbsp;them&nbsp;to&nbsp;grow&nbsp;excessively.<br>
+&nbsp;<br>
+This&nbsp;call&nbsp;clears&nbsp;them.&nbsp;Note&nbsp;that&nbsp;calling&nbsp;this&nbsp;while&nbsp;a&nbsp;request&nbsp;is&nbsp;in-flight&nbsp;may&nbsp;cause<br>
+strange&nbsp;callback&nbsp;errors.</tt></dd></dl>
+
+<dl><dt><a name="ChromeListenerMixin-install_listener_for_content"><strong>install_listener_for_content</strong></a>(self, handler)</dt><dd><tt>Install&nbsp;a&nbsp;content&nbsp;handler.<br>
+`handler`&nbsp;will&nbsp;be&nbsp;called&nbsp;for&nbsp;each&nbsp;received&nbsp;content&nbsp;item.<br>
+Internally,&nbsp;this&nbsp;involves&nbsp;a&nbsp;larger&nbsp;set&nbsp;of&nbsp;handlers&nbsp;to&nbsp;track&nbsp;the&nbsp;mappings&nbsp;of&nbsp;request-id&nbsp;to&nbsp;actual&nbsp;URL,<br>
+and&nbsp;asynchronously&nbsp;invoked&nbsp;Network.getResponseBody&nbsp;against&nbsp;the&nbsp;chromium&nbsp;tab&nbsp;instance.<br>
+&nbsp;<br>
+The&nbsp;handler&nbsp;is&nbsp;invoked&nbsp;as:<br>
+`handler(self,&nbsp;req_url,&nbsp;response_body)`&nbsp;where&nbsp;self&nbsp;is&nbsp;the&nbsp;pointer&nbsp;to&nbsp;the&nbsp;local&nbsp;<a href="#ChromeInterface">ChromeInterface</a>&nbsp;instance.</tt></dd></dl>
+
+<dl><dt><a name="ChromeListenerMixin-install_message_handler"><strong>install_message_handler</strong></a>(self, handler)</dt><dd><tt>Add&nbsp;handler&nbsp;`handler`&nbsp;to&nbsp;the&nbsp;list&nbsp;of&nbsp;message&nbsp;handlers&nbsp;that&nbsp;will&nbsp;be&nbsp;called&nbsp;on&nbsp;all&nbsp;received&nbsp;messages.<br>
+&nbsp;<br>
+The&nbsp;handler&nbsp;will&nbsp;be&nbsp;called&nbsp;with&nbsp;the&nbsp;tab&nbsp;context&nbsp;for&nbsp;each&nbsp;message&nbsp;the&nbsp;tab&nbsp;generates.<br>
+&nbsp;<br>
+NOTE:&nbsp;Handler&nbsp;call&nbsp;order&nbsp;is&nbsp;not&nbsp;specified!</tt></dd></dl>
+
+<dl><dt><a name="ChromeListenerMixin-remove_all_handlers"><strong>remove_all_handlers</strong></a>(self)</dt><dd><tt>Remove&nbsp;all&nbsp;message&nbsp;handlers&nbsp;for&nbsp;the&nbsp;current&nbsp;tab.</tt></dd></dl>
+
+<dl><dt><a name="ChromeListenerMixin-remove_handlers"><strong>remove_handlers</strong></a>(self, handler)</dt><dd><tt>Remove&nbsp;handler&nbsp;`handler`&nbsp;from&nbsp;the&nbsp;list&nbsp;of&nbsp;message&nbsp;handlers&nbsp;that&nbsp;will&nbsp;be&nbsp;called<br>
+on&nbsp;all&nbsp;received&nbsp;messages&nbsp;for&nbsp;the&nbsp;current&nbsp;tab.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;the&nbsp;handler&nbsp;is&nbsp;not&nbsp;present,&nbsp;a&nbsp;KeyError&nbsp;will&nbsp;be&nbsp;raised.</tt></dd></dl>
+
+<dl><dt><a name="ChromeListenerMixin-set_filter_func"><strong>set_filter_func</strong></a>(self, func)</dt><dd><tt>Specify&nbsp;a&nbsp;function&nbsp;with&nbsp;a&nbsp;signature&nbsp;`func(url,&nbsp;meta)`&nbsp;to&nbsp;be&nbsp;used&nbsp;as&nbsp;the&nbsp;precondition&nbsp;filter<br>
+for&nbsp;requesting&nbsp;full&nbsp;fetch&nbsp;results&nbsp;from&nbsp;the&nbsp;browser.<br>
+&nbsp;<br>
+Precondition&nbsp;check&nbsp;before&nbsp;executing&nbsp;the&nbsp;fetch&nbsp;of&nbsp;content&nbsp;for&nbsp;url&nbsp;`url`&nbsp;from&nbsp;the&nbsp;browser.<br>
+This&nbsp;is&nbsp;mostly&nbsp;useful&nbsp;for&nbsp;preventing&nbsp;the&nbsp;overhead&nbsp;of&nbsp;requesting&nbsp;large&nbsp;binary&nbsp;files&nbsp;multiple&nbsp;times.<br>
+&nbsp;<br>
+Overriding&nbsp;and&nbsp;returning&nbsp;false&nbsp;on&nbsp;later&nbsp;requests&nbsp;prevents&nbsp;additionl&nbsp;`Network.getResponseBody`&nbsp;invocations<br>
+being&nbsp;set&nbsp;to&nbsp;the&nbsp;browser.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;specifying&nbsp;func=None&nbsp;is&nbsp;a&nbsp;special&nbsp;case&nbsp;where&nbsp;a&nbsp;empty&nbsp;pass&nbsp;function&nbsp;that&nbsp;always&nbsp;returns&nbsp;true&nbsp;will<br>
+be&nbsp;used.<br>
+&nbsp;<br>
+Additionally,&nbsp;this&nbsp;function&nbsp;is&nbsp;*per&nbsp;tab*,&nbsp;and&nbsp;not&nbsp;automatically&nbsp;copied&nbsp;to&nbsp;a&nbsp;new&nbsp;tab&nbsp;when&nbsp;it&nbsp;is&nbsp;created.</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -145,5 +240,6 @@ Data descriptors defined here:<br>
 <td width="100%"><dl><dt><a name="-decode_chrome_getResponseBody"><strong>decode_chrome_getResponseBody</strong></a>(message)</dt><dd><tt>Given&nbsp;a&nbsp;response&nbsp;dict&nbsp;from&nbsp;a&nbsp;Network.getResponseBody&nbsp;command,<br>
 return&nbsp;either&nbsp;the&nbsp;properly&nbsp;decoded&nbsp;binary&nbsp;<a href="builtins.html#object">object</a>,&nbsp;or&nbsp;the&nbsp;unicode<br>
 string.</tt></dd></dl>
+ <dl><dt><a name="-filter_stub"><strong>filter_stub</strong></a>(url, meta)</dt></dl>
 </td></tr></table>
 </body></html>

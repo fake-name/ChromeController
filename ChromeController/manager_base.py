@@ -209,6 +209,12 @@ class ChromeInterface(ChromeListenerMixin):
 		of chromium instances, if you are not trying to instantiate multiple instances of chromium
 		at once.
 
+
+		All arguments that are not explicitly handled by ChromeInterface() are forwarded to the
+		underlying ChromeExecutionManager() instace. This is how you can control the behaviour
+		of the execution manager, including things like whether chromium is run in headless
+		mode, etc...
+
 		"""
 
 		super().__init__()
