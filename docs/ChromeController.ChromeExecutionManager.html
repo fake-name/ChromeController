@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: class ChromeExecutionManager</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><strong>ChromeController.ChromeExecutionManager</strong> = <a name="ChromeController.ChromeExecutionManager">class ChromeExecutionManager</a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Class&nbsp;for&nbsp;managing&nbsp;talking&nbsp;to&nbsp;a&nbsp;chromium&nbsp;instance,&nbsp;as&nbsp;well&nbsp;as<br>
+managing&nbsp;the&nbsp;chromium&nbsp;instance's&nbsp;execution&nbsp;lifetime.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ChromeExecutionManager-__del__"><strong>__del__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeExecutionManager-__init__"><strong>__init__</strong></a>(self, binary, base_tab_key, host='localhost', port=None, websocket_timeout=10, enable_gpu=False, headless=True, xvfb=False, additional_options=[])</dt><dd><tt>Start&nbsp;up&nbsp;a&nbsp;chromium&nbsp;instance&nbsp;binary&nbsp;`binary`,&nbsp;with&nbsp;the&nbsp;base&nbsp;debug&nbsp;port&nbsp;`port`,<br>
+on&nbsp;host&nbsp;`localhost`.<br>
+&nbsp;<br>
+Note:&nbsp;If&nbsp;the&nbsp;port&nbsp;is&nbsp;set&nbsp;to&nbsp;None&nbsp;(the&nbsp;default),&nbsp;the&nbsp;port&nbsp;will&nbsp;be&nbsp;the&nbsp;next&nbsp;availble&nbsp;port&nbsp;accounting&nbsp;for&nbsp;other<br>
+chrome&nbsp;instances&nbsp;in&nbsp;the&nbsp;current&nbsp;python&nbsp;process.<br>
+&nbsp;<br>
+If&nbsp;port&nbsp;is&nbsp;not&nbsp;none,&nbsp;and&nbsp;the&nbsp;port&nbsp;is&nbsp;already&nbsp;in&nbsp;use,&nbsp;you&nbsp;will&nbsp;get&nbsp;a&nbsp;ReusedPortError.<br>
+&nbsp;<br>
+base_tab_key&nbsp;is&nbsp;any&nbsp;hashable&nbsp;python&nbsp;object&nbsp;that&nbsp;is&nbsp;used&nbsp;for&nbsp;multi-tab&nbsp;interfacing.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-asynchronous_command"><strong>asynchronous_command</strong></a>(self, command, tab_key, **params)</dt><dd><tt>Asynchronously&nbsp;send&nbsp;command&nbsp;`command`&nbsp;with&nbsp;params&nbsp;`params`&nbsp;in&nbsp;the<br>
+remote&nbsp;chrome&nbsp;instance,&nbsp;returning&nbsp;the&nbsp;send_id&nbsp;for&nbsp;the&nbsp;sent&nbsp;command.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-close_all"><strong>close_all</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeExecutionManager-close_chromium"><strong>close_chromium</strong></a>(self)</dt><dd><tt>Close&nbsp;the&nbsp;remote&nbsp;chromium&nbsp;instance.<br>
+&nbsp;<br>
+This&nbsp;command&nbsp;is&nbsp;normally&nbsp;executed&nbsp;as&nbsp;part&nbsp;of&nbsp;the&nbsp;class&nbsp;destructor.<br>
+It&nbsp;can&nbsp;be&nbsp;called&nbsp;early&nbsp;without&nbsp;issue,&nbsp;but&nbsp;calling&nbsp;ANY&nbsp;class&nbsp;functions<br>
+after&nbsp;the&nbsp;remote&nbsp;chromium&nbsp;instance&nbsp;is&nbsp;shut&nbsp;down&nbsp;will&nbsp;have&nbsp;unknown&nbsp;effects.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;if&nbsp;you&nbsp;are&nbsp;rapidly&nbsp;creating&nbsp;and&nbsp;destroying&nbsp;ChromeController&nbsp;instances,<br>
+you&nbsp;may&nbsp;need&nbsp;to&nbsp;*explicitly*&nbsp;call&nbsp;this&nbsp;before&nbsp;destruction.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-close_tab"><strong>close_tab</strong></a>(self, tab_key)</dt></dl>
+
+<dl><dt><a name="ChromeExecutionManager-close_websockets"><strong>close_websockets</strong></a>(self)</dt><dd><tt>Close&nbsp;websocket&nbsp;connection&nbsp;to&nbsp;remote&nbsp;browser.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-connect_to_chromium"><strong>connect_to_chromium</strong></a>(self, tab_key)</dt><dd><tt>Open&nbsp;a&nbsp;websocket&nbsp;connection&nbsp;to&nbsp;remote&nbsp;browser,&nbsp;determined&nbsp;by<br>
+self.<strong>host</strong>&nbsp;and&nbsp;self.<strong>port</strong>.&nbsp;&nbsp;Each&nbsp;tab&nbsp;has&nbsp;it's&nbsp;own&nbsp;websocket<br>
+endpoint.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;the&nbsp;manager&nbsp;maintains&nbsp;a&nbsp;connection&nbsp;to&nbsp;a&nbsp;blank&nbsp;tab&nbsp;to<br>
+prevent&nbsp;closing&nbsp;all&nbsp;remote&nbsp;tabs&nbsp;from&nbsp;causing&nbsp;the&nbsp;browser&nbsp;to&nbsp;exit.<br>
+This&nbsp;tab&nbsp;is&nbsp;not&nbsp;used&nbsp;by&nbsp;anything.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-drain"><strong>drain</strong></a>(self, tab_key)</dt><dd><tt>Return&nbsp;all&nbsp;messages&nbsp;in&nbsp;waiting&nbsp;for&nbsp;the&nbsp;websocket&nbsp;connection.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-fetch_tablist"><strong>fetch_tablist</strong></a>(self)</dt><dd><tt>Connect&nbsp;to&nbsp;host:port&nbsp;and&nbsp;request&nbsp;list&nbsp;of&nbsp;tabs<br>
+return&nbsp;list&nbsp;of&nbsp;dicts&nbsp;of&nbsp;data&nbsp;about&nbsp;open&nbsp;tabs.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-flush"><strong>flush</strong></a>(self, tab_key)</dt><dd><tt>Flush&nbsp;the&nbsp;pending&nbsp;RX&nbsp;buffer&nbsp;for&nbsp;a&nbsp;specific&nbsp;tab&nbsp;key.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-install_message_handler_for_tab_key"><strong>install_message_handler_for_tab_key</strong></a>(self, tab_key, handler)</dt><dd><tt>Add&nbsp;handler&nbsp;`handler`&nbsp;to&nbsp;the&nbsp;list&nbsp;of&nbsp;message&nbsp;handlers&nbsp;that&nbsp;will&nbsp;be&nbsp;called<br>
+on&nbsp;all&nbsp;received&nbsp;messages&nbsp;for&nbsp;the&nbsp;tab&nbsp;with&nbsp;a&nbsp;key&nbsp;of&nbsp;`tab_key`.<br>
+&nbsp;<br>
+The&nbsp;handler&nbsp;will&nbsp;be&nbsp;called&nbsp;with&nbsp;the&nbsp;tab&nbsp;context&nbsp;for&nbsp;each&nbsp;message&nbsp;the&nbsp;tab&nbsp;generates.<br>
+&nbsp;<br>
+NOTE:&nbsp;Handler&nbsp;call&nbsp;order&nbsp;is&nbsp;not&nbsp;specified!</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-pprint_tablist"><strong>pprint_tablist</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeExecutionManager-process_available"><strong>process_available</strong></a>(self, tab_key, timeout=0.1)</dt><dd><tt>Process&nbsp;all&nbsp;messages&nbsp;in&nbsp;the&nbsp;socket&nbsp;rx&nbsp;queue.<br>
+&nbsp;<br>
+Will&nbsp;block&nbsp;for&nbsp;at&nbsp;least&nbsp;100&nbsp;milliseconds.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-recv"><strong>recv</strong></a>(self, tab_key, message_id=None, timeout=30)</dt><dd><tt>Recieve&nbsp;a&nbsp;message,&nbsp;optionally&nbsp;filtering&nbsp;for&nbsp;a&nbsp;specified&nbsp;message&nbsp;id.<br>
+&nbsp;<br>
+If&nbsp;`message_id`&nbsp;is&nbsp;none,&nbsp;the&nbsp;first&nbsp;command&nbsp;in&nbsp;the&nbsp;receive&nbsp;queue&nbsp;is&nbsp;returned.<br>
+If&nbsp;`message_id`&nbsp;is&nbsp;not&nbsp;none,&nbsp;the&nbsp;command&nbsp;waits&nbsp;untill&nbsp;a&nbsp;message&nbsp;is&nbsp;received&nbsp;with<br>
+the&nbsp;specified&nbsp;id,&nbsp;or&nbsp;it&nbsp;times&nbsp;out.<br>
+&nbsp;<br>
+Timeout&nbsp;is&nbsp;the&nbsp;number&nbsp;of&nbsp;seconds&nbsp;to&nbsp;wait&nbsp;for&nbsp;a&nbsp;response,&nbsp;or&nbsp;`None`&nbsp;if&nbsp;the&nbsp;timeout<br>
+has&nbsp;expired&nbsp;with&nbsp;no&nbsp;response.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-recv_all_filtered"><strong>recv_all_filtered</strong></a>(self, keycheck, tab_key, timeout=0.5)</dt><dd><tt>Receive&nbsp;a&nbsp;all&nbsp;messages&nbsp;matching&nbsp;a&nbsp;filter,&nbsp;using&nbsp;the&nbsp;callable&nbsp;`keycheck`&nbsp;to&nbsp;filter&nbsp;received&nbsp;messages<br>
+for&nbsp;content.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;will&nbsp;*ALWAY*&nbsp;block&nbsp;for&nbsp;at&nbsp;least&nbsp;`timeout`&nbsp;seconds.<br>
+&nbsp;<br>
+If&nbsp;chromium&nbsp;is&nbsp;for&nbsp;some&nbsp;reason&nbsp;continuously&nbsp;streaming&nbsp;responses,&nbsp;it&nbsp;may&nbsp;block&nbsp;forever!<br>
+&nbsp;<br>
+`keycheck`&nbsp;is&nbsp;expected&nbsp;to&nbsp;be&nbsp;a&nbsp;callable&nbsp;that&nbsp;takes&nbsp;a&nbsp;single&nbsp;parameter&nbsp;(the&nbsp;decoded&nbsp;response<br>
+from&nbsp;chromium),&nbsp;and&nbsp;returns&nbsp;a&nbsp;boolean&nbsp;(true,&nbsp;if&nbsp;the&nbsp;command&nbsp;is&nbsp;the&nbsp;one&nbsp;filtered&nbsp;for,&nbsp;or&nbsp;false<br>
+if&nbsp;the&nbsp;command&nbsp;is&nbsp;not&nbsp;the&nbsp;one&nbsp;filtered&nbsp;for).<br>
+&nbsp;<br>
+```<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;check_func(message):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;message_id&nbsp;is&nbsp;None:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;True<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;"id"&nbsp;in&nbsp;message:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;message['id']&nbsp;==&nbsp;message_id<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;False<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;self.<a href="#ChromeController.ChromeExecutionManager-recv_filtered">recv_filtered</a>(check_func,&nbsp;timeout)<br>
+&nbsp;<br>
+```<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;the&nbsp;function&nbsp;is&nbsp;defined&nbsp;dynamically,&nbsp;and&nbsp;`message_id`&nbsp;is&nbsp;captured&nbsp;via&nbsp;closure.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-recv_filtered"><strong>recv_filtered</strong></a>(self, keycheck, tab_key, timeout=30, message=None)</dt><dd><tt>Receive&nbsp;a&nbsp;filtered&nbsp;message,&nbsp;using&nbsp;the&nbsp;callable&nbsp;`keycheck`&nbsp;to&nbsp;filter&nbsp;received&nbsp;messages<br>
+for&nbsp;content.<br>
+&nbsp;<br>
+`keycheck`&nbsp;is&nbsp;expected&nbsp;to&nbsp;be&nbsp;a&nbsp;callable&nbsp;that&nbsp;takes&nbsp;a&nbsp;single&nbsp;parameter&nbsp;(the&nbsp;decoded&nbsp;response<br>
+from&nbsp;chromium),&nbsp;and&nbsp;returns&nbsp;a&nbsp;boolean&nbsp;(true,&nbsp;if&nbsp;the&nbsp;command&nbsp;is&nbsp;the&nbsp;one&nbsp;filtered&nbsp;for,&nbsp;or&nbsp;false<br>
+if&nbsp;the&nbsp;command&nbsp;is&nbsp;not&nbsp;the&nbsp;one&nbsp;filtered&nbsp;for).<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;used&nbsp;internally,&nbsp;for&nbsp;example,&nbsp;by&nbsp;`<a href="#ChromeController.ChromeExecutionManager-recv">recv</a>()`,&nbsp;to&nbsp;filter&nbsp;the&nbsp;response&nbsp;for&nbsp;a&nbsp;specific&nbsp;ID:<br>
+&nbsp;<br>
+```<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;check_func(message):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;message_id&nbsp;is&nbsp;None:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;True<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;"id"&nbsp;in&nbsp;message:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;message['id']&nbsp;==&nbsp;message_id<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;False<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;self.<a href="#ChromeController.ChromeExecutionManager-recv_filtered">recv_filtered</a>(check_func,&nbsp;timeout)<br>
+&nbsp;<br>
+```<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;the&nbsp;function&nbsp;is&nbsp;defined&nbsp;dynamically,&nbsp;and&nbsp;`message_id`&nbsp;is&nbsp;captured&nbsp;via&nbsp;closure.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-remove_all_handlers_for_tab_key"><strong>remove_all_handlers_for_tab_key</strong></a>(self, tab_key)</dt><dd><tt>Add&nbsp;handler&nbsp;`handler`&nbsp;to&nbsp;the&nbsp;list&nbsp;of&nbsp;message&nbsp;handlers&nbsp;that&nbsp;will&nbsp;be&nbsp;called&nbsp;on&nbsp;all&nbsp;received&nbsp;messages.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;tab&nbsp;key&nbsp;is&nbsp;not&nbsp;present,&nbsp;no&nbsp;error&nbsp;will&nbsp;be&nbsp;raised.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-remove_handlers_for_tab_key"><strong>remove_handlers_for_tab_key</strong></a>(self, tab_key, handler)</dt><dd><tt>Remove&nbsp;handler&nbsp;`handler`&nbsp;from&nbsp;the&nbsp;list&nbsp;of&nbsp;message&nbsp;handlers&nbsp;that&nbsp;will&nbsp;be&nbsp;called<br>
+on&nbsp;all&nbsp;received&nbsp;messages&nbsp;for&nbsp;the&nbsp;tab&nbsp;with&nbsp;a&nbsp;key&nbsp;of&nbsp;`tab_key`.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;tab_key&nbsp;is&nbsp;not&nbsp;present,&nbsp;or&nbsp;the&nbsp;handler&nbsp;is&nbsp;not&nbsp;present&nbsp;in&nbsp;the&nbsp;tab,&nbsp;a<br>
+KeyError&nbsp;will&nbsp;be&nbsp;raised.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;potentially&nbsp;of&nbsp;little&nbsp;use,&nbsp;since&nbsp;the&nbsp;tab&nbsp;layer&nbsp;uses&nbsp;a&nbsp;dynamically<br>
+defined&nbsp;closure&nbsp;to&nbsp;capture&nbsp;the&nbsp;calling&nbsp;tab&nbsp;context,&nbsp;so&nbsp;attempting&nbsp;to&nbsp;remove<br>
+a&nbsp;defined&nbsp;funtion&nbsp;will&nbsp;fail&nbsp;since&nbsp;the&nbsp;function&nbsp;is&nbsp;no&nbsp;longer&nbsp;available.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-send"><strong>send</strong></a>(self, command, tab_key, params=None)</dt><dd><tt>Send&nbsp;command&nbsp;`command`&nbsp;with&nbsp;optional&nbsp;parameters&nbsp;`params`&nbsp;to&nbsp;the<br>
+remote&nbsp;chrome&nbsp;instance.<br>
+&nbsp;<br>
+The&nbsp;command&nbsp;`id`&nbsp;is&nbsp;automatically&nbsp;added&nbsp;to&nbsp;the&nbsp;outgoing&nbsp;message.<br>
+&nbsp;<br>
+return&nbsp;value&nbsp;is&nbsp;the&nbsp;command&nbsp;id,&nbsp;which&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;match&nbsp;a&nbsp;command<br>
+to&nbsp;it's&nbsp;associated&nbsp;response.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-synchronous_command"><strong>synchronous_command</strong></a>(self, command, tab_key, **params)</dt><dd><tt>Synchronously&nbsp;execute&nbsp;command&nbsp;`command`&nbsp;with&nbsp;params&nbsp;`params`&nbsp;in&nbsp;the<br>
+remote&nbsp;chrome&nbsp;instance,&nbsp;returning&nbsp;the&nbsp;response&nbsp;from&nbsp;the&nbsp;chrome&nbsp;instance.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table>
+</body></html>
