@@ -31,6 +31,9 @@ python3 -m pydoc -w ChromeController.Generator
 python3 -m pydoc -w ChromeController.Generator.Generated
 python3 -m pydoc -w ChromeController.Generator.gen
 python3 -m pydoc -w ChromeController
+python3 -m pydoc -w ChromeController.filter_funcs
+python3 -m pydoc -w ChromeController.exit_handler
+python3 -m pydoc -w ChromeController.__main__
 python3 -m pydoc -w ChromeController.manager
 python3 -m pydoc -w ChromeController.cr_exceptions
 python3 -m pydoc -w ChromeController.chrome_context
@@ -43,6 +46,9 @@ mv ChromeController.cr_exceptions.html                 ./docs/ChromeController.c
 mv ChromeController.Generator.gen.html                 ./docs/ChromeController.Generator.gen.html
 mv ChromeController.Generator.Generated.html           ./docs/ChromeController.Generator.Generated.html
 mv ChromeController.Generator.html                     ./docs/ChromeController.Generator.html
+mv ChromeController.exit_handler.html                  ./docs/ChromeController.exit_handler.html
+mv ChromeController.filter_funcs.html                  ./docs/ChromeController.filter_funcs.html
+mv ChromeController.__main__.html                      ./docs/ChromeController.__main__.html
 mv ChromeController.html                               ./docs/ChromeController.html
 mv ChromeController.manager_base.html                  ./docs/ChromeController.manager_base.html
 mv ChromeController.tab_pool.html                      ./docs/ChromeController.tab_pool.html
