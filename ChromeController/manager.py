@@ -967,6 +967,7 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 			while 1:
 				if time.time() - start_time > max_wait_timeout:
 					self.log.debug("Page was not idle after waiting %s seconds. Giving up and extracting content now.", max_wait_timeout)
+					break
 				self.transport.recv_filtered(
 						filter_funcs.wait_for_methods(target_events),
 						tab_key = self.tab_id,
