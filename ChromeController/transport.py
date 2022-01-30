@@ -167,6 +167,7 @@ class ChromeExecutionManager():
 
 		self.log.debug("Spawned process: %s, PID: %s", self.cr_proc, self.cr_proc.pid)
 		for x in range(100):
+			self._check_process_dead()
 			try:
 				self.tablist = self.fetch_tablist()
 
