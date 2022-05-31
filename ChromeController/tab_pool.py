@@ -83,8 +83,12 @@ class TabPooledChromium(object):
 
 	def close(self):
 		if self.alive:
-			self.root_tab.close()
-			self.chrome_interface.close()
+			# Handle a failure in constructing the chrome interface
+			if hasattr(self, "root_tab"):
+				self.root_tab.close()
+
+			if hasattr(self, "chrome_interface"):
+				self.chrome_interface.close()
 			self.alive = False
 
 	def __del__(self):
