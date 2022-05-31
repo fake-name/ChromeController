@@ -29,11 +29,15 @@ before_script:
     - python $(which nosetests) --with-coverage --exe --cover-package=ChromeController tests
 
 
+test:python3.7:
+  extends: .test
+  image: python:3.7
+  
 test:python3.8:
   extends: .test
   image: python:3.8
 
-# test:python3.9:
-#   extends: .test
-#   image: python:3.9
+test:python3.9:
+  extends: .test
+  image: python:3.9
 
