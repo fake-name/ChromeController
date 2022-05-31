@@ -19,15 +19,16 @@ before_script:
     - "ls"
     - "apt-get update"
     - "apt-get install -y --no-install-recommends ./google-chrome-stable_current_amd64.deb"
-    - "pip install nose"
-    - "pip install coverage"
-    - "pip install coveralls"
-    - "pip install ."
+    - "pip3 install nose"
+    - "pip3 install coverage"
+    - "pip3 install coveralls"
+    - "pip3 install ."
     - "useradd testuser"
 
 .test:
   script:
-    - exec su testuser -c python $(which nosetests) --with-coverage --exe --cover-package=ChromeController tests
+    - exec su testuser -c python $(which nosetests) --exe --cover-package=ChromeController tests
+    # - exec su testuser -c python $(which nosetests) --with-coverage --exe --cover-package=ChromeController tests
 
 
 # test:python3.7:
