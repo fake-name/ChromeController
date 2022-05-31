@@ -15,7 +15,7 @@ TIMEOUT_SECS       = 5
 
 class TestPlainCreation(unittest.TestCase):
 	def test_plain_instantiation_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			self.assertTrue(cr is not None)
 
 
@@ -32,14 +32,14 @@ class TestSimpleFetch(unittest.TestCase):
 		self.mock_server_thread.join()
 
 	def test_fetch_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			resp = cr.blocking_navigate_and_get_source("http://localhost:{}".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 			self.assertEqual(resp['content'], 'Root OK?')
 			self.assertEqual(resp['binary'], False)
 			self.assertEqual(resp['mimetype'], "text/html")
 
 	def test_fetch_decode_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			# text/html content should be decoded automatically.
 			resp = cr.blocking_navigate_and_get_source("http://localhost:{}/html-decode".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 			self.assertEqual(resp['content'], 'Root OK?')
@@ -47,35 +47,35 @@ class TestSimpleFetch(unittest.TestCase):
 			self.assertEqual(resp['mimetype'], "text/html")
 
 	def test_fetch_decode_json_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			resp = cr.blocking_navigate_and_get_source("http://localhost:{}/json/valid".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 			self.assertEqual(resp['content'], '{"oh" : "hai"}')
 			self.assertEqual(resp['binary'], False)
 			self.assertEqual(resp['mimetype'], "application/json")
 
 	def test_fetch_decode_json_2(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			resp = cr.blocking_navigate_and_get_source("http://localhost:{}/json/no-coding".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 			self.assertEqual(resp['content'], '{"oh" : "hai"}')
 			self.assertEqual(resp['binary'], False)
 			self.assertEqual(resp['mimetype'], "text/plain")
 
 	def test_fetch_decode_json_3(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			resp = cr.blocking_navigate_and_get_source("http://localhost:{}/json/invalid".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 			self.assertEqual(resp['content'], 'LOLWAT')
 			self.assertEqual(resp['binary'], False)
 			self.assertEqual(resp['mimetype'], "application/json")
 
 	def test_fetch_compressed_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			resp = cr.blocking_navigate_and_get_source("http://localhost:{}/compressed/gzip".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 			self.assertEqual(resp['content'], 'Root OK?')
 			self.assertEqual(resp['binary'], False)
 			self.assertEqual(resp['mimetype'], "text/html")
 
 	def test_fetch_compressed_2(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			resp = cr.blocking_navigate_and_get_source("http://localhost:{}/compressed/deflate".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 			self.assertEqual(resp['content'], 'Root OK?')
 			self.assertEqual(resp['binary'], False)
@@ -86,7 +86,7 @@ class TestSimpleFetch(unittest.TestCase):
 	########################################################################################################################
 
 	def test_get_head_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			inurl_1 = "http://localhost:{}/".format(self.mock_server_port)
 
 			cr.blocking_navigate(inurl_1)
@@ -100,7 +100,7 @@ class TestSimpleFetch(unittest.TestCase):
 	# Binary shit is broken.
 	# Siiigh.
 	# def test_get_head_2(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		inurl_2 = "http://localhost:{}/filename_mime/content-disposition".format(self.mock_server_port)
 
 	# 		cr.blocking_navigate(inurl_2)
@@ -114,7 +114,7 @@ class TestSimpleFetch(unittest.TestCase):
 	########################################################################################################################
 
 	def test_redirect_handling_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 
 			inurl_1 = "http://localhost:{}/redirect/from-1".format(self.mock_server_port)
 			resp = cr.blocking_navigate_and_get_source(inurl_1, timeout=TIMEOUT_SECS)
@@ -124,7 +124,7 @@ class TestSimpleFetch(unittest.TestCase):
 			self.assertEqual(resp['mimetype'], "text/html")
 
 	# def test_redirect_handling_2(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		inurl_2 = "http://localhost:{}/redirect/from-2".format(self.mock_server_port)
 	# 		resp = cr.blocking_navigate_and_get_source(inurl_2, timeout=TIMEOUT_SECS)
 
@@ -133,7 +133,7 @@ class TestSimpleFetch(unittest.TestCase):
 	# 		self.assertEqual(resp['mimetype'], "text/html")
 
 	def test_redirect_handling_3(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			inurl_3 = "http://localhost:{}/redirect/from-3".format(self.mock_server_port)
 			resp = cr.blocking_navigate_and_get_source(inurl_3, timeout=TIMEOUT_SECS)
 
@@ -142,7 +142,7 @@ class TestSimpleFetch(unittest.TestCase):
 			self.assertEqual(resp['mimetype'], "text/html")
 
 	def test_redirect_handling_4(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			inurl_3 = "http://localhost:{}/redirect/from-4".format(self.mock_server_port)
 			resp = cr.blocking_navigate_and_get_source(inurl_3, timeout=TIMEOUT_SECS)
 
@@ -151,7 +151,7 @@ class TestSimpleFetch(unittest.TestCase):
 			self.assertEqual(resp['mimetype'], "text/html")
 
 	def test_redirect_handling_3(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			inurl_3 = "http://localhost:{}/redirect/from-1".format(self.mock_server_port)
 			outurl_3 = "http://localhost:{}/redirect/to-1".format(self.mock_server_port)
 
@@ -164,7 +164,7 @@ class TestSimpleFetch(unittest.TestCase):
 
 	# Broken
 	# def test_redirect_handling_4(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		inurl_4 = "http://localhost:{}/redirect/from-2".format(self.mock_server_port)
 	# 		outurl_4 = "http://localhost:{}/redirect/to-2".format(self.mock_server_port)
 
@@ -176,28 +176,28 @@ class TestSimpleFetch(unittest.TestCase):
 
 	# Broken too.
 	# def test_redirect_handling_5(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		# This is a redirect without the actual redirect
 	# 		with self.assertRaises(ValueError):
 	# 			inurl_5 = "http://localhost:{}/redirect/bad-1".format(self.mock_server_port)
 	# 			cr.blocking_navigate(inurl_5)
 
 	def test_redirect_handling_6(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			# This is a infinitely recursive redirect.
 			with self.assertRaises(ChromeController.ChromeResponseNotReceived):
 				inurl_6 = "http://localhost:{}/redirect/bad-2".format(self.mock_server_port)
 				cr.blocking_navigate(inurl_6)
 
 	def test_redirect_handling_7(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			# This is a infinitely recursive redirect.
 			with self.assertRaises(ChromeController.ChromeResponseNotReceived):
 				inurl_6 = "http://localhost:{}/redirect/bad-3".format(self.mock_server_port)
 				cr.blocking_navigate(inurl_6)
 
 	def test_redirect_handling_8(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			inurl_7 = "http://localhost:{}/redirect/from-5".format(self.mock_server_port)
 			# Assumes localhost seems to resolve to the listening address (here it's 0.0.0.0). Is this ever not true? IPv6?
 			outurl_7 = "http://127.0.0.1:{}/".format(self.mock_server_port)
@@ -210,7 +210,7 @@ class TestSimpleFetch(unittest.TestCase):
 
 
 	# def test_get_item_1(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		inurl_1 = "http://localhost:{}".format(self.mock_server_port)
 	# 		content_1, fileN_1, mType_1 = self.wg.getItem(inurl_1)
 	# 		self.assertEqual(content_1, 'Root OK?')
@@ -219,7 +219,7 @@ class TestSimpleFetch(unittest.TestCase):
 
 
 	# def test_get_item_2(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		inurl_2 = "http://localhost:{}/filename_mime/content-disposition".format(self.mock_server_port)
 	# 		content_2, fileN_2, mType_2 = self.wg.getItem(inurl_2)
 
@@ -230,7 +230,7 @@ class TestSimpleFetch(unittest.TestCase):
 
 
 	# def test_get_item_3(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		inurl_3 = "http://localhost:{}/filename/path-only.txt".format(self.mock_server_port)
 	# 		content_3, fileN_3, mType_3 = self.wg.getItem(inurl_3)
 
@@ -239,7 +239,7 @@ class TestSimpleFetch(unittest.TestCase):
 	# 		self.assertEqual(mType_3, None)
 
 	# def test_get_cookies_1(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		inurl_1 = "http://localhost:{}/cookie_test".format(self.mock_server_port)
 	# 		inurl_2 = "http://localhost:{}/cookie_require".format(self.mock_server_port)
 
@@ -270,14 +270,14 @@ class TestSimpleFetch(unittest.TestCase):
 	# # Siiiiigh.
 
 	# def test_file_and_name_1(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source("http://localhost:{}/filename/path-only.txt".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		# self.assertEqual(fn, 'path-only.txt')
 
 
 	# def test_file_and_name_2(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source("http://localhost:{}/filename/content-disposition".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		self.assertEqual(resp['binary'], True)
@@ -285,7 +285,7 @@ class TestSimpleFetch(unittest.TestCase):
 
 
 	# def test_file_and_name_3(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source("http://localhost:{}/filename_mime/content-disposition-quotes-1".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		self.assertEqual(resp['binary'], True)
@@ -293,7 +293,7 @@ class TestSimpleFetch(unittest.TestCase):
 
 
 	# def test_file_and_name_4(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source("http://localhost:{}/filename_mime/content-disposition-quotes-2".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		self.assertEqual(resp['binary'], True)
@@ -301,7 +301,7 @@ class TestSimpleFetch(unittest.TestCase):
 
 
 	# def test_file_and_name_5(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source("http://localhost:{}/filename_mime/content-disposition-quotes-spaces-1".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		self.assertEqual(resp['binary'], True)
@@ -309,7 +309,7 @@ class TestSimpleFetch(unittest.TestCase):
 
 
 	# def test_file_and_name_6(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source("http://localhost:{}/filename_mime/content-disposition-quotes-spaces-2".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		self.assertEqual(resp['binary'], True)
@@ -317,28 +317,28 @@ class TestSimpleFetch(unittest.TestCase):
 
 
 	# def test_file_and_name_7(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source(requestedUrl="http://localhost:{}/filename_mime/content-disposition-quotes-spaces-2".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		self.assertEqual(resp['binary'], True)
 	# 		# self.assertEqual(fn, 'loler coaster.html')
 
 	# def test_file_and_name_8(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source(requestedUrl="http://localhost:{}/filename_mime/content-disposition-quotes-spaces-2".format(self.mock_server_port), addlHeaders={"Referer" : 'http://www.example.org'}, timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		self.assertEqual(resp['binary'], True)
 	# 		# self.assertEqual(fn, 'loler coaster.html')
 
 	# def test_file_and_name_9(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source("http://localhost:{}/filename_mime/content-disposition-quotes-spaces-2".format(self.mock_server_port), addlHeaders={"Referer" : 'http://www.example.org'}, timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		self.assertEqual(resp['binary'], True)
 	# 		# self.assertEqual(fn, 'loler coaster.html')
 
 	# def test_file_and_name_10(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source("http://localhost:{}/filename/path-only-trailing-slash/".format(self.mock_server_port), timeout=TIMEOUT_SECS)
 	# 		self.assertEqual(resp['content'], b"LOLWAT?\x00\xff\xaa\x55!")
 	# 		self.assertEqual(resp['binary'], True)
@@ -346,7 +346,7 @@ class TestSimpleFetch(unittest.TestCase):
 
 
 	# def test_file_name_mime_1(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source(
 	# 						"http://localhost:{}/filename_mime/path-only.txt".format(self.mock_server_port))
 	# 		self.assertEqual(resp['content'], 'LOLWAT?')
@@ -355,7 +355,7 @@ class TestSimpleFetch(unittest.TestCase):
 	# 		self.assertEqual(resp['mimetype'], 'text/plain')
 
 	# def test_file_name_mime_2(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source(
 	# 						"http://localhost:{}/filename_mime/content-disposition".format(self.mock_server_port))
 	# 		self.assertEqual(resp['content'], 'LOLWAT?')
@@ -364,7 +364,7 @@ class TestSimpleFetch(unittest.TestCase):
 	# 		self.assertEqual(resp['mimetype'], 'text/plain')
 
 	# def test_file_name_mime_3(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source(
 	# 						"http://localhost:{}/filename_mime/content-disposition-html-suffix".format(self.mock_server_port))
 	# 		self.assertEqual(resp['content'], 'LOLWAT?')
@@ -373,7 +373,7 @@ class TestSimpleFetch(unittest.TestCase):
 	# 		self.assertEqual(resp['mimetype'], 'text/plain')
 
 	# def test_file_name_mime_5(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source(
 	# 						"http://localhost:{}/filename/path-only-trailing-slash/".format(self.mock_server_port))
 	# 		self.assertEqual(resp['content'], 'LOLWAT?')
@@ -382,7 +382,7 @@ class TestSimpleFetch(unittest.TestCase):
 	# 		self.assertEqual(resp['mimetype'], 'text/plain')
 
 	# def test_file_name_mime_4(self):
-	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+	# 	with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 	# 		resp = cr.blocking_navigate_and_get_source(
 	# 						"http://localhost:{}/filename_mime/explicit-html-mime".format(self.mock_server_port))
 	# 		self.assertEqual(resp['content'], 'LOLWAT?')

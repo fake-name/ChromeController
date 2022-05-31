@@ -26,7 +26,7 @@ class TestChromium(unittest.TestCase):
 			# Configure mock server.
 			self.mock_server_port, self.mock_server, self.mock_server_thread = testing_server.start_server(self, expect_headers)
 			tgturl = "http://localhost:{}".format(self.mock_server_port)
-			with ChromeController.ChromeContext(CHROME_BINARY_NAME) as cr:
+			with ChromeController.ChromeContext(CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 				ret = cr.update_headers(expect_headers)
 				# print("update_headers return:")
 				# print(ret)

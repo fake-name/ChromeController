@@ -17,7 +17,7 @@ CHROME_BINARY_NAME = "google-chrome"
 
 class TestChromiumPost(unittest.TestCase):
 	def setUp(self):
-		self.cr = ChromeController.TabPooledChromium("google-chrome")
+		self.cr = ChromeController.TabPooledChromium("google-chrome", additional_options=['--no-sandbox', '--disable-setuid-sandbox'])
 		self.mock_server_port, self.mock_server, self.mock_server_thread = testing_server.start_server(self, {})
 
 	def tearDown(self):
@@ -28,7 +28,7 @@ class TestChromiumPost(unittest.TestCase):
 
 		intermediate_url = "http://localhost:{}/ignore-headers".format(self.mock_server_port)
 		target_url       = "http://localhost:{}/post/json_resp".format(self.mock_server_port)
-		with ChromeController.ChromeContext(CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			# print(ret)
 			# print("")
 			first_nav = cr.blocking_navigate_and_get_source(intermediate_url)
@@ -50,7 +50,7 @@ class TestChromiumPost(unittest.TestCase):
 
 		intermediate_url = "http://localhost:{}/ignore-headers".format(self.mock_server_port)
 		target_url       = "http://localhost:{}/post/form_urlencoded".format(self.mock_server_port)
-		with ChromeController.ChromeContext(CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			# print(ret)
 			# print("")
 			first_nav = cr.blocking_navigate_and_get_source(intermediate_url)

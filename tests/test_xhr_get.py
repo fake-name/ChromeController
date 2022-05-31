@@ -16,7 +16,7 @@ CHROME_BINARY_NAME = "google-chrome"
 
 class TestChromium(unittest.TestCase):
 	def setUp(self):
-		self.cr = ChromeController.TabPooledChromium("google-chrome")
+		self.cr = ChromeController.TabPooledChromium("google-chrome", additional_options=['--no-sandbox', '--disable-setuid-sandbox'])
 		# self.mock_server_port, self.mock_server, self.mock_server_thread = testing_server.start_server(self, {})
 
 	def tearDown(self):

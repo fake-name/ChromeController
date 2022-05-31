@@ -23,12 +23,12 @@ class TestRedirects(unittest.TestCase):
 
 
 	def test_plain_instantiation_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			self.assertTrue(cr is not None)
 
 
 	def test_multi_redirect_handling_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			inurl_3 = "http://localhost:{}/redirect_mult/from-1".format(self.mock_server_port)
 			outurl_3 = "http://localhost:{}/redirect_mult/to-5".format(self.mock_server_port)
 
@@ -44,7 +44,7 @@ class TestRedirects(unittest.TestCase):
 			self.assertEqual(resp['mimetype'], "text/html")
 
 	def test_slow_redirect_1(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			inurl_3 = "http://localhost:{}/redirect_slow/from-1".format(self.mock_server_port)
 			outurl_3 = "http://localhost:{}/redirect_slow/to-1".format(self.mock_server_port)
 
@@ -72,7 +72,7 @@ class TestRedirects(unittest.TestCase):
 			self.assertEqual(resp['mimetype'], "text/html")
 
 	def test_cloudflare_auto(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			tgturl = "http://127.0.0.1:{}/cloudflare_under_attack_shit".format(self.mock_server_port)
 			cr.blocking_navigate_and_get_source(tgturl)
 
@@ -96,7 +96,7 @@ class TestRedirects(unittest.TestCase):
 
 
 	def test_sucuri_auto(self):
-		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME) as cr:
+		with ChromeController.ChromeContext(binary=CHROME_BINARY_NAME, additional_options=['--no-sandbox', '--disable-setuid-sandbox']) as cr:
 			tgturl = "http://127.0.0.1:{}/sucuri_shit".format(self.mock_server_port)
 			cr.blocking_navigate_and_get_source(tgturl)
 
