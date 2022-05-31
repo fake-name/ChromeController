@@ -16,7 +16,8 @@ cache:
 
 before_script:
     - "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-    - "apt install google-chrome-stable_current_amd64.deb"
+    - "ls"
+    - "apt install ./google-chrome-stable_current_amd64.deb"
     - "pip install nose"
     - "pip install coverage"
     - "pip install coveralls"
@@ -31,7 +32,7 @@ test:python3.8:
   extends: .test
   image: python:3.8
 
-test:python3.9:
-  extends: .test
-  image: python:3.9
+# test:python3.9:
+#   extends: .test
+#   image: python:3.9
 
