@@ -24,6 +24,12 @@ before_script:
     - "pip3 install coveralls"
     - "pip3 install ."
     - "useradd testuser"
+    - "pwd "
+    - "mkdir -p /home/testuser"
+    - "ls /"
+    - "ls /home/"
+    - "chown -R testuser:testuser /home/testuser"
+    - "chown -R testuser:testuser ."
 
 .test:
   script:
@@ -31,15 +37,15 @@ before_script:
     # - exec su testuser -c python $(which nosetests) --with-coverage --exe --cover-package=ChromeController tests
 
 
-test:python3.7:
-  extends: .test
-  image: python:3.7
+# test:python3.7:
+#   extends: .test
+#   image: python:3.7
 
 test:python3.8:
   extends: .test
   image: python:3.8
 
-test:python3.9:
-  extends: .test
-  image: python:3.9
+# test:python3.9:
+#   extends: .test
+#   image: python:3.9
 

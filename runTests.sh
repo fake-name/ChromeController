@@ -30,7 +30,8 @@ nosetests                            \
 	--exe                            \
 	--cover-package=ChromeController \
 	--stop                      \
-	tests
+	tests.test_header_overrides
+	# tests
 	# --nocapture                      \
 	# tests.test_xhr_get
 	# tests.test_post
