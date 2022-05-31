@@ -17,7 +17,8 @@ cache:
 before_script:
     - "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     - "ls"
-    - "apt install ./google-chrome-stable_current_amd64.deb"
+    - "apt-get update"
+    - "apt-get install -y --no-install-recommends ./google-chrome-stable_current_amd64.deb"
     - "pip install nose"
     - "pip install coverage"
     - "pip install coveralls"
