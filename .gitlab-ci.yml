@@ -27,7 +27,7 @@ before_script:
 
 .test:
   script:
-    - exec su testuser -c python $(which nosetests) --exe --cover-package=ChromeController tests
+    - exec su testuser -c 'python $(which nosetests) --with-coverage --exe --cover-package=ChromeController tests'
     # - exec su testuser -c python $(which nosetests) --with-coverage --exe --cover-package=ChromeController tests
 
 
