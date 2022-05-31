@@ -23,10 +23,11 @@ before_script:
     - "pip install coverage"
     - "pip install coveralls"
     - "pip install ."
+    - "useradd testuser"
 
 .test:
   script:
-    - python $(which nosetests) --with-coverage --exe --cover-package=ChromeController tests
+    - exec su testuser -c python $(which nosetests) --with-coverage --exe --cover-package=ChromeController tests
 
 
 # test:python3.7:
@@ -35,9 +36,7 @@ before_script:
 
 test:python3.8:
   extends: .test
-  image: 
-    name: python:3.8  
-    entrypoint: ['bash', '-c', 'useradd testuser && exec su testuser -c bash']
+  image: python:3.8
 
 # test:python3.9:
 #   extends: .test
