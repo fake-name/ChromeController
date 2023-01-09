@@ -614,7 +614,7 @@ class ChromeExecutionManager():
 					handler(decoded)
 
 			return decoded
-		except (socket.timeout, websocket.WebSocketTimeoutException):
+		except (socket.timeout, BlockingIOError, websocket.WebSocketTimeoutException):
 			return None
 
 		except websocket.WebSocketConnectionClosedException:
