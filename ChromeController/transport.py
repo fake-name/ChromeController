@@ -439,6 +439,7 @@ class ChromeExecutionManager():
 
 		try:
 			self.log.info("Setting up websocket connection for key '%s'", tab_key)
+			# self.log.info("Chromium websocket URL: '%s'", wsurl)
 			self.soclist[tab_key] = websocket.create_connection(wsurl)
 			self.soclist[tab_key].settimeout(self.websocket_timeout)
 
@@ -590,9 +591,17 @@ class ChromeExecutionManager():
 
 
 	def __recv(self, tab_key, timeout=None):
+		'''
+		Receive one item (or none, if no items are available and the timeout has expired).
+
+		If none is specified as the timeout, a timeout of 0 will be used (e.g. non-blocking mode.)
+		'''
 		try:
 			if timeout:
 				self.soclist[tab_key].settimeout(timeout)
+
+			else:
+				self.soclist[tab_key].settimeout(0)
 
 			tmp = self.soclist[tab_key].recv()
 			self.log.debug("		Received: '%s'", tmp)
@@ -607,6 +616,7 @@ class ChromeExecutionManager():
 			return decoded
 		except (socket.timeout, websocket.WebSocketTimeoutException):
 			return None
+
 		except websocket.WebSocketConnectionClosedException:
 			raise cr_exceptions.ChromeCommunicationsError("Websocket appears to have been closed. Is the"
 				" remote chromium instance dead?")
@@ -797,6 +807,11 @@ class ChromeExecutionManager():
 		Flush the pending RX buffer for a specific tab key.
 		'''
 		self._messages[tab_key] = []
+
+		# Finally, flush any pending (unprocessed) messages
+		tmp = self.__recv(tab_key)
+		while tmp is not None:
+			tmp = self.__recv(tab_key)
 
 	def drain(self, tab_key):
 		'''
