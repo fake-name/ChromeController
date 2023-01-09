@@ -579,7 +579,7 @@ class ChromeExecutionManager():
 		# self.log.debug("		Sending: '%s'", navcom)
 		try:
 			self.soclist[tab_key].send(navcom)
-		except (socket.timeout, websocket.WebSocketTimeoutException):
+		except (socket.timeout, BlockingIOError, websocket.WebSocketTimeoutException):
 			raise cr_exceptions.ChromeCommunicationsError("Failure sending command to chromium.")
 		except websocket.WebSocketConnectionClosedException:
 			raise cr_exceptions.ChromeCommunicationsError("Websocket appears to have been closed. Is the"
