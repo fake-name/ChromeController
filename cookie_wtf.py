@@ -12,11 +12,11 @@ import ChromeController
 
 def test():
 
-	ua = dict(WebRequest.getUserAgent())
+	# ua = dict(WebRequest.getUserAgent())
 	# print(ua)
 
-	crbin = os.path.abspath("../Chromium/src/out/Headless/headless_shell")
-	cr = ChromeController.ChromeRemoteDebugInterface(crbin)
+	# crbin = os.path.abspath("../Chromium/src/out/Headless/headless_shell")
+	cr = ChromeController.ChromeRemoteDebugInterface()
 
 	# print(cr)
 	resp = cr.Emulation_setVisibleSize(1500, 1000)

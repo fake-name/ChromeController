@@ -26,6 +26,7 @@ if sys.platform == 'win32':
 	import win32con
 	import win32api
 
+
 ACTIVE_PORTS = set()
 
 
@@ -113,12 +114,23 @@ class ChromeExecutionManager():
 	def _launch_process(self, binary, dbg_port, base_tab_key, additional_options):
 
 		if binary is None:
-			binary = "chromium"
+
+			# Probably not a /great/ assumption, but windows is a thing
+			if sys.platform == 'win32':
+				binary = "chrome.exe"
+			else:
+				binary = "chromium"
 
 		binary, *args = shlex.split(binary)
 
 		if not os.path.exists(binary):
-			fixed = distutils.spawn.find_executable(binary)
+
+			# Handle new and old chrome
+			searches = os.pathsep.join([os.environ['PATH'],
+				r"C:\Progra~1\Google\Chrome\Application",   # 'Program Files'
+				r"C:\Progra~2\Google\Chrome\Application"])  # 'Program Files (x86)'
+
+			fixed = distutils.spawn.find_executable(binary, path=searches)
 			if fixed:
 				binary = fixed
 		if not binary or not os.path.exists(binary):
@@ -794,7 +806,7 @@ class ChromeExecutionManager():
 			if message_id is None:
 				return True
 			if not message:
-				self.log.debug("Message is not true (%s)!", message)
+				# self.log.debug("Message is not true (%s)!", message)
 				return False
 			if "id" in message:
 				return message['id'] == message_id
