@@ -77,8 +77,8 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 			assert all([isinstance(val, int) for val in visible_size]), "visible_size must be a 2-tuple containing 2 integers"
 			self.log.debug("Visible size overridden to %sx%s" % visible_size)
 			self.Emulation_setVisibleSize(*visible_size)
-		else:
-			self.Emulation_setVisibleSize(1024, 1366)
+		# else:
+		# 	self.Emulation_setVisibleSize(1024, 1366)
 
 		self.__new_tab_scripts = []
 
