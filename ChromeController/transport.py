@@ -148,6 +148,12 @@ class ChromeExecutionManager():
 
 		argv = prefix + [binary] + args + [
 				'--remote-debugging-port={dbg_port}'.format(dbg_port=dbg_port),
+
+				# We need to allow websocket connections from localhost
+				# Chrome circa ~111.0.5563.64 now checks this.
+				# Also lets be fancy and not just allow *
+				'--remote-allow-origins=http://%s:%s' % (self.host, self.port),
+
 				'--enable-features=NetworkService',
 			]
 		if self.headless:
@@ -178,13 +184,26 @@ class ChromeExecutionManager():
 									)
 
 		self.log.debug("Spawned process: %s, PID: %s", self.cr_proc, self.cr_proc.pid)
+
+		# New headless chrome somehow starts without any tabs.
+		# We need to be able to fix that.
+
+
+		tab_fails = False
+
 		for x in range(100):
 			self._check_process_dead()
 			try:
 				self.tablist = self.fetch_tablist()
 
 				if not self.tablist:
-					raise cr_exceptions.ChromeStartupException("No tabs in started chromium?")
+					if not tab_fails:
+						self.log.info("Creating base tab")
+						self.__create_new_tab("about:blank")
+						tab_fails = True
+					else:
+						self.log.error("Received args: %s", argv)
+						raise cr_exceptions.ChromeStartupException("No tabs in started chromium?")
 
 				# self.tab_id_map[base_tab_key] = self.tablist[0]['id']
 				# print("Tab base key:", base_tab_key, self.tablist[0]['id'])
@@ -377,7 +396,6 @@ class ChromeExecutionManager():
 		prevent closing all remote tabs from causing the browser to exit.
 		This tab is not used by anything.
 
-
 		"""
 
 		assert self.tablist is not None
@@ -424,7 +442,11 @@ class ChromeExecutionManager():
 		if start_at_url:
 			url += "?%s" % (start_at_url, )
 		try:
-			requests.get(url)
+			resp = requests.put(url)
+
+			self.log.debug("New tab create ret:")
+			self.log.debug('%s', resp)
+
 			self.tablist = self.fetch_tablist()
 			known_tabs = list(self.tab_id_map.values())
 			for tab in self.tablist:
@@ -444,6 +466,8 @@ class ChromeExecutionManager():
 
 		cr_tab_meta = self._get_cr_tab_meta_for_key(tab_key)
 
+		self.log.info("Connecting to tab: '%s'", cr_tab_meta)
+
 		if not 'webSocketDebuggerUrl' in cr_tab_meta:
 			raise cr_exceptions.ChromeConnectFailure("Tab %s has no 'webSocketDebuggerUrl' (%s)" % (tab_key, self.tablist))
 
@@ -457,6 +481,7 @@ class ChromeExecutionManager():
 
 		except (socket.timeout, websocket.WebSocketTimeoutException):
 			raise cr_exceptions.ChromeCommunicationsError("Could not connect to remote chromium.")
+
 
 	def __close_tab(self, tab_key, timeout=None):
 
@@ -515,6 +540,9 @@ class ChromeExecutionManager():
 			raise cr_exceptions.ChromeConnectFailure("Failed to fetch configuration json from browser!")
 
 		tablist = json.loads(response.text)
+
+		self.log.debug("Current tablist:")
+		self.log.debug("	%s", tablist)
 
 		return tablist
 

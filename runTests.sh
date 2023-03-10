@@ -25,17 +25,19 @@ set -e
 # 	--cover-package=ChromeController \
 # 	tests.test_redirects
 
-nosetests                            \
-	--with-coverage                  \
-	--exe                            \
-	--cover-package=ChromeController \
-	--stop                      \
-	tests.test_header_overrides
-	# tests
-	# --nocapture                      \
-	# tests.test_xhr_get
-	# tests.test_post
-	# tests.test_tab_pool
+# pytest                            \
+# 	--with-coverage                  \
+# 	--exe                            \
+# 	--cover-package=ChromeController \
+# 	--stop                      \
+# 	tests
+# 	# tests.test_header_overrides
+# 	# --nocapture                      \
+# 	# tests.test_xhr_get
+# 	# tests.test_post
+# 	# tests.test_tab_pool
+
+pytest --exitfirst  --log-cli-level=DEBUG
 
 # nosetests                            \
 # 	--with-coverage                  \
@@ -51,7 +53,7 @@ nosetests                            \
 	# tests.test_simple
 	# tests.test_selenium
 
-coverage report --show-missing
+# coverage report --show-missing
 
-coverage erase
+# coverage erase
 
