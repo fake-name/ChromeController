@@ -176,9 +176,6 @@ class ChromeExecutionManager():
 			preexec_fn = exit_handler.on_parent_exit('SIGTERM')
 
 		self.cr_proc = subprocess.Popen(argv,
-										stdin         = open(os.path.devnull, "r"),
-										stdout        = subprocess.PIPE,
-										stderr        = subprocess.PIPE,
 										creationflags = creationflags,
 										preexec_fn    = preexec_fn,
 									)
