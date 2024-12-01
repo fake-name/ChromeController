@@ -17,13 +17,14 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="base64.html">base64</a><br>
-<a href="ChromeController.cr_exceptions.html">ChromeController.cr_exceptions</a><br>
-</td><td width="25%" valign=top><a href="gc.html">gc</a><br>
-<a href="logging.html">logging</a><br>
-</td><td width="25%" valign=top><a href="pprint.html">pprint</a><br>
-<a href="time.html">time</a><br>
-</td><td width="25%" valign=top><a href="uuid.html">uuid</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="builtins.html">builtins</a><br>
+<a href="base64.html">base64</a><br>
+</td><td width="25%" valign=top><a href="ChromeController.cr_exceptions.html">ChromeController.cr_exceptions</a><br>
+<a href="gc.html">gc</a><br>
+</td><td width="25%" valign=top><a href="logging.html">logging</a><br>
+<a href="pprint.html">pprint</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+<a href="uuid.html">uuid</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -51,7 +52,9 @@
 <font color="#000000" face="helvetica, arial"><a name="ChromeInterface">class <strong>ChromeInterface</strong></a>(<a href="ChromeController.manager_base.html#ChromeListenerMixin">ChromeListenerMixin</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Document&nbsp;me,&nbsp;maybe?<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeInterface">ChromeInterface</a>(binary,&nbsp;dbg_port,&nbsp;use_execution_manager,&nbsp;additional_options,&nbsp;*args,&nbsp;**kwargs)<br>
+&nbsp;<br>
+Document&nbsp;me,&nbsp;maybe?<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.manager_base.html#ChromeInterface">ChromeInterface</a></dd>
@@ -95,6 +98,10 @@ This&nbsp;command&nbsp;simply&nbsp;returns&nbsp;all&nbsp;waiting&nbsp;messages&n
 instance.&nbsp;This&nbsp;can&nbsp;be&nbsp;useful&nbsp;when&nbsp;waiting&nbsp;for&nbsp;a&nbsp;specific&nbsp;asynchronous&nbsp;message<br>
 from&nbsp;chrome,&nbsp;but&nbsp;higher&nbsp;level&nbsp;calls&nbsp;are&nbsp;better&nbsp;suited&nbsp;for&nbsp;managing&nbsp;wait-for-message<br>
 type&nbsp;needs.</tt></dd></dl>
+
+<dl><dt><a name="ChromeInterface-for_existing_tab"><strong>for_existing_tab</strong></a>(self, tab_id, *args, **kwargs)</dt><dd><tt>Create&nbsp;a&nbsp;interface&nbsp;<a href="builtins.html#object">object</a>&nbsp;for&nbsp;an&nbsp;existing&nbsp;tab.<br>
+&nbsp;<br>
+tab_id&nbsp;is&nbsp;a&nbsp;UUID&nbsp;<a href="builtins.html#object">object</a>&nbsp;as&nbsp;lsited&nbsp;in&nbsp;the&nbsp;transport&nbsp;tab_id_map</tt></dd></dl>
 
 <dl><dt><a name="ChromeInterface-new_tab"><strong>new_tab</strong></a>(self, *args, **kwargs)</dt></dl>
 
@@ -173,10 +180,12 @@ Data descriptors inherited from <a href="ChromeController.manager_base.html#Chro
 <font color="#000000" face="helvetica, arial"><a name="ChromeListenerMixin">class <strong>ChromeListenerMixin</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Docs&nbsp;plzzzz<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeListenerMixin">ChromeListenerMixin</a>(*args,&nbsp;**kwargs)<br>
+&nbsp;<br>
+Docs&nbsp;plzzzz<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="ChromeListenerMixin-__init__"><strong>__init__</strong></a>(self, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeListenerMixin-__init__"><strong>__init__</strong></a>(self, *args, **kwargs)</dt></dl>
 
 <dl><dt><a name="ChromeListenerMixin-clear_content_listener_cache"><strong>clear_content_listener_cache</strong></a>(self)</dt><dd><tt>The&nbsp;handlers&nbsp;installed&nbsp;by&nbsp;<a href="#ChromeListenerMixin-install_listener_for_content">install_listener_for_content</a>()&nbsp;have&nbsp;some&nbsp;persistant<br>
 storage&nbsp;in&nbsp;the&nbsp;class&nbsp;to&nbsp;allow&nbsp;tracking&nbsp;request-id&nbsp;-&gt;&nbsp;response&nbsp;body&nbsp;mappings.<br>

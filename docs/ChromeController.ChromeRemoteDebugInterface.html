@@ -9,7 +9,9 @@
 <font color="#000000" face="helvetica, arial"><strong>ChromeController.ChromeRemoteDebugInterface</strong> = <a name="ChromeController.ChromeRemoteDebugInterface">class ChromeRemoteDebugInterface</a>(<a href="ChromeController.Generator.Generated.html#ChromeRemoteDebugInterface">ChromeController.Generator.Generated.ChromeRemoteDebugInterface</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Remote&nbsp;control&nbsp;class&nbsp;for&nbsp;Chromium.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt>ChromeController.ChromeRemoteDebugInterface(binary=None,&nbsp;dbg_port=None,&nbsp;use_execution_manager=None,&nbsp;additional_options=[],&nbsp;visible_size=None,&nbsp;disable_page=False,&nbsp;disable_dom=False,&nbsp;disable_network=False,&nbsp;*args,&nbsp;**kwargs)<br>
+&nbsp;<br>
+Remote&nbsp;control&nbsp;class&nbsp;for&nbsp;Chromium.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.manager.html#ChromeRemoteDebugInterface">ChromeRemoteDebugInterface</a></dd>
@@ -151,6 +153,17 @@ be&nbsp;via&nbsp;<a href="#ChromeController.ChromeRemoteDebugInterface-execute_j
 This&nbsp;can&nbsp;also&nbsp;be&nbsp;used&nbsp;to&nbsp;interrogate&nbsp;the&nbsp;JS&nbsp;interpreter,&nbsp;as&nbsp;simply&nbsp;passing<br>
 variable&nbsp;names&nbsp;of&nbsp;interest&nbsp;will&nbsp;return&nbsp;the&nbsp;variable&nbsp;value.</tt></dd></dl>
 
+<dl><dt><a name="ChromeRemoteDebugInterface-fetch_content_with_chrome"><strong>fetch_content_with_chrome</strong></a>(self, url)</dt><dd><tt>Fetch&nbsp;an&nbsp;arbitrary&nbsp;URL&nbsp;with&nbsp;chromium,&nbsp;and&nbsp;return&nbsp;the&nbsp;content.<br>
+&nbsp;<br>
+This&nbsp;doesn't&nbsp;use&nbsp;JS&nbsp;to&nbsp;do&nbsp;a&nbsp;XHR&nbsp;fetch,&nbsp;so&nbsp;it&nbsp;should&nbsp;hopefully&nbsp;not&nbsp;depend&nbsp;on<br>
+the&nbsp;current&nbsp;tab's&nbsp;origin/cross-domain&nbsp;content&nbsp;security&nbsp;settings.<br>
+&nbsp;<br>
+Instead,&nbsp;it&nbsp;directly&nbsp;uses&nbsp;the&nbsp;devtools&nbsp;Network.loadNetworkResource()&nbsp;and&nbsp;then<br>
+streams&nbsp;the&nbsp;result&nbsp;using&nbsp;IO.read().<br>
+&nbsp;<br>
+Binary&nbsp;files&nbsp;are&nbsp;returnned&nbsp;as&nbsp;bytestrings,&nbsp;textual&nbsp;responses&nbsp;are&nbsp;returned&nbsp;in<br>
+unicode.&nbsp;The&nbsp;browser&nbsp;determines&nbsp;this,&nbsp;it's&nbsp;not&nbsp;controllable&nbsp;via&nbsp;the&nbsp;API.</tt></dd></dl>
+
 <dl><dt><a name="ChromeRemoteDebugInterface-find_element"><strong>find_element</strong></a>(self, search)</dt><dd><tt><a href="#ChromeController.ChromeRemoteDebugInterface-DOM_performSearch">DOM_performSearch</a>(self,&nbsp;query,&nbsp;includeUserAgentShadowDOM)<br>
 Python&nbsp;Function:&nbsp;DOM_performSearch<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;DOM<br>
@@ -233,7 +246,7 @@ will&nbsp;walk&nbsp;the&nbsp;page&nbsp;navigation&nbsp;responses&nbsp;and&nbsp;a
 the&nbsp;tab's&nbsp;latest&nbsp;location.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-install_evasions"><strong>install_evasions</strong></a>(self)</dt><dd><tt>Load&nbsp;headless&nbsp;detection&nbsp;evasions&nbsp;from&nbsp;the&nbsp;puppeteer-extra&nbsp;repository&nbsp;(<br>
-https://github.com/berstend/puppeteer-extra/tree/master/packages/puppeteer-extra-plugin-stealth/evasions).</tt></dd></dl>
+<a href="https://github.com/berstend/puppeteer-extra/tree/master/packages/puppeteer-extra-plugin-stealth/evasions">https://github.com/berstend/puppeteer-extra/tree/master/packages/puppeteer-extra-plugin-stealth/evasions</a>).</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-navigate_to"><strong>navigate_to</strong></a>(self, url)</dt><dd><tt>Trigger&nbsp;a&nbsp;page&nbsp;navigation&nbsp;to&nbsp;url&nbsp;`url`.<br>
 &nbsp;<br>
@@ -275,6 +288,33 @@ return&nbsp;value&nbsp;is&nbsp;a&nbsp;2-tuple&nbsp;of&nbsp;the&nbsp;results&nbsp
 update,&nbsp;as&nbsp;well&nbsp;as&nbsp;the&nbsp;extra&nbsp;headers&nbsp;update.<br>
 If&nbsp;no&nbsp;'User-Agent'&nbsp;key&nbsp;is&nbsp;present&nbsp;in&nbsp;the&nbsp;new&nbsp;headers,<br>
 the&nbsp;first&nbsp;item&nbsp;in&nbsp;the&nbsp;tuple&nbsp;will&nbsp;be&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="ChromeRemoteDebugInterface-wait_for_dom_idle"><strong>wait_for_dom_idle</strong></a>(self, dom_idle_requirement_secs=3, max_wait_timeout=30)</dt><dd><tt>Wait&nbsp;for&nbsp;the&nbsp;DOM&nbsp;to&nbsp;be&nbsp;idle.<br>
+&nbsp;<br>
+This&nbsp;does&nbsp;some&nbsp;guesses&nbsp;about&nbsp;what&nbsp;it&nbsp;means&nbsp;for&nbsp;the&nbsp;DOM&nbsp;to&nbsp;genuinly&nbsp;be&nbsp;idle,<br>
+but&nbsp;it&nbsp;should&nbsp;(generally)&nbsp;work.<br>
+&nbsp;<br>
+It&nbsp;will&nbsp;wait&nbsp;until&nbsp;the&nbsp;there&nbsp;have&nbsp;been&nbsp;none&nbsp;of&nbsp;the&nbsp;following&nbsp;events&nbsp;for&nbsp;`dom_idle_requirement_secs`<br>
+seconds.&nbsp;Note&nbsp;that&nbsp;these&nbsp;are&nbsp;events&nbsp;from&nbsp;the&nbsp;chromium&nbsp;dev&nbsp;tool&nbsp;protocol,&nbsp;and&nbsp;how&nbsp;they&nbsp;map&nbsp;to<br>
+actual&nbsp;javascripts&nbsp;events&nbsp;is&nbsp;defined&nbsp;by&nbsp;that.<br>
+&nbsp;-&nbsp;"Page.frameResized",<br>
+&nbsp;-&nbsp;"Page.frameStartedLoading",<br>
+&nbsp;-&nbsp;"Page.frameNavigated",<br>
+&nbsp;-&nbsp;"Page.frameAttached",<br>
+&nbsp;-&nbsp;"Page.frameStoppedLoading",<br>
+&nbsp;-&nbsp;"Page.frameScheduledNavigation",<br>
+&nbsp;-&nbsp;"Page.domContentEventFired",<br>
+&nbsp;-&nbsp;"Page.frameClearedScheduledNavigation",<br>
+&nbsp;-&nbsp;"Page.loadEventFired",<br>
+&nbsp;-&nbsp;"DOM.documentUpdated",<br>
+&nbsp;-&nbsp;"DOM.childNodeInserted",<br>
+&nbsp;-&nbsp;"DOM.childNodeRemoved",<br>
+&nbsp;-&nbsp;"DOM.childNodeCountUpdated",<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;DOM&nbsp;is&nbsp;never&nbsp;idle&nbsp;for&nbsp;`max_wait_timeout`&nbsp;seconds,&nbsp;it&nbsp;will&nbsp;give&nbsp;up&nbsp;and&nbsp;return&nbsp;early.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;due&nbsp;to&nbsp;how&nbsp;this&nbsp;works,&nbsp;it&nbsp;will&nbsp;ALWAYS&nbsp;take&nbsp;at&nbsp;least&nbsp;`dom_idle_requirement_secs`&nbsp;seconds<br>
+to&nbsp;return.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-xhr_fetch"><strong>xhr_fetch</strong></a>(self, url, headers=None, post_data=None, post_type=None)</dt><dd><tt>Execute&nbsp;a&nbsp;XMLHttpRequest()&nbsp;for&nbsp;content&nbsp;at&nbsp;`url`.&nbsp;If<br>
 `headers`&nbsp;are&nbsp;specified,&nbsp;they&nbsp;must&nbsp;be&nbsp;a&nbsp;dict&nbsp;of&nbsp;string:string<br>
@@ -3212,7 +3252,7 @@ display.&nbsp;Reported&nbsp;for&nbsp;diagnostic&nbsp;uses,&nbsp;may&nbsp;be&nbsp
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Sends&nbsp;a&nbsp;BeginFrame&nbsp;to&nbsp;the&nbsp;target&nbsp;and&nbsp;returns&nbsp;when&nbsp;the&nbsp;frame&nbsp;was&nbsp;completed.&nbsp;Optionally&nbsp;captures&nbsp;a<br>
 screenshot&nbsp;from&nbsp;the&nbsp;resulting&nbsp;frame.&nbsp;Requires&nbsp;that&nbsp;the&nbsp;target&nbsp;was&nbsp;created&nbsp;with&nbsp;enabled<br>
 BeginFrameControl.&nbsp;Designed&nbsp;for&nbsp;use&nbsp;with&nbsp;--run-all-compositor-stages-before-draw,&nbsp;see&nbsp;also<br>
-https://goo.gl/3zHXhB&nbsp;for&nbsp;more&nbsp;background.</tt></dd></dl>
+<a href="https://goo.gl/3zHXhB">https://goo.gl/3zHXhB</a>&nbsp;for&nbsp;more&nbsp;background.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-HeadlessExperimental_disable"><strong>HeadlessExperimental_disable</strong></a>(self)</dt><dd><tt>Function&nbsp;path:&nbsp;HeadlessExperimental.disable<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;HeadlessExperimental<br>
@@ -3542,7 +3582,7 @@ modifiers,&nbsp;keyboard&nbsp;layout,&nbsp;etc&nbsp;(e.g.,&nbsp;'AltGr')&nbsp;(d
 0).<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'commands'&nbsp;(type:&nbsp;array)&nbsp;-&gt;&nbsp;Editing&nbsp;commands&nbsp;to&nbsp;send&nbsp;with&nbsp;the&nbsp;key&nbsp;event&nbsp;(e.g.,&nbsp;'selectAll')&nbsp;(default:&nbsp;[]).<br>
 These&nbsp;are&nbsp;related&nbsp;to&nbsp;but&nbsp;not&nbsp;equal&nbsp;the&nbsp;command&nbsp;names&nbsp;used&nbsp;in&nbsp;`document.execCommand`&nbsp;and&nbsp;NSStandardKeyBindingResponding.<br>
-See&nbsp;https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/editing/commands/editor_command_names.h&nbsp;for&nbsp;valid&nbsp;command&nbsp;names.<br>
+See&nbsp;<a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/editing/commands/editor_command_names.h">https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/editing/commands/editor_command_names.h</a>&nbsp;for&nbsp;valid&nbsp;command&nbsp;names.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;return&nbsp;value.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Dispatches&nbsp;a&nbsp;key&nbsp;event&nbsp;to&nbsp;the&nbsp;page.</tt></dd></dl>
@@ -5485,7 +5525,7 @@ See&nbsp;also:&nbsp;`Page.produceCompilationCache`.</tt></dd></dl>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Tries&nbsp;to&nbsp;update&nbsp;the&nbsp;web&nbsp;lifecycle&nbsp;state&nbsp;of&nbsp;the&nbsp;page.<br>
 It&nbsp;will&nbsp;transition&nbsp;the&nbsp;page&nbsp;to&nbsp;the&nbsp;given&nbsp;state&nbsp;according&nbsp;to:<br>
-https://github.com/WICG/web-lifecycle/</tt></dd></dl>
+<a href="https://github.com/WICG/web-lifecycle/">https://github.com/WICG/web-lifecycle/</a></tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-Page_startScreencast"><strong>Page_startScreencast</strong></a>(self, **kwargs)</dt><dd><tt>Function&nbsp;path:&nbsp;Page.startScreencast<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Page<br>
@@ -5539,7 +5579,7 @@ https://github.com/WICG/web-lifecycle/</tt></dd></dl>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameters:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Required&nbsp;arguments:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'eventTypes'&nbsp;(type:&nbsp;array)&nbsp;-&gt;&nbsp;The&nbsp;types&nbsp;of&nbsp;event&nbsp;to&nbsp;report,&nbsp;as&nbsp;specified&nbsp;in<br>
-https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype<br>
+<a href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype">https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype</a><br>
 The&nbsp;specified&nbsp;filter&nbsp;overrides&nbsp;any&nbsp;previous&nbsp;filters,&nbsp;passing&nbsp;empty<br>
 filter&nbsp;disables&nbsp;recording.<br>
 Note&nbsp;that&nbsp;not&nbsp;all&nbsp;types&nbsp;exposed&nbsp;to&nbsp;the&nbsp;web&nbsp;platform&nbsp;are&nbsp;currently&nbsp;supported.<br>
@@ -6960,6 +7000,10 @@ This&nbsp;command&nbsp;simply&nbsp;returns&nbsp;all&nbsp;waiting&nbsp;messages&n
 instance.&nbsp;This&nbsp;can&nbsp;be&nbsp;useful&nbsp;when&nbsp;waiting&nbsp;for&nbsp;a&nbsp;specific&nbsp;asynchronous&nbsp;message<br>
 from&nbsp;chrome,&nbsp;but&nbsp;higher&nbsp;level&nbsp;calls&nbsp;are&nbsp;better&nbsp;suited&nbsp;for&nbsp;managing&nbsp;wait-for-message<br>
 type&nbsp;needs.</tt></dd></dl>
+
+<dl><dt><a name="ChromeRemoteDebugInterface-for_existing_tab"><strong>for_existing_tab</strong></a>(self, tab_id, *args, **kwargs)</dt><dd><tt>Create&nbsp;a&nbsp;interface&nbsp;object&nbsp;for&nbsp;an&nbsp;existing&nbsp;tab.<br>
+&nbsp;<br>
+tab_id&nbsp;is&nbsp;a&nbsp;UUID&nbsp;object&nbsp;as&nbsp;lsited&nbsp;in&nbsp;the&nbsp;transport&nbsp;tab_id_map</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-process_available"><strong>process_available</strong></a>(self)</dt><dd><tt>Process&nbsp;all&nbsp;messages&nbsp;in&nbsp;the&nbsp;socket&nbsp;rx&nbsp;queue.<br>
 &nbsp;<br>

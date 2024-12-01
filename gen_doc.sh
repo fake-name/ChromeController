@@ -21,25 +21,25 @@ set -e
 # 	cp ../Chromium/src/out/Headless/gen/blink/core/inspector/protocol.json            ./ChromeController/protocols/js_protocol-r1.2.json
 # fi
 
-python3 gen_class.py
+pypy3 gen_class.py
 
 
-python3 -m pydoc -w ChromeController.TabPooledChromium
-python3 -m pydoc -w ChromeController.ChromeExecutionManager
-python3 -m pydoc -w ChromeController.ChromeRemoteDebugInterface
-python3 -m pydoc -w ChromeController.Generator
-python3 -m pydoc -w ChromeController.Generator.Generated
-python3 -m pydoc -w ChromeController.Generator.gen
-python3 -m pydoc -w ChromeController
-python3 -m pydoc -w ChromeController.filter_funcs
-python3 -m pydoc -w ChromeController.exit_handler
-python3 -m pydoc -w ChromeController.__main__
-python3 -m pydoc -w ChromeController.manager
-python3 -m pydoc -w ChromeController.cr_exceptions
-python3 -m pydoc -w ChromeController.chrome_context
-python3 -m pydoc -w ChromeController.manager_base
-python3 -m pydoc -w ChromeController.tab_pool
-python3 -m pydoc -w ChromeController.transport
+pypy3 -m pydoc -w ChromeController.TabPooledChromium
+pypy3 -m pydoc -w ChromeController.ChromeExecutionManager
+pypy3 -m pydoc -w ChromeController.ChromeRemoteDebugInterface
+pypy3 -m pydoc -w ChromeController.Generator
+pypy3 -m pydoc -w ChromeController.Generator.Generated
+pypy3 -m pydoc -w ChromeController.Generator.gen
+pypy3 -m pydoc -w ChromeController
+pypy3 -m pydoc -w ChromeController.filter_funcs
+pypy3 -m pydoc -w ChromeController.exit_handler
+pypy3 -m pydoc -w ChromeController.__main__
+pypy3 -m pydoc -w ChromeController.manager
+pypy3 -m pydoc -w ChromeController.cr_exceptions
+pypy3 -m pydoc -w ChromeController.chrome_context
+pypy3 -m pydoc -w ChromeController.manager_base
+pypy3 -m pydoc -w ChromeController.tab_pool
+pypy3 -m pydoc -w ChromeController.transport
 
 mv ChromeController.chrome_context.html                ./docs/ChromeController.chrome_context.html
 mv ChromeController.cr_exceptions.html                 ./docs/ChromeController.cr_exceptions.html

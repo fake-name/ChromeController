@@ -19,7 +19,8 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="ChromeController.cr_exceptions.html">ChromeController.cr_exceptions</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="builtins.html">builtins</a><br>
+<a href="ChromeController.cr_exceptions.html">ChromeController.cr_exceptions</a><br>
 <a href="distutils.html">distutils</a><br>
 <a href="json.html">json</a><br>
 <a href="logging.html">logging</a><br>
@@ -27,12 +28,13 @@
 <a href="pprint.html">pprint</a><br>
 <a href="requests.html">requests</a><br>
 <a href="shlex.html">shlex</a><br>
-</td><td width="25%" valign=top><a href="signal.html">signal</a><br>
-<a href="socket.html">socket</a><br>
+<a href="signal.html">signal</a><br>
+</td><td width="25%" valign=top><a href="socket.html">socket</a><br>
 <a href="subprocess.html">subprocess</a><br>
 <a href="sys.html">sys</a><br>
-</td><td width="25%" valign=top><a href="time.html">time</a><br>
+<a href="time.html">time</a><br>
 <a href="traceback.html">traceback</a><br>
+</td><td width="25%" valign=top><a href="uuid.html">uuid</a><br>
 <a href="websocket.html">websocket</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -56,7 +58,9 @@
 <font color="#000000" face="helvetica, arial"><a name="ChromeExecutionManager">class <strong>ChromeExecutionManager</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Class&nbsp;for&nbsp;managing&nbsp;talking&nbsp;to&nbsp;a&nbsp;chromium&nbsp;instance,&nbsp;as&nbsp;well&nbsp;as<br>
+<td colspan=2><tt><a href="#ChromeExecutionManager">ChromeExecutionManager</a>(binary,&nbsp;base_tab_key,&nbsp;host='localhost',&nbsp;port=None,&nbsp;websocket_timeout=10,&nbsp;enable_gpu=False,&nbsp;headless=True,&nbsp;xvfb=False,&nbsp;additional_options=[])<br>
+&nbsp;<br>
+Class&nbsp;for&nbsp;managing&nbsp;talking&nbsp;to&nbsp;a&nbsp;chromium&nbsp;instance,&nbsp;as&nbsp;well&nbsp;as<br>
 managing&nbsp;the&nbsp;chromium&nbsp;instance's&nbsp;execution&nbsp;lifetime.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
@@ -72,7 +76,7 @@ If&nbsp;port&nbsp;is&nbsp;not&nbsp;none,&nbsp;and&nbsp;the&nbsp;port&nbsp;is&nbs
 &nbsp;<br>
 base_tab_key&nbsp;is&nbsp;any&nbsp;hashable&nbsp;python&nbsp;<a href="builtins.html#object">object</a>&nbsp;that&nbsp;is&nbsp;used&nbsp;for&nbsp;multi-tab&nbsp;interfacing.</tt></dd></dl>
 
-<dl><dt><a name="ChromeExecutionManager-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
+<dl><dt><a name="ChromeExecutionManager-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="ChromeExecutionManager-asynchronous_command"><strong>asynchronous_command</strong></a>(self, command, tab_key, **params)</dt><dd><tt>Asynchronously&nbsp;send&nbsp;command&nbsp;`command`&nbsp;with&nbsp;params&nbsp;`params`&nbsp;in&nbsp;the<br>
 remote&nbsp;chrome&nbsp;instance,&nbsp;returning&nbsp;the&nbsp;send_id&nbsp;for&nbsp;the&nbsp;sent&nbsp;command.</tt></dd></dl>
@@ -196,6 +200,13 @@ The&nbsp;command&nbsp;`id`&nbsp;is&nbsp;automatically&nbsp;added&nbsp;to&nbsp;th
 &nbsp;<br>
 return&nbsp;value&nbsp;is&nbsp;the&nbsp;command&nbsp;id,&nbsp;which&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;match&nbsp;a&nbsp;command<br>
 to&nbsp;it's&nbsp;associated&nbsp;response.</tt></dd></dl>
+
+<dl><dt><a name="ChromeExecutionManager-sync_tablist"><strong>sync_tablist</strong></a>(self)</dt><dd><tt>Sync&nbsp;tablist&nbsp;with&nbsp;browser,&nbsp;adding&nbsp;any&nbsp;tabs&nbsp;created&nbsp;by&nbsp;the&nbsp;browser&nbsp;itself&nbsp;to&nbsp;the&nbsp;available&nbsp;tab&nbsp;listing.<br>
+This&nbsp;is&nbsp;mostly&nbsp;useful&nbsp;to&nbsp;maually&nbsp;call&nbsp;if&nbsp;you&nbsp;are&nbsp;trying&nbsp;to&nbsp;interact&nbsp;with&nbsp;things&nbsp;like&nbsp;extensions,&nbsp;that<br>
+internally&nbsp;change&nbsp;tab&nbsp;IDs.<br>
+&nbsp;<br>
+This&nbsp;also&nbsp;gets&nbsp;called&nbsp;before&nbsp;each&nbsp;tab&nbsp;creation,&nbsp;because&nbsp;we&nbsp;need&nbsp;to&nbsp;be&nbsp;able&nbsp;to&nbsp;determine&nbsp;which<br>
+tab&nbsp;is&nbsp;actually&nbsp;newly&nbsp;created&nbsp;after&nbsp;interacting&nbsp;with&nbsp;the&nbsp;browser.</tt></dd></dl>
 
 <dl><dt><a name="ChromeExecutionManager-synchronous_command"><strong>synchronous_command</strong></a>(self, command, tab_key, **params)</dt><dd><tt>Synchronously&nbsp;execute&nbsp;command&nbsp;`command`&nbsp;with&nbsp;params&nbsp;`params`&nbsp;in&nbsp;the<br>
 remote&nbsp;chrome&nbsp;instance,&nbsp;returning&nbsp;the&nbsp;response&nbsp;from&nbsp;the&nbsp;chrome&nbsp;instance.</tt></dd></dl>

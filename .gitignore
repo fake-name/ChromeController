@@ -5,3 +5,4 @@ __pycache__
 /build/*
 /ChromeController.egg-info
 dist
+/logs

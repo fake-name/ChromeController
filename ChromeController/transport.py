@@ -21,6 +21,8 @@ import subprocess
 import distutils.spawn
 from . import cr_exceptions
 
+import uuid
+
 if sys.platform == 'win32':
 	import pywintypes
 	import win32con
@@ -437,7 +439,34 @@ class ChromeExecutionManager():
 		for line in pprint.pformat(list(enumerate(self.tablist))).split("\n"):
 			self.log.info("	%s", line)
 
+		self.log.info("Tab ID Map: %s", type(self.tab_id_map))
+		for line in pprint.pformat(list(enumerate(self.tab_id_map))).split("\n"):
+			self.log.info("	%s", line)
+
+	def sync_tablist(self):
+		'''
+		Sync tablist with browser, adding any tabs created by the browser itself to the available tab listing.
+		This is mostly useful to maually call if you are trying to interact with things like extensions, that
+		internally change tab IDs.
+
+		This also gets called before each tab creation, because we need to be able to determine which
+		tab is actually newly created after interacting with the browser.
+		'''
+
+		self.tablist = self.fetch_tablist()
+		known_tabs = list(self.tab_id_map.values())
+		for tab in self.tablist:
+
+			# Glom onto the first tab in the tablist that's not known.
+			if tab['id'] not in [tmp['id'] for tmp in known_tabs]:
+				tab_id = uuid.uuid4()
+				self.log.debug("New tab created with ID: '%s'", tab['id'])
+				self.tab_id_map[tab_id] = tab
+
 	def __create_new_tab(self, tab_key, start_at_url=None):
+
+		self.sync_tablist()
+
 		url = "http://%s:%s/json/new" % (self.host, self.port)
 		if start_at_url:
 			url += "?%s" % (start_at_url, )
@@ -498,6 +527,10 @@ class ChromeExecutionManager():
 		self.log.info("Closing websocket connecton %s (%s)", tab_key, len(self.soclist))
 		self.soclist.pop(tab_key, None)
 
+		# Handle the case where we've closed everything.
+		if len(self.soclist) == 0:
+			return {}
+
 		self.tablist = self.fetch_tablist()
 		return self.tablist
 
@@ -512,12 +545,15 @@ class ChromeExecutionManager():
 			self.close_chromium()
 
 	def close_all(self):
-		self.log.info("Closing all tabs.")
-		for tab_key in list(self.tab_id_map.keys()):
-			self.log.info("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key]['id'])
-			self.__close_tab(tab_key)
+		# self.log.info("Closing all tabs.")
+		# for tab_key in list(self.tab_id_map.keys()):
+		# 	self.log.info("Closing tab %s (cr ID: %s)", tab_key, self.tab_id_map[tab_key]['id'])
+		# 	try:
+		# 		self.__close_tab(tab_key)
+		# 	except:
+		# 		pass
 
-		self.log.info("All tabs are closed. Closing chromium!")
+		self.log.info("Closing chromium!")
 		self.close_websockets()
 		self.close_chromium()
 
@@ -804,7 +840,10 @@ class ChromeExecutionManager():
 		Will block for at least 100 milliseconds.
 
 		'''
-		self.__recv(tab_key, timeout=timeout)
+		have = self.__recv(tab_key, timeout=timeout)
+		while have:
+			have = self.__recv(tab_key, timeout=timeout)
+
 
 	def recv(self, tab_key, message_id=None, timeout=30):
 		'''

@@ -269,6 +269,11 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 	def _unpack_xhr_resp(self, values):
 		ret = {}
 
+		if isinstance(values, list):
+			# When the xhr fails (I believe due to the page context being invalid),
+			# you get a list, rather then a dict
+			raise ChromeError("Received non-dict item in response to xhr!")
+
 		# Handle single objects without all the XHR stuff.
 		# This seems to be a chrome 84 change.
 		if set(values.keys()) == set(['type', 'value']):
@@ -943,6 +948,47 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		at least dom_idle_requirement_secs seconds.
 		'''
 
+		self.wait_for_dom_idle(dom_idle_requirement_secs, max_wait_timeout)
+
+		root_node_id = self.get_dom_root_id()
+
+		# Use that to get the HTML for the specified node
+		response = self.DOM_getOuterHTML(nodeId=root_node_id)
+
+		assert 'result' in response
+		assert 'outerHTML' in response['result']
+		return response['result']['outerHTML']
+
+	def wait_for_dom_idle(self, dom_idle_requirement_secs=3, max_wait_timeout=30):
+		'''
+		Wait for the DOM to be idle.
+
+		This does some guesses about what it means for the DOM to genuinly be idle,
+		but it should (generally) work.
+
+		It will wait until the there have been none of the following events for `dom_idle_requirement_secs`
+		seconds. Note that these are events from the chromium dev tool protocol, and how they map to
+		actual javascripts events is defined by that.
+		 - "Page.frameResized",
+		 - "Page.frameStartedLoading",
+		 - "Page.frameNavigated",
+		 - "Page.frameAttached",
+		 - "Page.frameStoppedLoading",
+		 - "Page.frameScheduledNavigation",
+		 - "Page.domContentEventFired",
+		 - "Page.frameClearedScheduledNavigation",
+		 - "Page.loadEventFired",
+		 - "DOM.documentUpdated",
+		 - "DOM.childNodeInserted",
+		 - "DOM.childNodeRemoved",
+		 - "DOM.childNodeCountUpdated",
+
+		If the DOM is never idle for `max_wait_timeout` seconds, it will give up and return early.
+
+		Note that due to how this works, it will ALWAYS take at least `dom_idle_requirement_secs` seconds
+		to return.
+		'''
+
 		# There are a bunch of events which generally indicate a page is still doing *things*.
 		# I have some concern about how this will handle things like advertisements, which
 		# basically load crap forever. That's why we have the max_wait_timeout.
@@ -977,16 +1023,6 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 		except ChromeResponseNotReceived:
 			# We timed out, the DOM is probably idle.
 			pass
-
-		root_node_id = self.get_dom_root_id()
-
-		# Use that to get the HTML for the specified node
-		response = self.DOM_getOuterHTML(nodeId=root_node_id)
-
-		assert 'result' in response
-		assert 'outerHTML' in response['result']
-		return response['result']['outerHTML']
-
 
 	def take_screeshot(self):
 		'''
@@ -1211,4 +1247,52 @@ class ChromeRemoteDebugInterface(ChromeRemoteDebugInterface_base):
 			button = 'left',
 			clickCount=1,
 		)
+
+
+	def fetch_content_with_chrome(self, url):
+		'''
+		Fetch an arbitrary URL with chromium, and return the content.
+
+		This doesn't use JS to do a XHR fetch, so it should hopefully not depend on
+		the current tab's origin/cross-domain content security settings.
+
+		Instead, it directly uses the devtools Network.loadNetworkResource() and then
+		streams the result using IO.read().
+
+		Binary files are returnned as bytestrings, textual responses are returned in
+		unicode. The browser determines this, it's not controllable via the API.
+		'''
+		ft = self.Page_getFrameTree()
+
+		frame_id = ft['result']['frameTree']['frame']['id']
+
+		load_options = {
+
+			"disableCache"       : False,
+			"includeCredentials" : True,
+		}
+
+
+		result = self.Network_loadNetworkResource(frameId=frame_id, url=url, options=load_options)
+
+		file_meta = result['result']['resource']
+
+
+		def maybe_decode(in_obj):
+			if in_obj['base64Encoded']:
+				return base64.b64decode(in_obj['data'])
+			else:
+				return in_obj['data']
+
+		if 'stream' in file_meta:
+			stream_id = file_meta['stream']
+			s_chunk = self.IO_read(handle=result['result']['resource']['stream'], size=1024)
+			f_buf = maybe_decode(s_chunk['result'])
+			while s_chunk['result']['eof'] == False:
+				s_chunk = self.IO_read(handle=result['result']['resource']['stream'], size=1024)
+				f_buf += maybe_decode(s_chunk['result'])
+			return f_buf
+		else:
+			import pdb
+			pdb.set_trace()
 

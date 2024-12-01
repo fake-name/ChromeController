@@ -12,6 +12,14 @@
     <p></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="builtins.html">builtins</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
@@ -31,7 +39,11 @@
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="ChromeRemoteDebugInterface">class <strong>ChromeRemoteDebugInterface</strong></a>(<a href="ChromeController.manager_base.html#ChromeInterface">ChromeController.manager_base.ChromeInterface</a>)</font></td></tr>
     
-<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#ChromeRemoteDebugInterface">ChromeRemoteDebugInterface</a>(*args,&nbsp;**kwargs)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.Generator.Generated.html#ChromeRemoteDebugInterface">ChromeRemoteDebugInterface</a></dd>
 <dd><a href="ChromeController.manager_base.html#ChromeInterface">ChromeController.manager_base.ChromeInterface</a></dd>
@@ -2966,7 +2978,7 @@ display.&nbsp;Reported&nbsp;for&nbsp;diagnostic&nbsp;uses,&nbsp;may&nbsp;be&nbsp
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Sends&nbsp;a&nbsp;BeginFrame&nbsp;to&nbsp;the&nbsp;target&nbsp;and&nbsp;returns&nbsp;when&nbsp;the&nbsp;frame&nbsp;was&nbsp;completed.&nbsp;Optionally&nbsp;captures&nbsp;a<br>
 screenshot&nbsp;from&nbsp;the&nbsp;resulting&nbsp;frame.&nbsp;Requires&nbsp;that&nbsp;the&nbsp;target&nbsp;was&nbsp;created&nbsp;with&nbsp;enabled<br>
 BeginFrameControl.&nbsp;Designed&nbsp;for&nbsp;use&nbsp;with&nbsp;--run-all-compositor-stages-before-draw,&nbsp;see&nbsp;also<br>
-https://goo.gl/3zHXhB&nbsp;for&nbsp;more&nbsp;background.</tt></dd></dl>
+<a href="https://goo.gl/3zHXhB">https://goo.gl/3zHXhB</a>&nbsp;for&nbsp;more&nbsp;background.</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-HeadlessExperimental_disable"><strong>HeadlessExperimental_disable</strong></a>(self)</dt><dd><tt>Function&nbsp;path:&nbsp;HeadlessExperimental.disable<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;HeadlessExperimental<br>
@@ -3296,7 +3308,7 @@ modifiers,&nbsp;keyboard&nbsp;layout,&nbsp;etc&nbsp;(e.g.,&nbsp;'AltGr')&nbsp;(d
 0).<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'commands'&nbsp;(type:&nbsp;array)&nbsp;-&gt;&nbsp;Editing&nbsp;commands&nbsp;to&nbsp;send&nbsp;with&nbsp;the&nbsp;key&nbsp;event&nbsp;(e.g.,&nbsp;'selectAll')&nbsp;(default:&nbsp;[]).<br>
 These&nbsp;are&nbsp;related&nbsp;to&nbsp;but&nbsp;not&nbsp;equal&nbsp;the&nbsp;command&nbsp;names&nbsp;used&nbsp;in&nbsp;`document.execCommand`&nbsp;and&nbsp;NSStandardKeyBindingResponding.<br>
-See&nbsp;https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/editing/commands/editor_command_names.h&nbsp;for&nbsp;valid&nbsp;command&nbsp;names.<br>
+See&nbsp;<a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/editing/commands/editor_command_names.h">https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/editing/commands/editor_command_names.h</a>&nbsp;for&nbsp;valid&nbsp;command&nbsp;names.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;return&nbsp;value.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Dispatches&nbsp;a&nbsp;key&nbsp;event&nbsp;to&nbsp;the&nbsp;page.</tt></dd></dl>
@@ -5239,7 +5251,7 @@ See&nbsp;also:&nbsp;`Page.produceCompilationCache`.</tt></dd></dl>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description:&nbsp;Tries&nbsp;to&nbsp;update&nbsp;the&nbsp;web&nbsp;lifecycle&nbsp;state&nbsp;of&nbsp;the&nbsp;page.<br>
 It&nbsp;will&nbsp;transition&nbsp;the&nbsp;page&nbsp;to&nbsp;the&nbsp;given&nbsp;state&nbsp;according&nbsp;to:<br>
-https://github.com/WICG/web-lifecycle/</tt></dd></dl>
+<a href="https://github.com/WICG/web-lifecycle/">https://github.com/WICG/web-lifecycle/</a></tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-Page_startScreencast"><strong>Page_startScreencast</strong></a>(self, **kwargs)</dt><dd><tt>Function&nbsp;path:&nbsp;Page.startScreencast<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Domain:&nbsp;Page<br>
@@ -5293,7 +5305,7 @@ https://github.com/WICG/web-lifecycle/</tt></dd></dl>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameters:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Required&nbsp;arguments:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'eventTypes'&nbsp;(type:&nbsp;array)&nbsp;-&gt;&nbsp;The&nbsp;types&nbsp;of&nbsp;event&nbsp;to&nbsp;report,&nbsp;as&nbsp;specified&nbsp;in<br>
-https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype<br>
+<a href="https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype">https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype</a><br>
 The&nbsp;specified&nbsp;filter&nbsp;overrides&nbsp;any&nbsp;previous&nbsp;filters,&nbsp;passing&nbsp;empty<br>
 filter&nbsp;disables&nbsp;recording.<br>
 Note&nbsp;that&nbsp;not&nbsp;all&nbsp;types&nbsp;exposed&nbsp;to&nbsp;the&nbsp;web&nbsp;platform&nbsp;are&nbsp;currently&nbsp;supported.<br>
@@ -6735,6 +6747,10 @@ This&nbsp;command&nbsp;simply&nbsp;returns&nbsp;all&nbsp;waiting&nbsp;messages&n
 instance.&nbsp;This&nbsp;can&nbsp;be&nbsp;useful&nbsp;when&nbsp;waiting&nbsp;for&nbsp;a&nbsp;specific&nbsp;asynchronous&nbsp;message<br>
 from&nbsp;chrome,&nbsp;but&nbsp;higher&nbsp;level&nbsp;calls&nbsp;are&nbsp;better&nbsp;suited&nbsp;for&nbsp;managing&nbsp;wait-for-message<br>
 type&nbsp;needs.</tt></dd></dl>
+
+<dl><dt><a name="ChromeRemoteDebugInterface-for_existing_tab"><strong>for_existing_tab</strong></a>(self, tab_id, *args, **kwargs)</dt><dd><tt>Create&nbsp;a&nbsp;interface&nbsp;object&nbsp;for&nbsp;an&nbsp;existing&nbsp;tab.<br>
+&nbsp;<br>
+tab_id&nbsp;is&nbsp;a&nbsp;UUID&nbsp;object&nbsp;as&nbsp;lsited&nbsp;in&nbsp;the&nbsp;transport&nbsp;tab_id_map</tt></dd></dl>
 
 <dl><dt><a name="ChromeRemoteDebugInterface-new_tab"><strong>new_tab</strong></a>(self, *args, **kwargs)</dt></dl>
 

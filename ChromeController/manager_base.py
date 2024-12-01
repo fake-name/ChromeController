@@ -341,6 +341,18 @@ class ChromeInterface(ChromeListenerMixin):
 		self.transport._check_process_dead()
 		return new
 
+	def for_existing_tab(self, tab_id, *args, **kwargs):
+		'''
+		Create a interface object for an existing tab.
+
+		tab_id is a UUID object as lsited in the transport tab_id_map
+		'''
+
+		new = self.__class__(use_execution_manager=(self.transport, tab_id), *args, **kwargs)
+
+		self.transport._check_process_dead()
+		return new
+
 	def close(self):
 		# The process shouldn't be dead before we explicitly kill it.
 		self.transport._check_process_dead()

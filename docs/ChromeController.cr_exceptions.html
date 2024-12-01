@@ -12,6 +12,14 @@
     <p></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="builtins.html">builtins</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
@@ -57,7 +65,9 @@
 <font color="#000000" face="helvetica, arial"><a name="ChromeCommunicationsError">class <strong>ChromeCommunicationsError</strong></a>(<a href="ChromeController.cr_exceptions.html#ChromeControllerException">ChromeControllerException</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeCommunicationsError">ChromeCommunicationsError</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ChromeCommunicationsError">ChromeCommunicationsError</a></dd>
@@ -73,37 +83,30 @@ Data descriptors inherited from <a href="ChromeController.cr_exceptions.html#Chr
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ChromeCommunicationsError-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeCommunicationsError-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ChromeCommunicationsError-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeCommunicationsError-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeCommunicationsError-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeCommunicationsError-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ChromeCommunicationsError-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeCommunicationsError-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeCommunicationsError-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ChromeCommunicationsError-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeCommunicationsError-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeCommunicationsError-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ChromeCommunicationsError-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeCommunicationsError-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ChromeCommunicationsError-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ChromeCommunicationsError-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeCommunicationsError-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ChromeCommunicationsError-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeCommunicationsError-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
@@ -120,7 +123,9 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 <font color="#000000" face="helvetica, arial"><a name="ChromeConnectFailure">class <strong>ChromeConnectFailure</strong></a>(<a href="ChromeController.cr_exceptions.html#ChromeControllerException">ChromeControllerException</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeConnectFailure">ChromeConnectFailure</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ChromeConnectFailure">ChromeConnectFailure</a></dd>
@@ -136,37 +141,30 @@ Data descriptors inherited from <a href="ChromeController.cr_exceptions.html#Chr
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ChromeConnectFailure-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeConnectFailure-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ChromeConnectFailure-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeConnectFailure-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeConnectFailure-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeConnectFailure-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ChromeConnectFailure-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeConnectFailure-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeConnectFailure-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ChromeConnectFailure-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeConnectFailure-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeConnectFailure-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ChromeConnectFailure-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeConnectFailure-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ChromeConnectFailure-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ChromeConnectFailure-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeConnectFailure-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ChromeConnectFailure-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeConnectFailure-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
@@ -183,7 +181,9 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 <font color="#000000" face="helvetica, arial"><a name="ChromeControllerException">class <strong>ChromeControllerException</strong></a>(<a href="builtins.html#RuntimeError">builtins.RuntimeError</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeControllerException">ChromeControllerException</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ChromeControllerException">ChromeControllerException</a></dd>
@@ -198,37 +198,30 @@ Data descriptors defined here:<br>
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ChromeControllerException-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeControllerException-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ChromeControllerException-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeControllerException-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeControllerException-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeControllerException-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ChromeControllerException-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeControllerException-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeControllerException-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ChromeControllerException-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeControllerException-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeControllerException-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ChromeControllerException-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeControllerException-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ChromeControllerException-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ChromeControllerException-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeControllerException-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ChromeControllerException-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeControllerException-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
@@ -245,7 +238,9 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 <font color="#000000" face="helvetica, arial"><a name="ChromeDiedError">class <strong>ChromeDiedError</strong></a>(<a href="ChromeController.cr_exceptions.html#ChromeError">ChromeError</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeDiedError">ChromeDiedError</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ChromeDiedError">ChromeDiedError</a></dd>
@@ -262,37 +257,30 @@ Data descriptors inherited from <a href="ChromeController.cr_exceptions.html#Chr
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ChromeDiedError-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeDiedError-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ChromeDiedError-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeDiedError-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeDiedError-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeDiedError-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ChromeDiedError-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeDiedError-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeDiedError-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ChromeDiedError-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeDiedError-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeDiedError-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ChromeDiedError-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeDiedError-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ChromeDiedError-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ChromeDiedError-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeDiedError-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ChromeDiedError-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeDiedError-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
@@ -309,7 +297,9 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 <font color="#000000" face="helvetica, arial"><a name="ChromeError">class <strong>ChromeError</strong></a>(<a href="ChromeController.cr_exceptions.html#ChromeControllerException">ChromeControllerException</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeError">ChromeError</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ChromeError">ChromeError</a></dd>
@@ -325,37 +315,30 @@ Data descriptors inherited from <a href="ChromeController.cr_exceptions.html#Chr
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ChromeError-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeError-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ChromeError-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeError-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeError-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeError-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ChromeError-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeError-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeError-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ChromeError-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeError-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeError-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ChromeError-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeError-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ChromeError-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ChromeError-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeError-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ChromeError-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeError-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
@@ -372,7 +355,9 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 <font color="#000000" face="helvetica, arial"><a name="ChromeNavigateTimedOut">class <strong>ChromeNavigateTimedOut</strong></a>(<a href="ChromeController.cr_exceptions.html#ChromeError">ChromeError</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeNavigateTimedOut">ChromeNavigateTimedOut</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ChromeNavigateTimedOut">ChromeNavigateTimedOut</a></dd>
@@ -389,37 +374,30 @@ Data descriptors inherited from <a href="ChromeController.cr_exceptions.html#Chr
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ChromeNavigateTimedOut-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeNavigateTimedOut-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ChromeNavigateTimedOut-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeNavigateTimedOut-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeNavigateTimedOut-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeNavigateTimedOut-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ChromeNavigateTimedOut-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeNavigateTimedOut-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeNavigateTimedOut-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ChromeNavigateTimedOut-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeNavigateTimedOut-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeNavigateTimedOut-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ChromeNavigateTimedOut-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeNavigateTimedOut-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ChromeNavigateTimedOut-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ChromeNavigateTimedOut-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeNavigateTimedOut-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ChromeNavigateTimedOut-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeNavigateTimedOut-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
@@ -436,7 +414,9 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 <font color="#000000" face="helvetica, arial"><a name="ChromeResponseNotReceived">class <strong>ChromeResponseNotReceived</strong></a>(<a href="ChromeController.cr_exceptions.html#ChromeError">ChromeError</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeResponseNotReceived">ChromeResponseNotReceived</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ChromeResponseNotReceived">ChromeResponseNotReceived</a></dd>
@@ -453,37 +433,30 @@ Data descriptors inherited from <a href="ChromeController.cr_exceptions.html#Chr
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ChromeResponseNotReceived-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeResponseNotReceived-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ChromeResponseNotReceived-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeResponseNotReceived-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeResponseNotReceived-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeResponseNotReceived-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ChromeResponseNotReceived-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeResponseNotReceived-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeResponseNotReceived-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ChromeResponseNotReceived-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeResponseNotReceived-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeResponseNotReceived-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ChromeResponseNotReceived-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeResponseNotReceived-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ChromeResponseNotReceived-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ChromeResponseNotReceived-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeResponseNotReceived-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ChromeResponseNotReceived-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeResponseNotReceived-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
@@ -500,7 +473,9 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 <font color="#000000" face="helvetica, arial"><a name="ChromeStartupException">class <strong>ChromeStartupException</strong></a>(<a href="ChromeController.cr_exceptions.html#ChromeControllerException">ChromeControllerException</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeStartupException">ChromeStartupException</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ChromeStartupException">ChromeStartupException</a></dd>
@@ -516,37 +491,30 @@ Data descriptors inherited from <a href="ChromeController.cr_exceptions.html#Chr
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ChromeStartupException-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeStartupException-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ChromeStartupException-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeStartupException-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeStartupException-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeStartupException-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ChromeStartupException-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeStartupException-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeStartupException-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ChromeStartupException-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeStartupException-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeStartupException-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ChromeStartupException-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeStartupException-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ChromeStartupException-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ChromeStartupException-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeStartupException-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ChromeStartupException-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeStartupException-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
@@ -563,7 +531,9 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 <font color="#000000" face="helvetica, arial"><a name="ChromeTabNotFoundError">class <strong>ChromeTabNotFoundError</strong></a>(<a href="ChromeController.cr_exceptions.html#ChromeCommunicationsError">ChromeCommunicationsError</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ChromeTabNotFoundError">ChromeTabNotFoundError</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ChromeTabNotFoundError">ChromeTabNotFoundError</a></dd>
@@ -580,37 +550,30 @@ Data descriptors inherited from <a href="ChromeController.cr_exceptions.html#Chr
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ChromeTabNotFoundError-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeTabNotFoundError-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ChromeTabNotFoundError-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ChromeTabNotFoundError-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeTabNotFoundError-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeTabNotFoundError-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ChromeTabNotFoundError-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeTabNotFoundError-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ChromeTabNotFoundError-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ChromeTabNotFoundError-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeTabNotFoundError-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ChromeTabNotFoundError-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ChromeTabNotFoundError-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeTabNotFoundError-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ChromeTabNotFoundError-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ChromeTabNotFoundError-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ChromeTabNotFoundError-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ChromeTabNotFoundError-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ChromeTabNotFoundError-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
@@ -627,7 +590,9 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 <font color="#000000" face="helvetica, arial"><a name="ReusedPortError">class <strong>ReusedPortError</strong></a>(<a href="ChromeController.cr_exceptions.html#ChromeStartupException">ChromeStartupException</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Unspecified&nbsp;run-time&nbsp;error.<br>&nbsp;</tt></td></tr>
+<td colspan=2><tt><a href="#ReusedPortError">ReusedPortError</a>(*args,&nbsp;**keywords)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="ChromeController.cr_exceptions.html#ReusedPortError">ReusedPortError</a></dd>
@@ -644,37 +609,30 @@ Data descriptors inherited from <a href="ChromeController.cr_exceptions.html#Chr
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
 <hr>
-Methods inherited from <a href="builtins.html#RuntimeError">builtins.RuntimeError</a>:<br>
-<dl><dt><a name="ReusedPortError-__init__"><strong>__init__</strong></a>(self, /, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ReusedPortError-__init__"><strong>__init__</strong></a>(self, *args)</dt></dl>
 
-<dl><dt><a name="ReusedPortError-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="builtins.html#type">builtins.type</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="ReusedPortError-__reduce__"><strong>__reduce__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ReusedPortError-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ReusedPortError-__setstate__"><strong>__setstate__</strong></a>(self, dict)</dt></dl>
+
+<dl><dt><a name="ReusedPortError-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ReusedPortError-__unicode__"><strong>__unicode__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ReusedPortError-with_traceback"><strong>with_traceback</strong></a>(self, traceback)</dt></dl>
 
 <hr>
-Methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
-<dl><dt><a name="ReusedPortError-__delattr__"><strong>__delattr__</strong></a>(self, name, /)</dt><dd><tt>Implement&nbsp;delattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ReusedPortError-__getattribute__"><strong>__getattribute__</strong></a>(self, name, /)</dt><dd><tt>Return&nbsp;getattr(self,&nbsp;name).</tt></dd></dl>
-
-<dl><dt><a name="ReusedPortError-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="ReusedPortError-__repr__"><strong>__repr__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
-
-<dl><dt><a name="ReusedPortError-__setattr__"><strong>__setattr__</strong></a>(self, name, value, /)</dt><dd><tt>Implement&nbsp;setattr(self,&nbsp;name,&nbsp;value).</tt></dd></dl>
-
-<dl><dt><a name="ReusedPortError-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
-
-<dl><dt><a name="ReusedPortError-__str__"><strong>__str__</strong></a>(self, /)</dt><dd><tt>Return&nbsp;str(self).</tt></dd></dl>
-
-<dl><dt><a name="ReusedPortError-with_traceback"><strong>with_traceback</strong></a>(...)</dt><dd><tt>Exception.<a href="#ReusedPortError-with_traceback">with_traceback</a>(tb)&nbsp;--<br>
-set&nbsp;self.<strong>__traceback__</strong>&nbsp;to&nbsp;tb&nbsp;and&nbsp;return&nbsp;self.</tt></dd></dl>
+Static methods inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
+<dl><dt><a name="ReusedPortError-__new__"><strong>__new__</strong></a>(subtype, *args, **keywords)</dt></dl>
 
 <hr>
 Data descriptors inherited from <a href="builtins.html#BaseException">builtins.BaseException</a>:<br>
 <dl><dt><strong>__cause__</strong></dt>
-<dd><tt>exception&nbsp;cause</tt></dd>
 </dl>
 <dl><dt><strong>__context__</strong></dt>
-<dd><tt>exception&nbsp;context</tt></dd>
 </dl>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>

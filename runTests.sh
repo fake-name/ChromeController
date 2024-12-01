@@ -37,7 +37,8 @@ set -e
 # 	# tests.test_post
 # 	# tests.test_tab_pool
 
-pytest --exitfirst  --log-cli-level=DEBUG
+# pytest --exitfirst  --log-cli-level=DEBUG
+pytest --exitfirst
 
 # nosetests                            \
 # 	--with-coverage                  \
