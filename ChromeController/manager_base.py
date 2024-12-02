@@ -131,10 +131,10 @@ class ChromeListenerMixin():
 		# TODO: The generic filtering of Network.loadingFinished and Network.responseReceived should
 		# be moved into a single stand-alone handler that gets called first.
 		def _handler(ctx, message):
-			if 'method' in message and message['method'] == "Network.loadingFinished":
+			if 'method' in message and message['method'] == "Network.responseReceived":
 				request_id = message['params']['requestId']
 
-			elif 'method' in message and message['method'] == "Network.responseReceived":
+			elif 'method' in message and message['method'] == "Network.loadingFinished":
 				request_id = message['params']['requestId']
 				url = message['params']['response']['url']
 				self.__request_id_to_url_mapping[request_id]   = url
