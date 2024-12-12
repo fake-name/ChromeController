@@ -131,16 +131,23 @@ class ChromeListenerMixin():
 		# TODO: The generic filtering of Network.loadingFinished and Network.responseReceived should
 		# be moved into a single stand-alone handler that gets called first.
 		def _handler(ctx, message):
-			if 'method' in message and message['method'] == "Network.responseReceived":
-				request_id = message['params']['requestId']
 
-			elif 'method' in message and message['method'] == "Network.loadingFinished":
+			if 'method' in message and message['method'] == "Network.requestWillBeSent":
+				# Network.requestWillBeSent
 				request_id = message['params']['requestId']
-				url = message['params']['response']['url']
+				url = message['params']['request']['url']
 				self.__request_id_to_url_mapping[request_id]   = url
+
+			# elif 'method' in message and message['method'] == "Network.loadingFinished ":
+			elif 'method' in message and message['method'] == "Network.responseReceived":
+				request_id = message['params']['requestId']
+				assert self.__request_id_to_url_mapping[request_id] == message['params']['response']['url']
 				self.__request_id_to_response_meta[request_id] = message['params']['response']
 
-				if self._precondition_check_want_content_request(url=url, meta=message['params']['response']):
+				if self._precondition_check_want_content_request(
+							url  = self.__request_id_to_url_mapping[request_id],
+							meta = message['params']['response']
+						):
 					content_request_id = ctx.asynchronous_command("Network.getResponseBody", requestId = request_id)
 					self.__active_file_content_requests[content_request_id] = request_id
 
