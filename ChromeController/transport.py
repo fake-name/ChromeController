@@ -27,6 +27,7 @@ if sys.platform == 'win32':
 	import pywintypes
 	import win32con
 	import win32api
+	import winreg
 
 
 ACTIVE_PORTS = set()
@@ -48,6 +49,7 @@ class ChromeExecutionManager():
 			enable_gpu         = False,
 			headless           = True,
 			xvfb               = False,
+			profile_dir        = None,
 			additional_options = [],
 			):
 		"""
@@ -100,7 +102,7 @@ class ChromeExecutionManager():
 		# Not sure which.
 		for x in range(999):
 			try:
-				self._launch_process(self.binary, self.port, base_tab_key, additional_options)
+				self._launch_process(self.binary, self.port, base_tab_key, profile_dir, additional_options)
 				break
 			except cr_exceptions.ChromeConnectFailure:
 				if x > 3:
@@ -112,11 +114,44 @@ class ChromeExecutionManager():
 		self._messages = {}
 		self._message_filters = {}
 
+	def check_setup_profile_dir(self, profile_dir):
+		if os.path.exists(profile_dir):
+			return
 
-	def _launch_process(self, binary, dbg_port, base_tab_key, additional_options):
+		# # Auto-install ublock origin
+		# if sys.platform == 'win32':
+		# 	reg_dir = "Software\\Policies\\Google\\Chrome\\ExtensionInstallForcelist"
+
+		# 	self.log.info("Setting ublock origin forceinstall key in registry")
+
+		# 	with winreg.CreateKeyEx(winreg.HKEY_LOCAL_MACHINE, reg_dir, 0, winreg.KEY_WRITE) as key:
+		# 		winreg.SetValueEx(key, "1", 0, winreg.REG_SZ, "cjpalhdlnbpafiamejdnhcphjbkeiagm")
+
+		# 	with winreg.CreateKeyEx(winreg.HKEY_LOCAL_MACHINE, r"Software\Policies\Google\Chrome", 0, winreg.KEY_WRITE) as key:
+		# 		winreg.SetValueEx(key, "PromotionalTabsEnabled", 0, winreg.REG_BINARY, False)
+
+		# 	with winreg.CreateKeyEx(winreg.HKEY_LOCAL_MACHINE, r"Software\Policies\Google\Chrome", 0, winreg.KEY_WRITE) as key:
+		# 		winreg.SetValueEx(key, "ExtensionManifestV2Availability", 0, winreg.REG_DWORD, 2)
+
+
+		# else:
+		# 	binary = "chromium"
+
+
+		self.log.info("Creating profile directory %s", profile_dir)
+		os.makedirs(profile_dir)
+
+
+	def _launch_process(self, binary, dbg_port, base_tab_key, profile_dir, additional_options):
+		self.log.debug("Calling _launch_process with binary: '%s', dbg_port: '%s', base_tab_key: '%s', profile_dir: '%s', additional_options: '%s'",
+						binary, dbg_port, base_tab_key, profile_dir, additional_options)
+
+		if profile_dir is None:
+			profile_dir = os.path.join(os.path.dirname(sys.argv[0]), '.chromium-profile')
+			profile_dir = os.path.abspath(profile_dir)
+			self.check_setup_profile_dir(profile_dir)
 
 		if binary is None:
-
 			# Probably not a /great/ assumption, but windows is a thing
 			if sys.platform == 'win32':
 				binary = "chrome.exe"
@@ -124,6 +159,10 @@ class ChromeExecutionManager():
 				binary = "chromium"
 
 		binary, *args = shlex.split(binary)
+
+
+		self.log.debug("Binary: %s", binary)
+		self.log.debug("Args: %s", args)
 
 		if not os.path.exists(binary):
 
@@ -136,7 +175,7 @@ class ChromeExecutionManager():
 			if fixed:
 				binary = fixed
 		if not binary or not os.path.exists(binary):
-			self.log.warning("Could not find binary '%s'" % binary)
+			self.log.warning("Could not find binary '%s' (%s)" % (binary, os.path.exists(binary)))
 
 		if self.headless and self.xvfb:
 			raise RuntimeError("Headless mode with XVFB does not make sense")
@@ -155,8 +194,8 @@ class ChromeExecutionManager():
 				# Chrome circa ~111.0.5563.64 now checks this.
 				# Also lets be fancy and not just allow *
 				'--remote-allow-origins=http://%s:%s' % (self.host, self.port),
-
 				'--enable-features=NetworkService',
+				'--user-data-dir=%s' % profile_dir,
 			]
 		if self.headless:
 			argv.append('--headless')
@@ -176,6 +215,8 @@ class ChromeExecutionManager():
 		if 'linux' in sys.platform:
 			from . import exit_handler
 			preexec_fn = exit_handler.on_parent_exit('SIGTERM')
+
+		self.log.debug("Launching process with argv: %s", argv)
 
 		self.cr_proc = subprocess.Popen(argv,
 										creationflags = creationflags,

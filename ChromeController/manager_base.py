@@ -5,6 +5,8 @@ import pprint
 import gc
 import uuid
 import logging
+import json
+import traceback
 
 from . import cr_exceptions
 from .transport import ChromeExecutionManager
@@ -48,6 +50,8 @@ class ChromeListenerMixin():
 		self.__active_file_content_requests = {}
 
 		self._precondition_check_want_content_request = filter_stub
+
+		self.__requests_in_flight = 0
 
 
 	def install_message_handler(self, handler):
@@ -131,49 +135,74 @@ class ChromeListenerMixin():
 		# TODO: The generic filtering of Network.loadingFinished and Network.responseReceived should
 		# be moved into a single stand-alone handler that gets called first.
 		def _handler(ctx, message):
+			try:
+				if 'method' in message and message['method'] == "Network.requestWillBeSent":
+					# Network.requestWillBeSent
+					request_id = message['params']['requestId']
+					url = message['params']['request']['url']
+					self.__request_id_to_url_mapping[request_id] = url
+					self.__requests_in_flight += 1
 
-			if 'method' in message and message['method'] == "Network.requestWillBeSent":
-				# Network.requestWillBeSent
-				request_id = message['params']['requestId']
-				url = message['params']['request']['url']
-				self.__request_id_to_url_mapping[request_id]   = url
+				# elif 'method' in message and message['method'] == "Network.loadingFinished ":
+				elif 'method' in message and message['method'] == "Network.responseReceived":
+					request_id = message['params']['requestId']
+					assert request_id in self.__request_id_to_url_mapping, "Cannot cross-reference request id %s to url! Presumably the RequestWillBeSent message was lost!" % (request_id, )
+					assert self.__request_id_to_url_mapping[request_id] == message['params']['response']['url']
+					self.__request_id_to_response_meta[request_id] = message['params']['response']
 
-			# elif 'method' in message and message['method'] == "Network.loadingFinished ":
-			elif 'method' in message and message['method'] == "Network.responseReceived":
-				request_id = message['params']['requestId']
-				assert self.__request_id_to_url_mapping[request_id] == message['params']['response']['url']
-				self.__request_id_to_response_meta[request_id] = message['params']['response']
+					self.__requests_in_flight -= 1
+					if self.__requests_in_flight < 0:
+						self.log.error("Lost a in-flight message? What")
+						self.__requests_in_flight = 0
 
-				if self._precondition_check_want_content_request(
-							url  = self.__request_id_to_url_mapping[request_id],
-							meta = message['params']['response']
-						):
-					content_request_id = ctx.asynchronous_command("Network.getResponseBody", requestId = request_id)
-					self.__active_file_content_requests[content_request_id] = request_id
+					if self._precondition_check_want_content_request(
+								url  = self.__request_id_to_url_mapping[request_id],
+								meta = message['params']['response']
+							):
+						content_request_id = ctx.asynchronous_command("Network.getResponseBody", requestId = request_id)
+						self.__active_file_content_requests[content_request_id] = request_id
 
-			if 'id' in message:
-				message_id = message['id']
-				if message_id in self.__active_file_content_requests:
-					req_id = self.__active_file_content_requests[message_id]
-					if req_id in self.__request_id_to_url_mapping:
-						req_url  = self.__request_id_to_url_mapping[req_id]
-						req_meta = self.__request_id_to_response_meta[req_id]
-						if 'result' in message:
-							response_body = decode_chrome_getResponseBody(message['result'])
+				if 'id' in message:
+					message_id = message['id']
+					if message_id in self.__active_file_content_requests:
+						req_id = self.__active_file_content_requests[message_id]
+						if req_id in self.__request_id_to_url_mapping:
+							req_url  = self.__request_id_to_url_mapping[req_id]
+							req_meta = self.__request_id_to_response_meta[req_id]
+							if 'result' in message:
+								response_body = decode_chrome_getResponseBody(message['result'])
 
-							# This is kind of evil
-							if handler.__code__.co_argcount == 3:
-								handler(self, req_url, response_body)
-							elif handler.__code__.co_argcount == 4:
-								handler(self, req_url, response_body, meta=req_meta)
+								# This is kind of evil
+								if handler.__code__.co_argcount == 3:
+									handler(self, req_url, response_body)
+								elif handler.__code__.co_argcount == 4:
+									handler(self, req_url, response_body, meta=req_meta)
+								else:
+									raise RuntimeError("Only handler callback that accept 3 or 4 arguments permitted")
 							else:
-								raise RuntimeError("Only handler callback that accept 3 or 4 arguments permitted")
-						else:
-							self.log.error("Failed to extract content for request %s, url %s", req_id, req_url)
-							self.log.error("Received response: %s", message)
+								self.log.error("Failed to extract content for request %s, url %s", req_id, req_url)
+								self.log.error("Received response: %s", message)
+			except KeyError:
+				self.log.error("Failure when processing browser message!")
+				for line in traceback.format_exc().split("\n"):
+					self.log.error("Error -> %s", line)
+				self.log.error("Exception occured while processing message:")
+				msg_str = json.dumps(message, indent=4)
+				for line in msg_str.split("\n"):
+					self.log.error("Message -> %s", line)
+				self.log.error("This may indicate lost messages, the current state may no longer be valid!")
 
 		self.install_message_handler(_handler)
 
+	def get_active_requests_in_flight(self):
+		'''
+		Return the number of requests that are currently in-flight.
+
+		Ideally, if the dom has fully loaded, this will be zero. This mostly exists because
+		waiting for the dom to appear idle seems to be inadequate to determine if the page
+		has fully loaded.
+		'''
+		return self.__requests_in_flight
 
 	def clear_content_listener_cache(self):
 		'''
